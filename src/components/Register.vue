@@ -3,7 +3,7 @@
     <div id="register">
       <div id="nav">
       <nb></nb>
-      <h4> Create your LoNUS Account </h4>
+      <h4> Create your Account </h4>
       </div>
       
 
@@ -173,6 +173,17 @@
         onSubmit: function(evt) {
           if (evt.password == evt.confirm_password) {
             alert("Account Created")
+            evt.preventDefault();
+            database.collection('Register').add({
+            Username: form.name.value,
+            Firstname: form.firstname.value,
+            Lastname: form.lastname.value,
+            Major: form.major.value,
+            Email: form.email.value,
+            Year: form.year.value,
+            Password: form.password.value,
+            ConfirmPassword: form.confirm_password.value
+    });
             this.$router.push('/SignIn') 
 
           } else {
