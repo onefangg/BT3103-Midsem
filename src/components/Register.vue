@@ -149,6 +149,7 @@
   </template>
 
   <script>
+  import database from '../firebase.js'
   import NavBar from './NavBar.vue'
     export default {
       components: {
