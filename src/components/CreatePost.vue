@@ -5,8 +5,6 @@
     <br>
     <div>
         
-        <b-form @submit = "submit">
-                
                 <b-form-radio-group  id ='radio' inline v-model="create_type">
                    Choose Type of Group:  
                     
