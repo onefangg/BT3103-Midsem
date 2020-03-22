@@ -1,11 +1,30 @@
 <template>
     <div class="home">
+      <nb></nb>
+      <b-container id="contain"> 
+      <b-row>
+          <b-col><b-img src='..\assets\team_meeting blue.svg' id="illustration"></b-img></b-col>
+          <b-col><hr align="left" id="shortline"> 
+          <div id = "text">Finding groupmates in NUS is easier than ever.</div>
+          <div id ="subtext">Having difficulty finding project groupmates? Or just tired of studying alone? 
+                              LoNUS does the heavy lifting for you to find new people to work with. </div>
+          
+          <div id = "joinbutton">
+            <b-button variant="primary" class="btn btn-primary float-left" to="/SignIn">Join Now</b-button>
+           </div>
+          </b-col>
+          
+      </b-row>
+
+      </b-container>
+
+
       <!-- <nb></nb> -->
       <!-- <div class="bg"> -->
         <!-- <nb></nb> -->
-        <div>
+        <!--<div>
           <nb></nb>
-          <!-- <h1 id='welcome' style = "padding:  0.5em 0.5em 0.5em 0em"> Welcome to loNUS! </h1> -->
+        
           <b-jumbotron id = 'image' style="background-image: url(https://www.comp.nus.edu.sg/images/resources/content/01-ugbanner.jpg); background-size: 100%;"  class="mb-0">
            <div id = 'box' class="align-items-center">
             <div class="transbox">
@@ -21,7 +40,7 @@
               
             </div>
           </b-jumbotron>
-      </div>
+      </div>-->
     </div>
     <!-- </div> -->
 
@@ -36,6 +55,35 @@ export default {
 </script>
 
 <style>
+  #contain {
+    padding-top: 40px;
+  }
+  #illustration{
+    max-width: 500px;
+  }
+  #text{
+    text-align: left;
+    font-weight:800;
+    font-size:30px;
+    color: black;
+    line-height: 135%;
+    letter-spacing: 0.7px;
+  }
+  #subtext {
+    font-weight:500;
+    padding-top:14px;
+    text-align:left;
+    letter-spacing: 0.7px;
+  }
+  #shortline{
+   background-color: #558FE5; 
+   height: 2px; 
+   border: 0;
+   width:20%;
+  }
+  #joinbutton{
+    padding-top:18px;
+  }
   .jumbotron {
       background-repeat: no-repeat;
       background-size: 100%;
