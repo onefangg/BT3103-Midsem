@@ -174,7 +174,7 @@
           if (evt.password == evt.confirm_password) {
             alert("Account Created")
             database.collection('Register').add({
-            Username: this.form.username,
+            Username: this.form.name,
             Firstname: this.form.firstname,
             Lastname: this.form.lastname,
             Major: this.form.major,
@@ -235,5 +235,3 @@ h4{
 }
 
 </style>
-
-
