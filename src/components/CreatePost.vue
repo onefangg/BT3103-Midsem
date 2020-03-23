@@ -5,8 +5,6 @@
     <br>
     <div>
         
-        <b-form @submit = "submit">
-                
                 <b-form-radio-group  id ='radio' inline v-model="create_type">
                    Choose Type of Group:  
                     
@@ -206,7 +204,8 @@ export default {
                 Limit:null,
                 NumberOfMembers:0,
                 UserNames:[],
-                DatePosted:''
+                DatePosted: null,
+                Poster: ''
             },
             study:{
                 ModuleCode:'',
@@ -214,9 +213,10 @@ export default {
                 Limit:null,
                 NumberOfMembers:0,
                 UserNames:[],
-                DatePosted:'',
+                DatePosted:null,
                 Location:'',
-                GroupName:''
+                GroupName:'',
+                Poster:''
             },
             currUser:'',
             create_type: 'project'
@@ -227,11 +227,13 @@ export default {
             if (this.create_type==='study'){
                 this.getNowstu()
                 this.getNumMembersStu()
+                this.setPosterstu()
                 database.collection('Study Group').add(this.study)
             }
             else{
                 this.getNowproj()
                 this.getNumMembersProj()
+                this.setPosterproj()
                 database.collection('Project Group').add(this.proj)
             }
             alert("Post Successfully Created!")
@@ -253,19 +255,22 @@ export default {
             this.currUser=''
         },
         getNowproj: function() {
-                    const today = new Date();
-                    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-                    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                    const dateTime = date +' '+ time;
-                    this.proj.DatePosted = dateTime;
+               
+                    this.proj.DatePosted = new Date();
                 },
         getNowstu: function() {
-                    const today = new Date();
-                    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-                    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                    const dateTime = date +' '+ time;
-                    this.study.DatePosted = dateTime;
-                }
+                    
+                    this.study.DatePosted = new Date();
+                },
+        setPosterstu: function(){
+            this.study.Poster = this.study.UserNames[0];
+
+        },
+
+        setPosterproj: function(){
+            this.proj.Poster = this.proj.UserNames[0];
+
+        }
     
     }
 }

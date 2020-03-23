@@ -43,7 +43,6 @@
         <!-- Filter and sort options for Study Groups -->
         <div v-show="selected_type === 'Study'">
             <b-form inline>
-            <b-form-select v-model="selected_faculty" :options="faculties" label-field= "Faculty" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
             <b-form-select v-model="selected_area" :options="areas" label-field= "location" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
             <b-form-select v-model="selected_sort" :options="sort" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
             </b-form>
@@ -88,7 +87,6 @@
             :post_status= "item.UserNames.length < item.Limit ? 'Open' : 'Closed'"
             :post_date = "item.DatePosted.toDate()"
             :location = "item.Location"
-            :faculty = "item.Faculty"
             :members = "item.UserNames">
             </StudyPost>    
 
@@ -156,7 +154,7 @@ export default {
                 }
             })
            }
-        }
+    }
     , data() {
         return {
             studyList: [],
@@ -171,21 +169,11 @@ export default {
                 {value:'New', text: 'Sort By'},
                 {value:'New', text:'Date Posted, Newest First'},
                 {value:'Old', text:'Date Posted, Oldest First'}],
-            selected_faculty:"",   
-            faculties: [ 
-                {value:"", text: 'Select a Faculty'},
-                {value:"", text: 'Any Faculty'},
-                {value:'Computing', text: 'Computing'},
-                {value:'FASS', text: 'FASS'}
-            ],
             mod: "",
             error_mod: "",
             selected_area: "",
             areas:[
-                {value:"", text: 'Select a Location'},
-                {value:'East', text: 'East'},
-                {value:'West', text: 'West'},
-                {value:'NUS', text: 'NUS'}
+                {value:"", text: '???'}
             ],
             noResults: false,
             searchResults: false
@@ -214,24 +202,6 @@ export default {
                     this.projectList.push(projectGrp)
                 })
             })
-            }
-        },
-        selected_faculty: function(change_fac) {
-            this.studyList.length = 0;
-            let studyGrp = {};
-
-            // if no preference, just run the normal fetch study
-            if (change_fac == "") {
-                this.fetchStudy();
-            } else {
-            // otherwise filter based on options
-                database.collection("Study Group").where("Faculty", "==", change_fac).get().then((querySnapshot) => {
-                    querySnapshot.forEach(doc => {
-                        studyGrp = doc.data()
-                        studyGrp.id = doc.id
-                        this.studyList.push(studyGrp)
-                    })
-                })
             }
         },
         selected_area: function(change_area) {
