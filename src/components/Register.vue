@@ -173,16 +173,15 @@
         onSubmit: function(evt) {
           if (evt.password == evt.confirm_password) {
             alert("Account Created")
-            evt.preventDefault();
             database.collection('Register').add({
-            Username: form.name.value,
-            Firstname: form.firstname.value,
-            Lastname: form.lastname.value,
-            Major: form.major.value,
-            Email: form.email.value,
-            Year: form.year.value,
-            Password: form.password.value,
-            ConfirmPassword: form.confirm_password.value
+            Username: this.form.username,
+            Firstname: this.form.firstname,
+            Lastname: this.form.lastname,
+            Major: this.form.major,
+            Email: this.form.email,
+            Year: this.form.year,
+            Password: this.form.password,
+            ConfirmPassword: this.form.confirm_password
     });
             this.$router.push('/SignIn') 
 
@@ -198,6 +197,8 @@
           this.form.firstname = ''
           this.form.lastname = ''
           this.form.password= ''
+          this.form.major= ''
+          this.form.year= ''
           this.form.confirm_password= ''
           // Trick to reset/clear native browser form validation state
           this.show = false
