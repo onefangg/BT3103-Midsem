@@ -14,25 +14,11 @@
     "@fortawesome/vue-fontawesome": "^0.1.9",
     "bootstrap-vue": "^2.1.0",
     "core-js": "^3.6.4",
-<<<<<<< HEAD
-<<<<<<< HEAD
+    "firebase": "^7.11.0",
     "moment": "^2.24.0",
-    "vue": "^2.6.11"
-=======
-    "firebase": "^7.11.0",
     "vue": "^2.6.11",
-<<<<<<< HEAD
-    "vue-resource": "^1.5.1"
->>>>>>> upstream/master
-=======
-    "firebase": "^7.11.0",
-    "vue": "^2.6.11",
-    "vue-resource": "^1.5.1"
->>>>>>> upstream/master
-=======
     "vue-resource": "^1.5.1",
     "vue-router": "^3.1.6"
->>>>>>> upstream/master
   },
   "devDependencies": {
     "@babel/polyfill": "^7.7.0",
