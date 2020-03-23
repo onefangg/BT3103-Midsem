@@ -68,7 +68,7 @@
                 v-bind:userId = "A000001"
                 v-bind:post_desc = "item.Description"
                 v-bind:post_status = "item.Limit > item.UserNames.length ? 'Open' : 'Closed'"
-                v-bind:post_date = "new Date(item.DatePosted)"
+                v-bind:post_date = "item.DatePosted.toDate()"
                 v-bind:members = "item.UserNames"
                 ></Post>
 
@@ -85,7 +85,7 @@
             :userId = "A000001" 
             :post_desc = "item.Description"
             :post_status= "item.UserNames.length < item.Limit ? 'Open' : 'Closed'"
-            :post_date = "new Date(item.DatePosted)"
+            :post_date = "item.DatePosted.toDate()"
             :location = "item.Location"
             :members = "item.UserNames">
             </StudyPost>    
