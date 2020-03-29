@@ -1,5 +1,5 @@
 <template>
-  <b-card id = 'post' style="max-width: 20rem;" header-tag="modheader" footer-tag="modfooter">
+  <b-card id = 'post' style="max-width: 20rem;" >
       <template v-slot:header>
         <h6 class="mb-0"><b>{{groupName}}</b></h6>
       </template>
@@ -11,23 +11,41 @@
             <b-row id = 'post_body'> 
             <b-list-group-item>
               {{post_desc}}
-              
             </b-list-group-item></b-row>
-
+            
+            
+            
             <b-list-group-item>
               <b-row id ='post_body'>
-                
-                <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'users'}" class="faicon"/>
-                
-                {{post_status}}</b-row> 
-                 <b-row><b-button v-b-toggle.collapse-1 size="sm" variant="outline-primary" id="collapse-button-1">see members ▼</b-button></b-row>
-               <b-row> <b-collapse id="collapse-1" class="mt-2">
+                <b-col>
+                  <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'users'}" class="faicon"/>
+                  {{post_status}}
+                </b-col>
+                  <!-- delete post button and pop-up -->
+                <b-col>
+                  <b-button size = "sm"
+                            variant = "danger"
+                            @click ="showdelete = !showdelete"
+                      >     Delete Group</b-button>
+                  <b-modal v-model ="showdelete" @ok = "deletePost()">
+                    Are you sure you want to delete this post?
+                  </b-modal>
+                </b-col>   
+              </b-row> 
+
+              <b-row>
+                <b-button v-b-toggle.collapse-1 size="sm" variant="outline-primary" id="collapse-button-1">see members ▼</b-button>  
+              </b-row>
+              
+              <b-row>
+                <b-collapse id="collapse-1" class="mt-2">
                  <b-card id='members'>
                   <a href="#" v-for="item in members" :key="item" @click="redirect">
                   @{{item}}</a>
                  
                  </b-card>
-                </b-collapse></b-row>
+                </b-collapse>
+              </b-row>
             </b-list-group-item>
 
 
@@ -38,6 +56,7 @@
         
         <b-modal v-model="modalShow">Success!</b-modal>
         <b-row>
+          
           <b-col cols = "8"  id = 'post_author'>
             <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'user-circle'}" class="faicon"/>Created by: <br><a href="#" @click="redirect">@{{userId}}</a>
           <br> <div id="date">{{disp_date}}</div>
@@ -52,13 +71,17 @@
 
 <script>
 var moment = require('moment')
+import database from '../firebase.js'
+
+
 export default {
   data() {
     return {
-      modalShow: false
+      modalShow: false,
+      showdelete :false
     }
   },
-  props: ['groupName', 'userId', 'post_desc', 'post_status', 'post_date', 'location', 'faculty', 'members'],
+  props: ['groupName', 'userId', 'post_desc', 'post_status', 'post_date', 'location', 'faculty', 'members', 'hide_post'],
   methods: {
     redirect: function(){
       this.$router.push({
@@ -66,6 +89,12 @@ export default {
         params: {
           userId: this.userId
       }})
+    }, 
+    deletePost: function() {
+      this.hide_post = !this.hide_post
+      database.collection("Project Group").doc(this.doc_id).update({
+        hidden: true
+      })
     }
   },
   computed: {
@@ -82,7 +111,8 @@ export default {
   font-weight: bold
 }
 #post {
-  margin: 5px
+  margin: 5px;
+  width: 20rem;
 }
 #members {
   text-align: left;

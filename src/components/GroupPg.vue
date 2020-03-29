@@ -62,7 +62,6 @@
         <br>
 
         <b-row align-h="center">
-        
                 <Post v-for = "(item) in projectList" v-bind:key = "item.id"  
                 v-bind:module = "item.ModuleCode"
                 v-bind:userId = "A000001"
@@ -70,6 +69,8 @@
                 v-bind:post_status = "item.Limit > item.UserNames.length ? 'Open' : 'Closed'"
                 v-bind:post_date = "item.DatePosted.toDate()"
                 v-bind:members = "item.UserNames"
+                :doc_id = "item.id"
+                :hide_post = "item.hidden"
                 ></Post>
 
         </b-row>
@@ -87,7 +88,9 @@
             :post_status= "item.UserNames.length < item.Limit ? 'Open' : 'Closed'"
             :post_date = "item.DatePosted.toDate()"
             :location = "item.Location"
-            :members = "item.UserNames">
+            :members = "item.UserNames"
+            :doc_id = "item.id"
+            :hide_post = "item.hidden">
             </StudyPost>    
 
       </b-row>
@@ -129,7 +132,9 @@ export default {
             database.collection('Project Group').get().then((querySnapshot) => {
                 querySnapshot.forEach(doc => {
                     projectGrp = doc.data()
+                    
                     projectGrp.id = doc.id
+                    // console.log(projectGrp.id)
                     this.projectList.push(projectGrp)
                 })
             })

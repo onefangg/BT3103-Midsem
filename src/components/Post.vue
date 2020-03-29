@@ -1,42 +1,64 @@
 <template>
-  <b-card id = 'post' style="max-width: 20rem;" header-tag="modheader" footer-tag="modfooter">
-      <template v-slot:header>
-        <h6 class="mb-0"><b>Module code: {{module}}</b></h6>
-      </template>
+  <b-card id = 'post' v-show = "!hide_post" style="max-width: 20rem;" >
+        
+        
+        <!-- header (module code etc.) -->
+        <template v-slot:header>
+          <h6 class="mb-0">
+            <b>Module code: {{module}}</b>  
+          </h6>   
+        </template>
+
+      <!-- card body -->
+      <b-list-group flush>
+        <b-row id = 'post_body'> 
+          <b-list-group-item>
+            {{post_desc}}    
+          </b-list-group-item>
+        </b-row>
       
-      
-          <b-list-group flush>
+        <b-list-group-item>
+          <!-- is there enough members/full capacity -->
+          <b-row id ='post_body'>     
+            <b-col>
+              <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'users'}" class="faicon"/>
+              {{post_status}}
+            </b-col>
+
+
+            <b-col align-self="end">
+              <!-- delete post button and pop-up -->
+              <b-button size="sm"
+                        variant = "danger"
+                        @click ="showdelete = !showdelete"
+                        >Delete Group</b-button>
+              <b-modal v-model ="showdelete" @ok = "deletePost()">
+                Are you sure you want to delete this post?
+              </b-modal>
+            </b-col>
+          </b-row> 
           
-
-            <b-row id = 'post_body'> 
-            <b-list-group-item>
-              {{post_desc}}
-              
-            </b-list-group-item></b-row>
-
-            <b-list-group-item>
-              <b-row id ='post_body'>
-                
-                <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'users'}" class="faicon"/>
-                {{post_status}} </b-row> 
-            
-                <b-row><b-button v-b-toggle.collapse-1 size="sm" variant="outline-primary" id="collapse-button-1">see members ▼</b-button></b-row>
-               <b-row> <b-collapse id="collapse-1" class="mt-2">
-                 <b-card id='members'>
-                  <a href="#" v-for="item in members" :key="item" @click="redirect">
-                  @{{item}}</a>
-                 
-                 </b-card>
-                </b-collapse></b-row>
-                
-            </b-list-group-item>
+         
+          <!-- showing all members button -->
+          <b-row>
+            <b-button v-b-toggle.collapse-1 size="sm" variant="outline-primary" id="collapse-button-1">see members ▼</b-button>
+          </b-row>
+              <!-- generating all members in the group -->
+              <b-row>
+                <b-collapse id="collapse-1" class="mt-2">
+                  <b-card id='members'>
+                    <a href="#" v-for="item in members" :key="item" @click="redirect">
+                      @{{item}}
+                    </a>
+                  </b-card>
+                </b-collapse>
+              </b-row>
 
 
-          </b-list-group>
+        </b-list-group-item>
+      </b-list-group>
      
       <template v-slot:footer>
-       
-        
         <b-modal v-model="modalShow">Success!</b-modal>
         <b-row>
           <b-col cols = "8"  id = 'post_author'>
@@ -53,14 +75,16 @@
 
 <script>
 var moment = require('moment')
+import database from '../firebase.js'
 
 export default {
   data() {
     return {
-      modalShow: false
+      modalShow: false,
+      showdelete :false
     }
   },
-  props: ['module', 'userId', 'post_desc', 'post_status', 'post_date', 'members'],
+  props: ['module', 'userId', 'post_desc', 'post_status', 'post_date', 'members', 'doc_id', 'hide_post'],
   methods: {
     redirect: function(){
       this.$router.push({
@@ -68,6 +92,12 @@ export default {
         params: {
           userId: this.userId
       }})
+    },
+    deletePost: function() {
+      this.hide_post = !this.hide_post
+      database.collection("Project Group").doc(this.doc_id).update({
+        hidden: true
+      })
     }
   },
   computed: {
@@ -84,7 +114,9 @@ export default {
   font-weight: bold
 }
 #post {
-  margin: 5px
+  margin: 5px;
+  width: 20rem;
+
 }
 
 #post_body {
@@ -104,6 +136,12 @@ export default {
 #members {
   text-align: left;
   font-size:12px;
+}
+
+#delete {
+  display: inline-block;
+  top: 0px;
+  right: 0px;
 }
 
 
