@@ -1,7 +1,6 @@
 <template>
 <div> <nb></nb>
 <h4> LoNUS Postings </h4>
-
 <!-- Selection screen between Project and Study Groups; Default is Project Groups -->
 <b-container fluid = "lg">
     <div class= "radio">
@@ -39,6 +38,9 @@
         </div>
    </div>
 
+    
+
+
     <div class="row justify-content-center align-items-center h-100">
         <!-- Filter and sort options for Study Groups -->
         <div v-show="selected_type === 'Study'">
@@ -48,6 +50,9 @@
             </b-form>
         </div>
     </div>
+
+    <br>
+    <b-spinner variant = "primary" v-show = "finish_loading"></b-spinner>
 </b-container>
     
     <!-- change userId later.... -->
@@ -57,6 +62,7 @@
     <div v-show="selected_type === 'Project'">
         <div v-show = "searchResults">
             <b-button v-on:click = "fetchProject()">Clear Search Results</b-button>
+            <br>
             <h3 v-show = "noResults">No results for {{error_mod}}</h3>
         </div>
         <br>
@@ -121,10 +127,13 @@ export default {
                     studyGrp.id = doc.id
                     this.studyList.push(studyGrp)
                 })
+            }).finally(() => {
+                this.finish_loading = false;
             })
         },
         fetchProject: function() {
             this.projectList.length = 0;
+
             if (this.searchResults) {
                 this.searchResults = false;
             }
@@ -132,16 +141,17 @@ export default {
             database.collection('Project Group').get().then((querySnapshot) => {
                 querySnapshot.forEach(doc => {
                     projectGrp = doc.data()
-                    
                     projectGrp.id = doc.id
-                    // console.log(projectGrp.id)
                     this.projectList.push(projectGrp)
                 })
+            }).finally(() => {
+                this.finish_loading = false;
             })
         },
         searchModule: function() {
             this.projectList.length = 0; // clear the exisitng project list
             let projectGrp = {};
+            this.finish_loading = true;
            
             database.collection("Project Group").where("ModuleCode", "==", this.mod).get().then(
                 (querySnapshot) => {
@@ -157,6 +167,7 @@ export default {
                     this.error_mod = this.mod;
                     this.noResults = true;
                 }
+                this.finish_loading = false;
             })
            }
     }
@@ -181,7 +192,8 @@ export default {
                 {value:"", text: '???'}
             ],
             noResults: false,
-            searchResults: false
+            searchResults: false,
+            finish_loading: true
         }
     },
     created() {
@@ -193,26 +205,34 @@ export default {
             this.projectList.length = 0; // clear the exisitng project list
             let projectGrp = {}
             if (change_sort === "Old") {
+                this.finish_loading = true;
                 database.collection('Project Group').orderBy('DatePosted').get().then((querySnapshot) => {
-                querySnapshot.forEach(doc => {
-                    projectGrp = doc.data()
-                    projectGrp.id = doc.id
-                    this.projectList.push(projectGrp)
+                    querySnapshot.forEach(doc => {
+                        projectGrp = doc.data()
+                        projectGrp.id = doc.id
+                        this.projectList.push(projectGrp)
+                    })
+                }).finally(() => {
+                    this.finish_loading = false;
                 })
-            })} else if (change_sort === "New") {
+            } else if (change_sort === "New") {
+                this.finish_loading = true;
                 database.collection('Project Group').orderBy('DatePosted', "desc").get().then((querySnapshot) => {
-                querySnapshot.forEach(doc => {
-                    projectGrp = doc.data()
-                    projectGrp.id = doc.id
-                    this.projectList.push(projectGrp)
+                    querySnapshot.forEach(doc => {
+                        projectGrp = doc.data()
+                        projectGrp.id = doc.id
+                        this.projectList.push(projectGrp)
+                    })
+                }).finally(() => {
+                    this.finish_loading = false;
                 })
-            })
             }
         },
         selected_area: function(change_area) {
             this.studyList.length = 0;
             let studyGrp = {};
-            
+            this.finish_loading = true;
+
             if (change_area == "") {
                 this.fetchStudy();
             } else {
@@ -223,6 +243,8 @@ export default {
                         studyGrp.id = doc.id
                         this.studyList.push(studyGrp)
                     })
+                }).finally(() => {
+                    this.finish_loading = false;
                 })
             }
         }

@@ -1,7 +1,5 @@
 <template>
-  <b-card id = 'post' v-show = "!hide_post" style="max-width: 20rem;" >
-        
-        
+  <b-card id = 'post' v-show = "!hide_post" style="max-width: 20rem;" >       
         <!-- header (module code etc.) -->
         <template v-slot:header>
           <h6 class="mb-0">
