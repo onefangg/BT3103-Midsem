@@ -4,42 +4,49 @@
     <nb></nb>
 
     <h4> Having issues with LoNUS? Drop us an enquiry to let us help! </h4>
-
-    <b-form-group id="input-group-3" label="Enquiry Type:" label-for="input-3">
+    <form @submit="onSubmit" @reset="onReset" v-if="show">
+    <b-form-group id="input-group-3" label="Enquiry Type:" label-for="input-3" label-cols-sm="2" label-cols-lg="3">
         <b-form-select
           id="input-3"
           v-model="form.enquiry"
           :options="enquiries"
           required
+          name= "type"
         ></b-form-select>
       </b-form-group>
 
 
-    <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-      <b-form-group
-        id="input-group-1"
-        label="Subject Line:"
-        label-for="input-1"
-      >
+    <b-form-group id="input-group-1" label="Subject Line:" label-for="input-1" label-cols-sm="2" label-cols-lg="3">
         <b-form-input
           id="input-1"
           v-model="form.subject"
           type="subject"
           required
+          name="subject"
           placeholder="Enter Subject Line"
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-2" label="Description of Problem:" label-for="input-2">
+      <b-form-group id="input-group-2" label="Description of Problem:" label-for="input-2" label-cols-sm="2" label-cols-lg="3" >
         <b-form-input
           id="input-2"
           v-model="form.description"
           required
-          style="height:150px"
+          style="height:100px"
           placeholder="Enter Description of Enquiry"
         ></b-form-input>
       </b-form-group>
 
+      <b-form-group id="input-group-1" label="Preferred Email Address" label-for="input-5" label-cols-sm="2"
+          label-cols-lg="3">
+        <b-form-input
+          id="input-5"
+          v-model="form.email"
+          required
+          name = "email"
+          placeholder="Enter Email Address"
+        ></b-form-input>
+      </b-form-group>
       
 
       <b-form-group id="input-group-4">
@@ -50,14 +57,15 @@
 
       <b-button type="submit" variant="primary"> Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
-    </b-form>
+    </form>
     
   </div>
 </template>
 
 <script>
 import NavBar from './NavBar.vue'
-  export default {
+import emailjs from 'emailjs-com'
+export default {
     components: {
         'nb' : NavBar
     },
@@ -67,7 +75,8 @@ import NavBar from './NavBar.vue'
           subject: '',
           name: '',
           enquiry: null,
-          checked: []
+          checked: null,
+          email:''
         },
         enquiries: [{ text: 'Select One', value: null }, 'Account Problems', 'Trouble joining group', 'Trouble forming group', 'Report a User', 'Others'],
         show: true
@@ -76,7 +85,20 @@ import NavBar from './NavBar.vue'
     methods: {
       onSubmit(evt) {
         evt.preventDefault()
+        if (this.form.checked!=null){
+          emailjs.sendForm('tbbtlonus','contact_form', evt.target, 'user_EAmKC1OvHKyrIWyVgsMbS')
+          .then((response) => {
+          console.log('SUCCESS!', response.status, response.text);
+          }, (err) => {
+          console.log('FAILED...', err);
+         });
+        }
         alert('Enquiry Success!')
+        this.form.subject = ''
+        this.form.description = ''
+        this.form.enquiry  = null
+        this.form.checked = null
+        this.form.email =''
       },
       onReset(evt) {
         evt.preventDefault()
@@ -84,7 +106,8 @@ import NavBar from './NavBar.vue'
         this.form.subject = ''
         this.form.description = ''
         this.form.enquiry  = null
-        this.form.checked = []
+        this.form.checked = null
+        this.form.email =''
         // Trick to reset/clear native browser form validation state
         this.show = false
         this.$nextTick(() => {
@@ -98,7 +121,7 @@ import NavBar from './NavBar.vue'
 <style scoped>
 #input-group-3{
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   padding: 20px;
   margin: auto;
 
@@ -106,7 +129,7 @@ import NavBar from './NavBar.vue'
 
 #input-group-1{
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   padding: 20px;
   margin: auto;
 
@@ -114,7 +137,7 @@ import NavBar from './NavBar.vue'
 
 #input-group-2{
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   padding: 20px;
   margin: auto;
   

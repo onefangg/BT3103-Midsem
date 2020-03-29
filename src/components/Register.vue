@@ -3,7 +3,7 @@
     <div id="register">
       <div id="nav">
       <nb></nb>
-      <h4> Create your LoNUS Account </h4>
+      <h4> Create your Account </h4>
       </div>
       
 
@@ -149,6 +149,7 @@
   </template>
 
   <script>
+  import database from '../firebase.js'
   import NavBar from './NavBar.vue'
     export default {
       components: {
@@ -172,6 +173,16 @@
         onSubmit: function(evt) {
           if (evt.password == evt.confirm_password) {
             alert("Account Created")
+            database.collection('Register').add({
+            Username: this.form.name,
+            Firstname: this.form.firstname,
+            Lastname: this.form.lastname,
+            Major: this.form.major,
+            Email: this.form.email,
+            Year: this.form.year,
+            Password: this.form.password,
+            ConfirmPassword: this.form.confirm_password
+    });
             this.$router.push('/SignIn') 
 
           } else {
@@ -186,6 +197,8 @@
           this.form.firstname = ''
           this.form.lastname = ''
           this.form.password= ''
+          this.form.major= ''
+          this.form.year= ''
           this.form.confirm_password= ''
           // Trick to reset/clear native browser form validation state
           this.show = false
@@ -222,5 +235,3 @@ h4{
 }
 
 </style>
-
-
