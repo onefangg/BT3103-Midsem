@@ -45,7 +45,7 @@
         <!-- Filter and sort options for Study Groups -->
         <div v-show="selected_type === 'Study'">
             <b-form inline>
-            <b-form-select v-model="selected_area" :options="areas" label-field= "location" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
+            <b-form-select v-model="selected_faculty" :options="faculty" label-field= "location" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
             <b-form-select v-model="selected_sort" :options="sort" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
             </b-form>
         </div>
@@ -72,7 +72,7 @@
                 v-bind:module = "item.ModuleCode"
                 v-bind:userId = "A000001"
                 v-bind:post_desc = "item.Description"
-                v-bind:post_status = "item.Limit > item.UserNames.length ? 'Open' : 'Closed'"
+                v-bind:post_status = "item.Limit > item.UserNames.length ? item.Limit- item.UserNames.length + ' Needed' : 'Closed'"
                 v-bind:post_date = "item.DatePosted.toDate()"
                 v-bind:members = "item.UserNames"
                 :doc_id = "item.id"
@@ -91,6 +91,7 @@
             :groupName = "item.GroupName"
             :userId = "A000001" 
             :post_desc = "item.Description"
+            :mod_code = "item.ModuleCode"
             :post_status= "item.UserNames.length < item.Limit ? 'Open' : 'Closed'"
             :post_date = "item.DatePosted.toDate()"
             :location = "item.Location"
@@ -187,9 +188,16 @@ export default {
                 {value:'Old', text:'Date Posted, Oldest First'}],
             mod: "",
             error_mod: "",
-            selected_area: "",
-            areas:[
-                {value:"", text: '???'}
+            selected_faculty: "All",
+            faculty:[
+                {value:'All', text: 'Select Faculty'},
+                {value:'Computing', text: 'Computing'},
+                {value:'FASS', text: 'FASS'},
+                {value:'Medicine', text: 'Medicine'},
+                {value:'Science', text: 'Science'},
+                {value:'Law', text: 'Law'},
+                {value:'Business', text: 'Business'}, 
+                {value:'Engineering', text: 'Engineering'}       
             ],
             noResults: false,
             searchResults: false,
@@ -228,16 +236,16 @@ export default {
                 })
             }
         },
-        selected_area: function(change_area) {
+        selected_faculty: function(change_faculty) {
             this.studyList.length = 0;
             let studyGrp = {};
             this.finish_loading = true;
 
-            if (change_area == "") {
+            if (change_faculty == "All") {
                 this.fetchStudy();
             } else {
             // otherwise filter based on options
-                database.collection("Study Group").where("Location", "==", change_area).get().then((querySnapshot) => {
+                database.collection("Study Group").where("Faculty", "==", change_faculty).get().then((querySnapshot) => {
                     querySnapshot.forEach(doc => {
                         studyGrp = doc.data()
                         studyGrp.id = doc.id

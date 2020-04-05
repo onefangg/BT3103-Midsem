@@ -82,6 +82,16 @@
 
 
             <div v-show="create_type === 'study'">
+               <b-form-group id="input-group-33" label="Faculty:" label-for="input-3" label-cols-sm="2" label-cols-lg="3">
+                    <b-form-select
+                    id="input-33"
+                    v-model="study.Faculty"
+                    :options="faculties"
+                    required
+                    name= "type"
+                    ></b-form-select>
+                </b-form-group>
+
                 <b-form-group
                     id="input-group-1"
                     label-cols-sm="2"
@@ -208,6 +218,7 @@ export default {
                 Poster: ''
             },
             study:{
+                Faculty:null,
                 ModuleCode:'',
                 Description:'',
                 Limit:null,
@@ -219,7 +230,8 @@ export default {
                 Poster:''
             },
             currUser:'',
-            create_type: 'project'
+            create_type: 'project',
+            faculties: [{ text: 'Select Faculty', value: null }, 'Computing','FASS', 'Science', 'Engineering','Business','Medicine','Law'],
         }
     },
     methods : {
@@ -314,5 +326,11 @@ h4{
     padding-left:10px
 }
 
+#input-group-33{
+    width: 100%;
+  max-width:1300px;
+  padding: 20px;
+  margin: auto;
+}
 
 </style>

@@ -39,17 +39,20 @@
          
           <!-- showing all members button -->
           <b-row>
-            <b-button v-b-toggle.collapse-1 size="sm" variant="outline-primary" id="collapse-button-1">see members ▼</b-button>
+            <b-button size="sm"
+                        variant = "primary"
+                        @click ="showMem = !showMem"
+                        >View members ▼</b-button>
           </b-row>
               <!-- generating all members in the group -->
               <b-row>
-                <b-collapse id="collapse-1" class="mt-2">
+                <b-row v-show="showMem" class="mt-2">
                   <b-card id='members'>
                     <a href="#" v-for="item in members" :key="item" @click="redirect">
                       @{{item}}
                     </a>
                   </b-card>
-                </b-collapse>
+                </b-row>
               </b-row>
 
 
@@ -60,7 +63,7 @@
         <b-modal v-model="modalShow">Success!</b-modal>
         <b-row>
           <b-col cols = "8"  id = 'post_author'>
-            <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'user-circle'}" class="faicon"/>Created by: <br><a href="#" @click="redirect">@{{userId}}</a>
+            <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'user-circle'}" class="faicon"/>Created by: <br><a href="#" @click="redirect">@{{members[0]}}</a>
             <br> <div id="date">{{disp_date}}</div>
           </b-col>
           <b-col cols = "2">
@@ -79,7 +82,8 @@ export default {
   data() {
     return {
       modalShow: false,
-      showdelete :false
+      showdelete :false,
+      showMem: false
     }
   },
   props: ['module', 'userId', 'post_desc', 'post_status', 'post_date', 'members', 'doc_id', 'hide_post'],
