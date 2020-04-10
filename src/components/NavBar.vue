@@ -15,6 +15,8 @@
     <div class="dropdown-1">
     <b-dropdown id="dropdown-1" right text="User" variant="primary" class="m-3" size="15px">
     <b-dropdown-item href="#" to="/myprofile">Profile</b-dropdown-item>
+
+    <b-dropdown-item href="#" to="/group-page">Find friends</b-dropdown-item> 
     <b-dropdown-item href="#" to="/home-page">Sign Out</b-dropdown-item>
   </b-dropdown>
 </div>
