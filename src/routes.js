@@ -7,6 +7,7 @@ import MyProfile from './components/MyProfile.vue'
 import CreatePost from './components/CreatePost.vue'
 import Contact from './components/Contact.vue'
 import Register from './components/Register.vue'
+import NotSignedIn from './components/NotSignedIn.vue'
 
 
 
@@ -21,5 +22,6 @@ export default [
     {path: "/users/:userId", component: Profile, props: true, meta : {title : 'User Profile', requiresAuth: true}},
     {path: "/Create-Post", component: CreatePost, meta:{title:'Create Post', requiresAuth: true}},
     {path: "/Contact", component: Contact, meta:{title:'Contact Us'}},
-    {path: "/Register", component: Register, meta:{title:'Register'}}
+    {path: "/Register", component: Register, meta:{title:'Register'}},
+    {path:'/NotSignedIn', component: NotSignedIn, meta:{title:'Please sign in'}}
 ]

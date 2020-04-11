@@ -16,7 +16,8 @@
     <b-dropdown id="dropdown-1" right text="User" variant="primary" class="m-3" size="15px">
     <b-dropdown-item href="#" to="/myprofile">Profile</b-dropdown-item>
     <b-dropdown-item href="#" to="/group-page">Find friends</b-dropdown-item> 
-    <b-dropdown-item href="#" to="/Home-Page">Sign Out</b-dropdown-item>
+    
+    <b-dropdown-item v-on:click="signOut">Sign Out</b-dropdown-item>
   </b-dropdown>
 </div>
   </div>
@@ -24,8 +25,19 @@
 </template>
 
 <script>
+import firebase from 'firebase'
+
 export default {
-    
+    methods: {
+    signOut() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$router.replace('/Sign-In');
+        });
+    }
+  }
 }
 </script>
 

@@ -44,10 +44,11 @@ router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title
   let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   if (requiresAuth && !await firebase.getCurrentUser()){
-     next('Sign-In') 
+     next('NotSignedIn') 
   }
   else next()
 })
+
 
 Vue.config.productionTip = false
 
