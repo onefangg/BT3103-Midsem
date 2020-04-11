@@ -249,7 +249,7 @@ export default {
                 database.collection('Project Group').add(this.proj)
             }
             alert("Post Successfully Created!")
-            this.$router.push('/group-page') 
+            this.$router.push('/Group-Page') 
         },
         getNumMembersStu: function(){
             this.study.NumberOfMembers = this.study.UserNames.length

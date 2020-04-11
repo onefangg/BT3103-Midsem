@@ -10,12 +10,12 @@
     <a class="py-3 d-none d-md-inline-block" href="#"><router-link to="/About">About</router-link></a>
     <a class="py-3 d-none d-md-inline-block" href="#"><router-link to="/Contact">Contact Us</router-link></a>
     <a class="py-3 d-none d-md-inline-block" href="#"><router-link to="/Create-Post">Create Group</router-link></a>
-    <a class="py-3 d-none d-md-inline-block" href="#"><router-link to="/group-page">Join Group</router-link></a>
+    <a class="py-3 d-none d-md-inline-block" href="#"><router-link to="/Group-Page">Join Group</router-link></a>
 
     <div class="dropdown-1">
     <b-dropdown id="dropdown-1" right text="User" variant="primary" class="m-3" size="15px">
     <b-dropdown-item href="#" to="/myprofile">Profile</b-dropdown-item>
-    <b-dropdown-item href="#" to="/home-page">Sign Out</b-dropdown-item>
+    <b-dropdown-item href="#" to="/Home-Page">Sign Out</b-dropdown-item>
   </b-dropdown>
 </div>
   </div>

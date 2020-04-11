@@ -1,4 +1,4 @@
-import SignUp from './components/SignUp.vue'
+import SignIn from './components/SignIn.vue'
 import GroupPg from './components/GroupPg.vue'
 import HomePage from './components/HomePage.vue'
 import About from './components/About.vue'
@@ -8,11 +8,13 @@ import CreatePost from './components/CreatePost.vue'
 import Contact from './components/Contact.vue'
 import Register from './components/Register.vue'
 
+
+
 export default [
     {path:"/", component: HomePage, meta:{title:'Home'}},
-    {path:'/SignIn', component: SignUp, meta:{title:'Sign In'}},
-    {path: "/group-page", component: GroupPg, meta:{title:'Join Group'}},
-    {path: "/home-page", component: HomePage, meta:{title:'Home'}},
+    {path:'/Sign-In', component: SignIn, meta:{title:'Sign In'}},
+    {path: "/Group-Page", component: GroupPg, meta:{title:'Join Group'}},
+    {path: "/Home-Page", component: HomePage, meta:{title:'Home'}},
     {path: "/About", component: About, meta:{title:'About'}},
     {path: "/profile", component: Profile, meta:{title:'Profile'}},
     {path: "/myprofile", component: MyProfile, meta:{title:'Profile'}},

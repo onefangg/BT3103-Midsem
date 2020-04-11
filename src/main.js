@@ -15,8 +15,17 @@ import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { faInstagram } from '@fortawesome/free-brands-svg-icons'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 
+import { firestorePlugin } from 'vuefire'
+Vue.use(firestorePlugin)
+import firebase from 'firebase/app'
+import 'firebase/firestore'
+
 Vue.use(VueResource);
 Vue.use(VueRouter);
+
+export const db = firebase.firestore()
+
+
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 library.add(faUserSecret)
 library.add(faFontAwesome)
@@ -35,6 +44,7 @@ router.beforeEach((to, from, next) => {
   document.title = to.meta.title
   next()
 })
+
 
 
 Vue.config.productionTip = false

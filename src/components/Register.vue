@@ -1,17 +1,14 @@
 <template>
-
-    <div id="register">
-      <div id="nav">
+<div class="sign-up">
+    <div id="nav">
       <nb></nb>
-      <h4> Create your Account </h4>
       </div>
-      
+    <br>
+    <h3>Create a new account</h3><br>
 
-      <b-form  @reset="onReset" v-if="show">
-        <b-form-group id="input-group-2" label="Username:" label-for="input-2" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
+    <b-form-group label="Username:" label-for="input-2" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
           <b-form-input
-            id="input-2"
-            v-model="form.name"
+            v-model="username"
             required
             placeholder="Enter Username"
             style="width: 230px;"
@@ -19,15 +16,12 @@
           ></b-form-input>
         </b-form-group>
 
-        
-        
-        <b-row class ="justify-content-center" inline>
+    <b-row class ="justify-content-center" inline>
           
           <b-col cols = "3">
-            <b-form-group id="input-group-3" label="First Name:" label-for="input-3" label-cols-lg="4" label-align-lg="right" label-align-sm="center">
+            <b-form-group label="First Name:" label-for="input-3" label-cols-lg="4" label-align-lg="right" label-align-sm="center">
               <b-form-input
-                id="input-2"
-                v-model="form.firstname"
+                v-model="firstname"
                 required
                 placeholder="First Name"
                 style="width: 230px;"
@@ -37,25 +31,21 @@
           </b-col>
           
         <b-col cols = "3">
-            <b-form-group id="input-group-4" label="Last Name:" label-for="input-4" label-cols-lg="4" label-align-lg="right" label-align-sm="center">
+            <b-form-group label="Last Name:" label-cols-lg="4" label-align-lg="right" label-align-sm="center">
               <b-form-input
-                id="input-2"
-                v-model="form.lastname"
+                v-model="lastname"
                 required
                 placeholder="Last Name"
                 style="width: 230px;"
                 
               ></b-form-input>
             </b-form-group>
-
-
           </b-col>
         </b-row>
-          
-        <b-form-group id="input-group-8" label="Major:" label-for="input-8" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
+
+    <b-form-group label="Major:" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
           <b-form-input
-            id="input-8"
-            v-model="form.major"
+            v-model="major"
             required
             placeholder="Enter Major"
             style="width: 230px;"
@@ -63,11 +53,9 @@
           ></b-form-input>
            </b-form-group>
 
-
-        <b-form-group id="input-group-9" label="Year:" label-for="input-9" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
+    <b-form-group label="Year:" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
           <b-form-input
-            id="input-9"
-            v-model="form.year"
+            v-model="year"
             required
             placeholder="Enter Year of Study"
             style="width: 230px;"
@@ -75,11 +63,8 @@
           ></b-form-input>
         </b-form-group>
 
-
-        <b-form-group
-          id="input-group-1"
+    <b-form-group
           label="Email address:"
-          label-for="input-1"
           label-cols-lg="4"
           label-align-lg="right" 
           label-align-sm="center"
@@ -87,29 +72,24 @@
         >
         <b-input-group size="md" append="@u.nus.edu" style="width: 340px">
           <b-form-input
-            id="input-1"
-            v-model="form.email"
+            v-model="email"
             type="text"
             required
             placeholder="Enter email"
 
           ></b-form-input>
         </b-input-group>
-        </b-form-group>
+    </b-form-group>
         
-
-        <b-form-group
-        id="input-group-5"
+    <b-form-group
         label="Password:"
-        label-for="input-5"
         label-align-lg="right"
         label-align-sm="center"
         label-cols-lg="4"
         
       >
         <b-form-input
-          id="input-5"
-          v-model="form.password"
+          v-model="password"
           type="password"
           required
           placeholder="Enter your desired password"
@@ -117,121 +97,59 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group
-        id="input-group-6"
+    <b-form-group
         label="Confirm Password:"
-        label-for="input-6"
         label-align-lg="right"
         label-align-sm="center"
         label-cols-lg="4"
         
       >
         <b-form-input
-          id="input-5"
-          v-model="form.confirm_password"
+          v-model="confirm_password"
           type="password"
           required
           placeholder="Confirm password"
           style="width:230px"
         ></b-form-input>
         <br>
-      <h6 v-if="form.password == '' || form.confirm_password ==''"></h6>
-      <h6 v-else-if="form.password != form.confirm_password">Passwords do not match</h6>
+      <h6 v-if="password == '' || confirm_password ==''"></h6>
+      <h6 v-else-if="password != confirm_password">Passwords do not match</h6>
       <h6 v-else> Passwords matches </h6>
       </b-form-group>
 
-        
-  
-        <b-button  type="submit" variant="primary" v-on:click = "onSubmit(form)" >Submit</b-button>
-        <b-button type="reset" variant="danger">Reset</b-button>
-      </b-form>
-    </div>
-  </template>
+    <b-button type="submit" variant="primary" v-on:click="signUp">Sign Up!</b-button>
+  </div>
+</template>
 
-  <script>
-  import database from '../firebase.js'
-  import NavBar from './NavBar.vue'
-    export default {
-      components: {
+<script>
+  import firebase from 'firebase'
+   import NavBar from './NavBar.vue'
+  export default {
+    name: 'signup',
+    components: {
         'nb':NavBar
       },
-      data() {
-        return {
-          form: {
-            email: '',
-            name: '',
-            firstname:'',
-            lastname:'',
-            password:'',
-            confirm_password:'',
-            flag:false
-          },
-          show: true
-        }
-      },
-      methods: {
-        onSubmit: function(evt) {
-          if (evt.password == evt.confirm_password) {
-            alert("Account Created")
-            database.collection('Register').add({
-            Username: this.form.name,
-            Firstname: this.form.firstname,
-            Lastname: this.form.lastname,
-            Major: this.form.major,
-            Email: this.form.email,
-            Year: this.form.year,
-            Password: this.form.password,
-            ConfirmPassword: this.form.confirm_password
-    });
-            this.$router.push('/SignIn') 
-
-          } else {
-            alert("fail)")
-          }
-        },
-        onReset: function(evt) {
-          evt.preventDefault()
-          // Reset our form values
-          this.form.email = ''
-          this.form.name = ''
-          this.form.firstname = ''
-          this.form.lastname = ''
-          this.form.password= ''
-          this.form.major= ''
-          this.form.year= ''
-          this.form.confirm_password= ''
-          // Trick to reset/clear native browser form validation state
-          this.show = false
-          this.$nextTick(() => {
-            this.show = true
-          })
-        }
+    data () {
+      return {
+        username: '',
+        firstname:'',
+        lastname:'',
+        email: '',
+        password: '',
+        confirm_password: '',
+        major:'',
+        year: ''
+      }
+    },
+    methods: {
+      signUp () {
+        firebase.auth().createUserWithEmailAndPassword(this.email+"@u.nus.edu", this.password).then(()=> {
+          this.$router.replace('/LoginTest')
+        }).catch((err) => {
+          alert(err.message)
+        });
+        
       }
     }
-  </script>
-
-<style scoped>
-#register {
-  margin: 0 auto;
-  align-content: center;
-  padding-bottom: 50px;
-}
-
-#nav {
-padding-bottom: 50px
-
-}
-
-
-h6 {
-  text-align: left;
-}
-
-h4{
-  background-color: black;
-  color: white;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-
-</style>
+  }
+</script>

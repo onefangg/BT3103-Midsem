@@ -9,7 +9,7 @@
             <h6 align="center"><img src="https://www.comp.nus.edu.sg/images/resources/content/01-ugbanner.jpg" alt="NUS Computing Logo"> </h6>
             
             <p><router-link to="/SignUp">SignUp</router-link></p>
-            <p><router-link to="/group-page">Group</router-link></p>
+            <p><router-link to="/Group-Page">Group</router-link></p>
         </div>
 
         <div class="row">

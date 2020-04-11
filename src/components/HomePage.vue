@@ -10,7 +10,7 @@
                               LoNUS does the heavy lifting for you to find new people to work with. </div>
           
           <div id = "joinbutton">
-            <b-button variant="primary" class="btn btn-primary float-left" to="/SignIn">Join Now</b-button>
+            <b-button variant="primary" class="btn btn-primary float-left" to="/Sign-In">Join Now</b-button>
            </div>
           </b-col>
           
