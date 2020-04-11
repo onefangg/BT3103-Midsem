@@ -5,7 +5,7 @@
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
-            <b-nav-item variant = "light" href="#"><router-link to="/home-page">Home Page</router-link></b-nav-item>
+            <b-nav-item variant = "light" href="#"><router-link to="/Home-Page">Home Page</router-link></b-nav-item>
             <b-nav-item href="#" ><router-link to="/SignUp">Sign In </router-link></b-nav-item>
             <b-nav-item href="#" ><router-link to="/About">About</router-link></b-nav-item>
           </b-navbar-nav>

@@ -12,34 +12,21 @@
 
         <div class="form-label-group">
             <label for="inputEmail">Email address</label>
-            <input v-model="message" v-on:keyup.enter="check" placeholder="Email Address" type="email">
-            <p v-if="message == empty">{{error}}</p>
+            <input v-model="email" v-on:keyup.enter="check" placeholder="Email Address" type="email">
         </div>
         <div class="form-label-group">
             <label for="inputPassword">Password</label>
             <input v-model="password" placeholder="Password" type="password">
         </div>
 
-        <div>
-            <b-form-checkbox
-              id="checkbox-1"
-              v-model="status"
-              name="checkbox-1"
-              value="accepted"
-              unchecked-value="not_accepted"
-            >
-            Remember Me
-            </b-form-checkbox>
-        </div>
-
-        <br>
+       
         Not Registered? Click <router-link to="/Register"><u>here</u></router-link> to sign up!
         <br>
         <br>
 
 
         <div class="checkbox mb-3">
-            <button><router-link to="/group-page">Sign In</router-link></button>
+            <b-button type="submit" variant="primary" v-on:click="login">Sign In</b-button>
         </div>
         
         
@@ -51,16 +38,26 @@
 
 <script>
 import NavBar from './NavBar.vue'
+import firebase from 'firebase'
+
 export default {
   data() {
     return {
-    message: "",
+    email: "",
     empty: "",
-    error: "Email cannot be empty!",
-    password:"",
-    status: 'not_accepted'
+    password:""
     }
   },
+    methods: {
+      login () {
+        firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(() => {
+          this.$router.replace('/Group-Page')
+        })
+        .catch((err) => {
+          alert(err.message)
+        })
+      }
+    },
   components: {
     'nb':NavBar
   },

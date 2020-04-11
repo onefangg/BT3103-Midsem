@@ -11,8 +11,7 @@
         :options="group_types"
         name="radio-options"
       ></b-form-radio-group> 
-    </div> 
-
+    </div>
     
 <b-container fluid = "md" id="filterbox">      
    <!-- Filter and sort options for Project -->
@@ -27,6 +26,21 @@
                         v-model="mod"
                         v-on:keyup.enter = "searchModule()"
                     ></b-input>    
+                    
+                    <!-- Find friends; First a warning would be issued and then allow search -->
+                    <b-input
+                        id="b-form-input-module"
+                        class = "mb-2 mr-sm-2 mb-sm-0 search"
+                        placeholder="Enter friend's username"
+                        v-model="projfriends"
+                        v-on:keyup.enter = "friendsPrivacy = !friendsPrivacy"
+                    ></b-input>    
+                    <b-modal v-model = "friendsPrivacy" hide-footer="true">
+                        <b>NOTE!</b>
+                        Abuse and misuse of this function will result in the suspension from this platform.
+                        <b-button class="mt-3" variant="outline-danger" block>Cancel</b-button>
+                        <b-button class="mt-3" variant="outline-success" block @click="findFriends()">I understand</b-button>
+                    </b-modal>
 
                     <!-- Sorting options -->
                     <b-form-select 
@@ -38,15 +52,28 @@
         </div>
    </div>
 
-    
-
-
     <div class="row justify-content-center align-items-center h-100">
         <!-- Filter and sort options for Study Groups -->
         <div v-show="selected_type === 'Study'">
             <b-form inline>
+            <!-- Find friends; First a warning would be issued and then allow search -->
+            <b-input
+                id="b-form-input-module"
+                class = "mb-2 mr-sm-2 mb-sm-0 search"
+                placeholder="Enter friend's username"
+                v-model="studyfriends"
+                v-on:keyup.enter = "friendsPrivacy = !friendsPrivacy"
+            ></b-input>    
+            <b-modal v-model = "friendsPrivacy" hide-footer="true">
+                <b>NOTE!</b>
+                Abuse and misuse of this function will result in the suspension from this platform.
+                <b-button class="mt-3" variant="outline-danger" block>Cancel</b-button>
+                <b-button class="mt-3" variant="outline-success" block @click="findFriends()">I understand</b-button>
+            </b-modal>
+
             <b-form-select v-model="selected_faculty" :options="faculty" label-field= "location" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
             <b-form-select v-model="selected_sort" :options="sort" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
+            
             </b-form>
         </div>
     </div>
@@ -60,10 +87,11 @@
     <br>
     <!-- This is where the project group posts will show up -->
     <div v-show="selected_type === 'Project'">
-        <div v-show = "searchResults">
+        <div v-show = "searchResultsProject">
             <b-button v-on:click = "fetchProject()">Clear Search Results</b-button>
             <br>
-            <h3 v-show = "noResults">No results for {{error_mod}}</h3>
+            <h3 v-show = "noResultsFriendProj">No results for {{error_proj_friend}}</h3>
+            <h3 v-show = "noResultsMod">No results for {{error_mod}}</h3>
         </div>
         <br>
 
@@ -85,7 +113,12 @@
     <!-- This is where the study group posts will show up -->
     <br>
     <div v-show="selected_type === 'Study'">
-      <b-row align-h="center" >
+        <div v-show = "searchResultsStudy">       
+            <b-button v-on:click = "fetchStudy()">Clear Search Results</b-button>
+            <br>
+            <h3 v-show = "noResultsFriendStudy">No results for {{error_study_friend}}</h3>
+        </div>
+        <b-row align-h="center" >
             <StudyPost v-for = "(item) in studyList" 
             :key = "item.id"
             :groupName = "item.GroupName"
@@ -121,6 +154,10 @@ export default {
     }, methods: {
         fetchStudy: function() {
             this.studyList.length = 0;
+            if (this.searchResultsStudy) {
+                this.searchResultsStudy = false;
+            }
+
             let studyGrp = {}
             database.collection('Study Group').get().then((querySnapshot) => {
                 querySnapshot.forEach(doc => {
@@ -135,8 +172,8 @@ export default {
         fetchProject: function() {
             this.projectList.length = 0;
 
-            if (this.searchResults) {
-                this.searchResults = false;
+            if (this.searchResultsProject) {
+                this.searchResultsProject = false;
             }
             let projectGrp = {}
             database.collection('Project Group').get().then((querySnapshot) => {
@@ -162,15 +199,56 @@ export default {
                         this.projectList.push(projectGrp)
                 })
             }).finally(() => {
-                this.searchResults = true;
+                this.searchResultsProject = true;
                 // if there is no matching results
                 if (this.projectList.length == 0) {
                     this.error_mod = this.mod;
-                    this.noResults = true;
+                    this.noResultsMod = true;
                 }
                 this.finish_loading = false;
             })
-           }
+           },
+        findFriends: function() {
+            this.friendsPrivacy = !this.friendsPrivacy;
+            if (this.selected_type == "Project") {
+                this.projectList.length = 0; // clear the exisitng project list
+            } else if (this.selected_type == "Study") {
+                this.studyList.length = 0;
+            }
+            let templist = [];
+            let grp = {};
+            let friends = (this.selected_type == "Project") ? this.projfriends : this.studyfriends
+            this.finish_loading = true;
+            let select_group = this.selected_type + " Group"
+            database.collection(select_group).where("UserNames", "array-contains", friends).get().then(
+                (querySnapshot) => {
+                    querySnapshot.forEach(doc => {
+                        grp = doc.data()
+                        grp.id = doc.id
+                        templist.push(grp)
+                })
+            }).finally(() => {
+                
+                if (this.selected_type == "Project") {
+                    this.projectList = [...templist];
+                    this.searchResultsProject = true;
+
+                    // if there is no matching results
+                    if (this.projectList.length == 0) {
+                        this.error_proj_friend = this.projfriends;
+                        this.noResultsFriendProj = true;
+                    }
+                } else if (this.selected_type == "Study") {
+                    this.studyList = [...templist];
+                    this.searchResultsStudy = true;
+                     if (this.studyList.length == 0) {
+                        this.error_study_friend = this.studyfriends;
+                        this.noResultsFriendStudy = true;
+                    }
+                }
+                this.finish_loading = false;
+            })
+        }   
     }
     , data() {
         return {
@@ -188,6 +266,8 @@ export default {
                 {value:'Old', text:'Date Posted, Oldest First'}],
             mod: "",
             error_mod: "",
+            error_proj_friend: "",
+            error_study_friend: "",
             selected_faculty: "All",
             faculty:[
                 {value:'All', text: 'Select Faculty'},
@@ -199,9 +279,15 @@ export default {
                 {value:'Business', text: 'Business'}, 
                 {value:'Engineering', text: 'Engineering'}       
             ],
-            noResults: false,
-            searchResults: false,
-            finish_loading: true
+            projfriends: "",
+            studyfriends: "",
+            noResultsMod: false,
+            noResultsFriendProj: false,
+            noResultsFriendStudy: false,
+            searchResultsProject: false,
+            searchResultsStudy: false,
+            finish_loading: true,
+            friendsPrivacy: false,
         }
     },
     created() {
