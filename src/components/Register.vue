@@ -8,7 +8,7 @@
 
     <b-form-group label="Username:" label-for="input-2" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
           <b-form-input
-            v-model="username"
+            v-model="form.UserName"
             required
             placeholder="Enter Username"
             style="width: 230px;"
@@ -21,7 +21,7 @@
           <b-col cols = "3">
             <b-form-group label="First Name:" label-for="input-3" label-cols-lg="4" label-align-lg="right" label-align-sm="center">
               <b-form-input
-                v-model="firstname"
+                v-model="form.FirstName"
                 required
                 placeholder="First Name"
                 style="width: 230px;"
@@ -33,7 +33,7 @@
         <b-col cols = "3">
             <b-form-group label="Last Name:" label-cols-lg="4" label-align-lg="right" label-align-sm="center">
               <b-form-input
-                v-model="lastname"
+                v-model="form.LastName"
                 required
                 placeholder="Last Name"
                 style="width: 230px;"
@@ -45,7 +45,7 @@
 
     <b-form-group label="Major:" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
           <b-form-input
-            v-model="major"
+            v-model="form.Major"
             required
             placeholder="Enter Major"
             style="width: 230px;"
@@ -55,7 +55,7 @@
 
     <b-form-group label="Year:" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
           <b-form-input
-            v-model="year"
+            v-model="form.Year"
             required
             placeholder="Enter Year of Study"
             style="width: 230px;"
@@ -72,7 +72,7 @@
         >
         <b-input-group size="md" append="@u.nus.edu" style="width: 340px">
           <b-form-input
-            v-model="email"
+            v-model="form.NUSNET"
             type="text"
             required
             placeholder="Enter email"
@@ -89,7 +89,7 @@
         
       >
         <b-form-input
-          v-model="password"
+          v-model="form.Password"
           type="password"
           required
           placeholder="Enter your desired password"
@@ -112,9 +112,9 @@
           style="width:230px"
         ></b-form-input>
         <br>
-      <h6 v-if="password == '' || confirm_password ==''"></h6>
-      <h6 v-else-if="password != confirm_password">Passwords do not match</h6>
-      <h6 v-else> Passwords matches </h6>
+      <b-row><h6 v-if="form.Password == '' || confirm_password ==''"></h6>
+      <h6 v-else-if="form.Password != confirm_password">Passwords do not match</h6>
+      <h6 v-else> Passwords matches </h6></b-row>
       </b-form-group>
 
     <b-button type="submit" variant="primary" v-on:click="signUp">Sign Up!</b-button>
@@ -123,7 +123,8 @@
 
 <script>
   import firebase from 'firebase'
-   import NavBar from './NavBar.vue'
+  import NavBar from './NavBar.vue'
+  import database from '../firebase.js'
   export default {
     name: 'signup',
     components: {
@@ -131,20 +132,28 @@
       },
     data () {
       return {
-        username: '',
-        firstname:'',
-        lastname:'',
-        email: '',
-        password: '',
         confirm_password: '',
-        major:'',
-        year: ''
+        form: {
+          FirstName:'',
+          GroupsCreated:[],
+          GroupsJoined:[],
+          LastName:'',
+          Major:'',
+          NUSNET: '',
+          Password: '',
+          UserName: '',
+          Year: ''
+        }
       }
     },
     methods: {
+      insertintodatabase() {
+        database.collection('Users').add(this.form)
+      },
       signUp () {
-        firebase.auth().createUserWithEmailAndPassword(this.email+"@u.nus.edu", this.password).then(()=> {
-          this.$router.replace('/LoginTest')
+        firebase.auth().createUserWithEmailAndPassword(this.form.NUSNET+"@u.nus.edu", this.form.Password).then(()=> {
+          this.insertintodatabase();}).then(() => {
+          this.$router.replace('/Sign-In');
         }).catch((err) => {
           alert(err.message)
         });
