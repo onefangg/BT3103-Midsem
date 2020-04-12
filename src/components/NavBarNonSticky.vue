@@ -12,7 +12,7 @@
     <a class="py-3 d-none d-md-inline-block" href="#"><router-link to="/Create-Post">Create Group</router-link></a>
     <a class="py-3 d-none d-md-inline-block" href="#"><router-link to="/Group-Page">Join Group</router-link></a>
 
-    <div class="dropdown-1">
+    <div class="dropdown-1" v-show="checkLoginStatus === true">
     <b-dropdown id="dropdown-1" right text="User" variant="primary" class="m-3" size="15px">
     <b-dropdown-item href="#" to="/profile">Profile</b-dropdown-item>
     <b-dropdown-item href="#">Sign Out</b-dropdown-item>
@@ -23,8 +23,20 @@
 </template>
 
 <script>
+import firebase from 'firebase'
+
 export default {
-    
+    methods: {
+    checkLoginStatus() {
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            return true
+        } else {
+            return false
+        } 
+      });
+    }
+  }
 }
 </script>
 

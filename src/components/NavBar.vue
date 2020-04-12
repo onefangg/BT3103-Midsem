@@ -12,14 +12,15 @@
     <a class="py-3 d-none d-md-inline-block" href="#"><router-link to="/Create-Post">Create Group</router-link></a>
     <a class="py-3 d-none d-md-inline-block" href="#"><router-link to="/Group-Page">Join Group</router-link></a>
 
-    <div class="dropdown-1">
+    
+    <div class="dropdown-1" v-show="checkLoginStatus === true">
     <b-dropdown id="dropdown-1" right text="User" variant="primary" class="m-3" size="15px">
     <b-dropdown-item href="#" to="/myprofile">Profile</b-dropdown-item>
     <b-dropdown-item href="#" to="/group-page">Find friends</b-dropdown-item> 
     
     <b-dropdown-item v-on:click="signOut">Sign Out</b-dropdown-item>
   </b-dropdown>
-</div>
+</div> 
   </div>
 </nav>
 </template>
@@ -36,6 +37,15 @@ export default {
         .then(() => {
           this.$router.replace('/Sign-In');
         });
+    },
+    checkLoginStatus() {
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            return true
+        } else {
+            return false
+        } 
+      });
     }
   }
 }
