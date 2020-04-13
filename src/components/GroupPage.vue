@@ -1,6 +1,6 @@
 <template>
 <div> <nb></nb>
-<h4> LoNUS Postings </h4>
+<h4> LoNUS Groups </h4>
 <!-- Selection screen between Project and Study Groups; Default is Project Groups -->
 <b-container fluid = "lg">
     <div class= "radio">
@@ -85,7 +85,7 @@
     <!-- change userId later.... -->
 
     <br>
-    <!-- This is where the project group posts will show up -->
+    <!-- This is where the project groups will show up -->
     <div v-show="selected_type === 'Project'">
         <div v-show = "searchResultsProject">
             <b-button v-on:click = "fetchProject()">Clear Search Results</b-button>
@@ -96,7 +96,7 @@
         <br>
 
         <b-row align-h="center">
-                <Post v-for = "(item) in projectList" v-bind:key = "item.id"  
+                <ProjectGroup v-for = "(item) in projectList" v-bind:key = "item.id"  
                 v-bind:module = "item.ModuleCode"
                 v-bind:userId = "A000001"
                 v-bind:post_desc = "item.Description"
@@ -105,12 +105,12 @@
                 v-bind:members = "item.UserNames"
                 :doc_id = "item.id"
                 :hide_post = "item.hidden"
-                ></Post>
+                ></ProjectGroup>
 
         </b-row>
      </div>
 
-    <!-- This is where the study group posts will show up -->
+    <!-- This is where the study groups will show up -->
     <br>
     <div v-show="selected_type === 'Study'">
         <div v-show = "searchResultsStudy">       
@@ -119,7 +119,7 @@
             <h3 v-show = "noResultsFriendStudy">No results for {{error_study_friend}}</h3>
         </div>
         <b-row align-h="center" >
-            <StudyPost v-for = "(item) in studyList" 
+            <StudyGroup v-for = "(item) in studyList" 
             :key = "item.id"
             :groupName = "item.GroupName"
             :userId = "A000001" 
@@ -131,7 +131,7 @@
             :members = "item.UserNames"
             :doc_id = "item.id"
             :hide_post = "item.hidden">
-            </StudyPost>    
+            </StudyGroup>    
 
       </b-row>
     </div>
@@ -141,15 +141,15 @@
 
 
 <script>
-import Post from './Post.vue'
-import StudyPost from './StudyPost.vue'
+import ProjectGroup from './ProjectGroup.vue'
+import StudyGroup from './StudyGroup.vue'
 import NavBar from './NavBar.vue'
 import database from '../firebase.js'
 
 export default {
     components: {
-        Post,
-        StudyPost,
+        ProjectGroup,
+        StudyGroup,
         'nb':NavBar
     }, methods: {
         fetchStudy: function() {
@@ -377,8 +377,9 @@ export default {
 }
 
 h4{
-  background-color: black;
+  background-color: #007bff;
   color: white;
+  font-weight: 600;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }

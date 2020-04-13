@@ -1,12 +1,10 @@
-<template>
-       
+<template>  
     <div>
       <nb></nb>
         <form class="form-signin">
             <div class="text-center mb-4">
                 <img src="https://sagehouse.sg/wp-content/uploads/2017/08/national-university-of-singapore.jpg" alt="" width="300" height="200">
                 <p> Sign in with your <b>NUS Email</b> and Password </p>
-
             </div>
         </form>
 
@@ -18,22 +16,14 @@
             <label for="inputPassword">Password</label>
             <input v-model="password" placeholder="Password" type="password">
         </div>
-
-       
         Not Registered? Click <router-link to="/Register"><u>here</u></router-link> to sign up!
         <br>
         <br>
 
-
         <div class="checkbox mb-3">
             <b-button type="submit" variant="primary" v-on:click="login">Sign In</b-button>
-        </div>
-        
-        
+        </div>  
     </div>
-
-
-
 </template>
 
 <script>
@@ -56,6 +46,7 @@ export default {
         .catch((err) => {
           alert(err.message)
         })
+        
       }
     },
   components: {
@@ -64,7 +55,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 body {
 height: 100%;
@@ -91,7 +81,6 @@ height: 100%;
         font-size: 3.5rem;
     }
 }
-
 
 .form-signin {
   width: 100%;
@@ -126,7 +115,6 @@ height: 100%;
   border: 1px solid transparent;
   border-radius: .25rem;
   transition: all .1s ease-in-out;
-  
 }
 
 .form-label-group input::-webkit-input-placeholder {

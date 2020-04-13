@@ -14,6 +14,7 @@ import { faFacebook } from '@fortawesome/free-brands-svg-icons'
 import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { faInstagram } from '@fortawesome/free-brands-svg-icons'
 import { fas } from '@fortawesome/free-solid-svg-icons'
+import { faTelegram } from '@fortawesome/free-brands-svg-icons'
 
 import { firestorePlugin } from 'vuefire'
 Vue.use(firestorePlugin)
@@ -33,6 +34,7 @@ library.add(faFacebook)
 library.add(faTwitter)
 library.add(faInstagram)
 library.add(fas)
+library.add(faTelegram)
 
 
 

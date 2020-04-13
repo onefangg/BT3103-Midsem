@@ -1,12 +1,12 @@
 <template>
     <section id = "team">
         <div class="bg">
-            <nbns></nbns>
+            <nb></nb>
             <b-container fluid class="text-center">
                 <b-row>
                     <b-col>
-                        <h1 >Our Team</h1>
-                        <p class = "mt-2">LoNUS - The first NUS group finder so you don't have to study alone. <br/>Established in 2020, we aim to serve NUS students needs.</p>
+                        <h1 >The Team behind LoNUS</h1>
+                        <p class = "mt-2">Established in 2020. We aim to improve the lives of NUS students.</p>
                     </b-col>
                 </b-row>
             </b-container>
@@ -17,22 +17,16 @@
                         <b-card title="Choo Su lyn" img-src="..\assets\sulyn.jpg" img-alt="Image" img-top tag="article"
                             style="max-width: 20rem;" class="mb-2 img-fluid mb-3 m-0" border-variant="dark" text-variant="dark">
                             <b-card-text >
-                                A year 2 business analytics student working on BT3103
+                                Year 2 business analytics student.
                             </b-card-text>                
-                            <!-- <b-button href="#" variant="primary">Go somewhere</b-button> -->
                             <div class="d-flex flex-row justify-content-center">
                                 <div class="p-4">
-                                    <a href="https://www.facebook.com">
-                                        <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'facebook'}"/>
+                                    <a href="https://t.me/Ataraxific">
+                                        <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'telegram'}"/>
                                     </a>
                                 </div>
                                 <div class="p-4">
-                                    <a href="https://www.twitter.com">
-                                        <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'twitter'}"/>
-                                    </a>
-                                </div>
-                                <div class="p-4">
-                                    <a href="https://www.instagram.com">
+                                    <a href="https://www.instagram.com/ataraxific/">
                                         <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'instagram'}"/>
                                     </a>
                                 </div>
@@ -43,22 +37,16 @@
                         <b-card title="Caitlin Ong" img-src="..\assets\kaitilin.jpg" img-alt="Image" img-top tag="article"
                             style="max-width: 20rem;" class="mb-2 img-fluid mb-3" border-variant="dark" text-variant="dark" >
                             <b-card-text>
-                                A year 2 business analytics student working on BT3103
+                                Year 2 business analytics student who drinks too much coffee.
                             </b-card-text>                
-                            <!-- <b-button href="#" variant="primary">Go somewhere</b-button> -->
                             <div class="d-flex flex-row justify-content-center">
                                 <div class="p-4">
-                                    <a href="https://www.facebook.com">
-                                        <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'facebook'}"/>
+                                    <a href="https://t.me/cait_o">
+                                        <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'telegram'}"/>
                                     </a>
                                 </div>
                                 <div class="p-4">
-                                    <a href="https://www.twitter.com">
-                                        <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'twitter'}"/>
-                                    </a>
-                                </div>
-                                <div class="p-4">
-                                    <a href="https://www.instagram.com">
+                                    <a href="https://www.instagram.com/cait.kl/">
                                         <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'instagram'}"/>
                                     </a>
                                 </div>
@@ -66,25 +54,19 @@
                         </b-card>
                     </b-col>
                     <b-col>
-                        <b-card title="Chua Yi Fang" img-src="..\assets\yifang2.jpg" img-alt="Image" img-top tag="article" 
+                        <b-card title="Chua Yi Fang" img-src="..\assets\yifang4.jpg" img-alt="Image" img-top tag="article" 
                             style="max-width: 20rem;" class="mb-2 img-fluid mb-3" border-variant="dark" text-variant="dark">
                             <b-card-text>
-                                A year 2 business analytics student working on BT3103
+                                Year 2 business analytics student who loves BTS.
                             </b-card-text>                
-                            <!-- <b-button href="#" variant="primary">Go somewhere</b-button> -->
                             <div class="d-flex flex-row justify-content-center">
                                 <div class="p-4">
-                                    <a href="https://www.facebook.com">
-                                        <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'facebook'}"/>
+                                    <a href="https://t.me/onefang">
+                                        <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'telegram'}"/>
                                     </a>
                                 </div>
                                 <div class="p-4">
-                                    <a href="https://www.twitter.com">
-                                        <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'twitter'}"/>
-                                    </a>
-                                </div>
-                                <div class="p-4">
-                                    <a href="https://www.instagram.com">
+                                    <a href="https://www.instagram.com/yifaang/">
                                         <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'instagram'}"/>
                                     </a>
                                 </div>
@@ -99,18 +81,12 @@
                         <b-card title="Chua Wen Feng" img-src="..\assets\wenfeng.jpg" img-alt="Image" img-top tag="article"
                             style="max-width: 20rem;" class="mb-2 img-fluid mb-3" border-variant="dark" text-variant="dark">
                             <b-card-text>
-                                A year 2 business analytics student working on BT3103
+                                Year 2 business analytics student.
                             </b-card-text>                
-                            <!-- <b-button href="#" variant="primary">Go somewhere</b-button> -->
                             <div class="d-flex flex-row justify-content-center">
                                 <div class="p-4">
-                                    <a href="https://www.facebook.com">
-                                        <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'facebook'}"/>
-                                    </a>
-                                </div>
-                                <div class="p-4">
-                                    <a href="https://www.twitter.com">
-                                        <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'twitter'}"/>
+                                    <a href="https://t.me/cwf97">
+                                        <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'telegram'}"/>
                                     </a>
                                 </div>
                                 <div class="p-4">
@@ -125,19 +101,12 @@
                         <b-card title="Lim Wei Zheng" img-src= '..\assets\weizheng2.jpg' img-alt="Image" img-top tag="article"
                             style="max-width: 20rem;" class="mb-2 img-fluid mb-3" border-variant="dark" text-variant="dark">
                             <b-card-text>
-                                NUS Year 2 Business analytics 
-                                Passion for data analytics
+                                Year 2 business analytics student with a passion for data analytics.
                             </b-card-text>                
-                            <!-- <b-button href="#" variant="primary">Go somewhere</b-button> -->
                             <div class="d-flex flex-row justify-content-center">
                                 <div class="p-4">
-                                    <a href="https://www.facebook.com">
-                                        <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'facebook'}"/>
-                                    </a>
-                                </div>
-                                <div class="p-4">
-                                    <a href="https://www.twitter.com">
-                                        <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'twitter'}"/>
+                                    <a href="https://t.me/wei_zhenggg">
+                                        <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'telegram'}"/>
                                     </a>
                                 </div>
                                 <div class="p-4">
@@ -155,10 +124,10 @@
 </template>
 
 <script>
-import NavBarNonSticky from './NavBarNonSticky.vue'
+import NavBar from './NavBar.vue'
     export default {
         components: {
-            'nbns':NavBarNonSticky
+            'nb':NavBar
         }
     }
 </script>
@@ -167,23 +136,13 @@ import NavBarNonSticky from './NavBarNonSticky.vue'
     body, html {
       height: 100%;
     }
-    .bg {
-      /* The image used */
-      background-image: url("https://cdn.hipwallpaper.com/i/22/9/szOvfx.jpg");
-  
-      /* Full height */
-      height: 100%;
-  
-      /* Center and scale the image nicely */
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
+
     h1 {
         margin-top:20px;
         font-family: sans-serif;
         font-weight: bold;
     }
+    
     .mt-2 {
         font-family:sans-serif;
         /*font-weight: bold;*/

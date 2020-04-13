@@ -6,51 +6,42 @@
           <b-col><b-img src='..\assets\team_meeting blue.svg' id="illustration"></b-img></b-col>
           <b-col><hr align="left" id="shortline"> 
           <div id = "text">Finding groupmates in NUS is easier than ever.</div>
-          <div id ="subtext">Having difficulty finding project groupmates? Or just tired of studying alone? 
-                              LoNUS does the heavy lifting for you to find new people to work with. </div>
-          
+          <div id ="subtext">Having difficulty finding project groupmates? Or just tired of studying alone? LoNUS does the heavy lifting for you to find new people to work with. 
+          </div>
           <div id = "joinbutton">
-            <b-button variant="primary" class="btn btn-primary float-left" to="/Sign-In">Join Now</b-button>
+            <b-button variant="primary" v-if="!user" class="btn btn-primary float-left" to="/Sign-In">Join Now</b-button>
+            <b-button variant="primary" v-if="user" class="btn btn-primary float-left mr-2" to="/Group-Page">Join a group</b-button>
+            <b-button variant="primary" v-if="user" class="btn btn-primary float-left" to="/Create-Group">Create a group</b-button>
            </div>
           </b-col>
-          
       </b-row>
-
       </b-container>
-
-
-      <!-- <nb></nb> -->
-      <!-- <div class="bg"> -->
-        <!-- <nb></nb> -->
-        <!--<div>
-          <nb></nb>
-        
-          <b-jumbotron id = 'image' style="background-image: url(https://www.comp.nus.edu.sg/images/resources/content/01-ugbanner.jpg); background-size: 100%;"  class="mb-0">
-           <div id = 'box' class="align-items-center">
-            <div class="transbox">
-           <h1 id='welcome' class="justify-content-center align-items-center"> Welcome to LoNUS! </h1>
-            
-            
-                <h4 id='welcomemsg'>Looking for study buddies or project groups?</h4>
-               
-                <b-button variant="light" href="#"><router-link to="/SignIn">Sign In Now!</router-link></b-button>
-                </div>
-               
-               <div style ="padding: 9em 2em 0em 0em"></div>
-              
-            </div>
-          </b-jumbotron>
-      </div>-->
     </div>
-    <!-- </div> -->
 
 </template> 
 <script>
 import NavBar from './NavBar.vue'
+import firebase from 'firebase'
+
 export default {
   components: {
     'nb':NavBar
-  }
+  }, 
+  data () {
+      return {
+      user: null
+    }
+  },
+  created: function () {
+    var vm = this;
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        vm.user = user;
+      } else {
+        vm.user = null;
+      }
+    });
+}
 }
 </script>
 
@@ -84,23 +75,13 @@ export default {
   #joinbutton{
     padding-top:18px;
   }
-  .jumbotron {
-      background-repeat: no-repeat;
-      background-size: 100%;
-      min-height: 70vh;
-      margin-bottom: 0px;
-      padding:  8em 2em 2em 2em;
-      /*background-blend-mode: soft-light;*/
-    
-    
-  }
   #image{
     opacity: 80%;
   }
   #welcome {
     margin-bottom:0px;
     margin-top: 50px;
-    font: 3.5em sans-serif;
+    font: 3.5em;
     text-shadow: 3px 4px 4px #000000;
     font-weight: 800;
   }
@@ -120,28 +101,4 @@ export default {
     border-color: grey; 
     border-style:transparent;
   }
- 
-  .view {
-      /* The image used */
-      background-image: url("https://cdn.hipwallpaper.com/i/22/9/szOvfx.jpg");
-  
-      /* Full height */
-      height: 100%;
-  
-      /* Center and scale the image nicely */
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      opacity:1;
-    }
-    div.transbox {
-      margin-top: 30px;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding-bottom:25px;
-      margin-right: 400px;
-      margin-left: 400px;
-      border-radius: 25px;
-    }
-  
-  
 </style>

@@ -31,7 +31,7 @@
                 <b-tabs pills card>
                     <b-tab title="Groups Created" active>
                         <b-row align-h="left" >
-                            <Post v-for = "m in posts"
+                            <ProjectGroup v-for = "m in posts"
                                 class = "post-feed" 
                                 :key = m.id
                                 :module = m.mod_code
@@ -41,8 +41,8 @@
                                 :post_date = m.post_date
                                 :members = m.members
                                 >
-                                </Post>
-                                <StudyPost v-for = "s in studyposts" 
+                                </ProjectGroup>
+                                <StudyGroup v-for = "s in studygroups" 
                                 :key = s.id
                                 :groupName = s.groupName
                                 :userId = s.userId
@@ -53,11 +53,11 @@
                                 :faculty = s.faculty
                                 :members = s.members
                                 >
-                                </StudyPost>  
+                                </StudyGroup>  
                         </b-row>
                     </b-tab>
                     <b-tab title = 'Groups Joined'><b-row align-h="left" >
-                            <Post v-for = "m in joined"
+                            <ProjectGroup v-for = "m in joined"
                                 class = "post-feed" 
                                 :key = m.id
                                 :module = m.mod_code
@@ -67,7 +67,7 @@
                                 :post_date = m.post_date
                                 :members = m.members
                                 >
-                                </Post></b-row></b-tab>
+                                </ProjectGroup></b-row></b-tab>
                     </b-tabs>
             </b-card></b-col>
            
@@ -82,13 +82,13 @@
 
 <script>
 import NavBar from './NavBar.vue'
-import Post from './Post.vue'
-import StudyPost from './StudyPost.vue'
+import ProjectGroup from './ProjectGroup.vue'
+import StudyGroup from './StudyGroup.vue'
 export default {
     components: {
         'nb' : NavBar,
-        Post,
-        StudyPost
+        ProjectGroup,
+        StudyGroup
     },
     props: ["icon", "name", "userId", "img", "major", "username"],
     data() {
@@ -102,7 +102,7 @@ export default {
                 year: 2
 
             }, 
-            posts: [
+            projectgroups: [
                 {
                     mod_code: "BT3103",
                     userId: "notspiderman",
@@ -112,7 +112,7 @@ export default {
                     members: ["notspiderman", "ned","dodobird", "michaelangelo"]
                 }
             ],
-            studyposts: [
+            studygroups: [
                 {
                     groupName: "CLB muggers",
                     userId: "notspiderman",

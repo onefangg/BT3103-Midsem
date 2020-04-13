@@ -26,15 +26,13 @@
             v-model="details.UserName"
             required
             style="width: 230px;"
-
           ></b-form-input>
     </b-form-group> 
     <b-form-group label="First Name:" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
           <b-form-input
             v-model="details.FirstName"
             required
-            style="width: 230px;"
-            
+            style="width: 230px;"   
           ></b-form-input>
     </b-form-group>
 
@@ -43,7 +41,6 @@
             v-model="details.LastName"
             required
             style="width: 230px;"
-            
           ></b-form-input>
     </b-form-group>
 
@@ -52,7 +49,6 @@
             v-model="details.Major"
             required
             style="width: 230px;"
-            
           ></b-form-input>
     </b-form-group>
 
@@ -60,8 +56,16 @@
           <b-form-input
             v-model="details.Year"
             required
+            type="number"
             style="width: 230px;"
-            
+          ></b-form-input>
+    </b-form-group>
+
+        <b-form-group label="Telegram username:" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
+          <b-form-input
+            v-model="details.Telegram"
+            required
+            style="width: 230px;"
           ></b-form-input>
     </b-form-group>
 
@@ -92,6 +96,7 @@
           Major:'',
           NUSNET: '',
           Password: '',
+          Telegram: '',
           UserName: '',
           Year: ''
         }
@@ -105,6 +110,7 @@
                     FirstName: this.details.FirstName,
                     LastName: this.details.LastName,
                     Major: this.details.Major,
+                    Telegram: this.details.Telegram,
                     UserName: this.details.UserName,
                     Year: this.details.Year   
                 })
@@ -133,6 +139,7 @@
                     vm.details.Major = doc.data().Major;
                     vm.details.UserName = doc.data().UserName;
                     vm.details.Year = doc.data().Year;
+                    vm.details.Telegram = doc.data().Telegram;
                 })
             })
             .catch(function(error) {
@@ -142,6 +149,6 @@
         vm.user = null;
       }
     });
-  }
+    }
   }
 </script>
