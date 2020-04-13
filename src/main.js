@@ -51,7 +51,6 @@ router.beforeEach(async (to, from, next) => {
   else next()
 })
 
-
 Vue.config.productionTip = false
 
 new Vue({

@@ -9,6 +9,7 @@ import Contact from './components/Contact.vue'
 import Register from './components/Register.vue'
 import NotSignedIn from './components/NotSignedIn.vue'
 import Edit from './components/Edit.vue'
+import ProfileNew from './components/ProfileNew.vue'
 
 
 export default [
@@ -24,5 +25,6 @@ export default [
     {path: "/Contact", component: Contact, meta:{title:'Contact Us'}},
     {path: "/Register", component: Register, meta:{title:'Register'}},
     {path:'/NotSignedIn', component: NotSignedIn, meta:{title:'Please sign in'}},
+    {path:'/ProfileNew', component: ProfileNew, meta:{title:'ProfileNew', requiresAuth: true}},
     {path:'/Edit-Details', component: Edit, meta:{title:'Edit Details'}}
 ]
