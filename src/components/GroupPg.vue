@@ -35,7 +35,7 @@
                         v-model="projfriends"
                         v-on:keyup.enter = "friendsPrivacy = !friendsPrivacy"
                     ></b-input>    
-                    <b-modal v-model = "friendsPrivacy" hide-footer="true">
+                    <b-modal v-model = "friendsPrivacy" hide-footer=true>
                         <b>NOTE!</b>
                         Abuse and misuse of this function will result in the suspension from this platform.
                         <b-button class="mt-3" variant="outline-danger" block>Cancel</b-button>
@@ -64,7 +64,7 @@
                 v-model="studyfriends"
                 v-on:keyup.enter = "friendsPrivacy = !friendsPrivacy"
             ></b-input>    
-            <b-modal v-model = "friendsPrivacy" hide-footer="true">
+            <b-modal v-model = "friendsPrivacy" hide-footer=true>
                 <b>NOTE!</b>
                 Abuse and misuse of this function will result in the suspension from this platform.
                 <b-button class="mt-3" variant="outline-danger" block>Cancel</b-button>
