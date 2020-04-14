@@ -11,7 +11,8 @@
       <a class="py-3 d-none d-md-inline-block" href="#"><router-link to="/Group-Page">Join Group</router-link></a>
       <div class="dropdown-1" v-if="user">
       <b-dropdown id="dropdown-1" right text="User" variant="primary" class="m-3" size="15px">
-        <b-dropdown-item href="#" to="/Edit-Details">Edit Details</b-dropdown-item>
+        <b-dropdown-item href="#" to="/ProfileNew"><b-img v-bind:src="details.Picture"  alt="" class="user-profile" width="40px" height="40px" rounded="circle"></b-img>
+                    Profile</b-dropdown-item>
         <b-dropdown-item href="#" to="/Group-Page">Find friends</b-dropdown-item> 
         <b-dropdown-item v-on:click="signOut">Sign Out</b-dropdown-item>
       </b-dropdown>
@@ -22,11 +23,26 @@
 
 <script>
 import firebase from 'firebase'
+import database from '../firebase.js'
 
 export default {
   data () {
       return {
-      user: null
+      user: null,
+      email: '',
+      id: '',
+      details: {
+        FirstName:'',
+        GroupsCreated:[],
+        GroupsJoined:[],
+        LastName:'',
+        Major:'',
+        NUSNET: '',
+        Password: '',
+        UserName: '',
+        Year: '',
+        Picture: ''
+      },
     }
   },
   methods: {
@@ -44,6 +60,25 @@ export default {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         vm.user = user;
+        vm.email = user.email;
+        vm.email = vm.email.substring(0, vm.email.indexOf("@"))
+        const emailToCheck = vm.email;
+        database.collection('Users')
+            .where('NUSNET' , '==', emailToCheck)
+            .get().then((querySnapShot) => {
+                querySnapShot.forEach((doc) => {
+                    vm.id = doc.id
+                    vm.details.FirstName = doc.data().FirstName;
+                    vm.details.LastName = doc.data().LastName;
+                    vm.details.Major = doc.data().Major;
+                    vm.details.UserName = doc.data().UserName;
+                    vm.details.Year = doc.data().Year;
+                    vm.details.Picture = doc.data().Picture;
+                })
+            })
+            .catch(function(error) {
+                console.log("Error getting documents: ", error);
+             });
       } else {
         vm.user = null;
       }

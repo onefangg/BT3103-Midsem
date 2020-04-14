@@ -3,52 +3,95 @@
 <nb>
 </nb>
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-        <div class="top-breadcrumb">
-        </div>
-    </div>
-  </div>
-        <div class="img" style="    background-image: linear-gradient(150deg, rgba(63, 174, 255, .3)15%, rgba(63, 174, 255, .3)70%, rgba(63, 174, 255, .3)94%), url(https://bootdey.com/img/Content/flores-amarillas-wallpaper.jpeg);height: 350px;background-size: cover;"></div>
+<div id="my-container" class="hi">
+    <div class="img" style="    background-image: linear-gradient(150deg, rgba(63, 174, 255, .3)15%, rgba(63, 174, 255, .3)70%, rgba(63, 174, 255, .3)94%), url(https://bootdey.com/img/Content/flores-amarillas-wallpaper.jpeg);height: 350px;background-size: cover;"></div>
         <div class="card social-prof">
             <div class="card-body">
                 <div class="wrapper">
-                    <b-img src="https://i.picsum.photos/id/58/125/125.jpg" alt="" class="user-profile" width="150px" height="150px" rounded="circle"></b-img>
+                    <b-img v-bind:src="details.Picture" alt="" class="user-profile" width="150px" height="150px" rounded="circle"></b-img>
                     <h2>{{details.FirstName}}</h2>
                     <p>I am from {{details.Major}} </p>
+                    <b-button id="popover-reactive-1" v-on:click="changePic()">Change My Picture</b-button>
+
                 </div>
+
+                <b-popover
+                    target="popover-reactive-1"
+                    triggers="click"
+                    :show.sync="popoverShow"
+                    placement="auto"
+                    container="my-container"
+                    ref="popover"
+                    @show="onShow"
+                    @shown="onShown"
+                    @hidden="onHidden"
+                    >
+
+                    <template v-slot:title>
+                        <b-button @click="onClose" class="close" aria-label="Close">
+                        <span class="d-inline-block" aria-hidden="true">&times;</span>
+                        </b-button>
+                        Change my profile picture
+                    </template>
+
+                    <div>
+                        <b-form-group
+                        label="URL"
+                        label-for="popover-input-1"
+                        label-cols="3"
+                        :state="input1state"
+                        class="mb-1"
+                        description="Enter URL"
+                        invalid-feedback="This field is required"
+                        >
+                        <b-form-input
+                            ref="input1"
+                            id="popover-input-1"
+                            v-model="input1"
+                            :state="input1state"
+                            size="sm"
+                        ></b-form-input>
+                        </b-form-group>
+
+                        <b-button @click="onClose" size="sm" variant="danger">Cancel</b-button>
+                        <b-button @click="onOk" size="sm" variant="primary">Ok</b-button>
+                    </div>
+                    </b-popover>
+
+
+
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12 gedf-main">
+        
+        <b-row>
+            <b-col>
+                <b-card no-body>
+                    <b-tabs pills card>
+                        <b-tab title="Profile" active>
+                            <b-row alight-h="right">
+                                <b-button variant="light" to="/Edit-Details">Edit Details</b-button>
+                            </b-row>
+                            <br>
+                            <b-row align-h="left">
+                                <h5>Name: {{details.LastName}} {{details.FirstName}}</h5>
+                            </b-row>
+                            <b-row align-h="left">
+                                <h5>Year and Major: Year {{details.Year}} {{details.Major}}</h5>
+                            </b-row>
+                        </b-tab>
+                        
+                        <b-tab title = 'Groups Joined'>
+                            <b-row align-h="left" ></b-row>
+                        </b-tab>
 
-                <div class="card social-timeline-card">
-                    <div class="card-header">
-                        <div class="nav nav-tabs card-header-tabs" id="myTab" role="tab4list">
-                                <h5 class="nav-link active" id="posts-tab">My Profile</h5>
-                                
-                        </div>
-                    </div>
-                    
-                    <div class="profiletab">
-                      <b-container class="bv-example-row">
-                        <b-row>
-                          <b-col cols = "6">
-                            <h5>First Name: {{details.FirstName}}</h5>
-                          </b-col >
-                          <b-col cols = "6">
-                            <h5>Last Name: {{details.LastName}}</h5>
-                          </b-col>
-                        </b-row>
-                      </b-container>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+                         <b-tab title = 'Groups Created'>
+                            <b-row align-h="left" ></b-row>
+                        </b-tab>
+                    </b-tabs>
+            </b-card>
+        </b-col>
+    </b-row>       
+</div>
 </div>
 
 </template>
@@ -78,7 +121,18 @@ export default {
           NUSNET: '',
           Password: '',
           UserName: '',
-          Year: ''
+          Year: '',
+          Picture: ''
+        },
+        input1: '',
+        input1state: null,
+        popoverShow: false
+      }
+    },
+    watch: {
+      input1(val) {
+        if (val) {
+          this.input1state = true
         }
       }
     },
@@ -87,18 +141,54 @@ export default {
             database.collection('Users')
                 .doc(this.id)
                 .update({ 
-                    FirstName: this.details.FirstName,
-                    LastName: this.details.LastName,
-                    Major: this.details.Major,
-                    UserName: this.details.UserName,
-                    Year: this.details.Year   
+                    Picture: this.details.Picture   
                 })
                 .then(() => {
                     console.log('account details updated!')
                     this.showModal = true;
                 })
-            }
-        
+            },
+    onClose() {
+        this.popoverShow = false
+      },
+      onOk() {
+        if (!this.input1) {
+          this.input1state = false
+        }
+        if (this.input1) {
+          this.onClose()
+          // Return our popover form results
+          this.details.Picture = this.input1
+          this.submitChanges()
+        }
+      },
+      onShow() {
+        // This is called just before the popover is shown
+        // Reset our popover form variables
+        this.input1 = ''
+        this.input1state = null
+      },
+      onShown() {
+        // Called just after the popover has been shown
+        // Transfer focus to the first input
+        this.focusRef(this.$refs.input1)
+      },
+      onHidden() {
+        // Called just after the popover has finished hiding
+        // Bring focus back to the button
+        this.focusRef(this.$refs.button)
+      },
+      focusRef(ref) {
+        // Some references may be a component, functional component, or plain element
+        // This handles that check before focusing, assuming a `focus()` method exists
+        // We do this in a double `$nextTick()` to ensure components have
+        // updated & popover positioned first
+        this.$nextTick(() => {
+          this.$nextTick(() => {
+            (ref.$el || ref).focus()
+          })
+        })
+      }        
     },
   created: function () {
     var vm = this;
@@ -118,6 +208,7 @@ export default {
                     vm.details.Major = doc.data().Major;
                     vm.details.UserName = doc.data().UserName;
                     vm.details.Year = doc.data().Year;
+                    vm.details.Picture = doc.data().Picture;
                 })
             })
             .catch(function(error) {
@@ -138,120 +229,9 @@ body {
 
 }
 
-.profiletab {
-  background-color:#fff;
-  text-align:left
-}
-/*social */
-.card-one {
-    position: relative;
-    width: 300px;
-    background: #fff;
-    box-shadow: 0 10px 7px -5px rgba(0, 0, 0, 0.4);
-}
-.card {
-    margin-bottom: 35px;
-    box-shadow: 0 10px 20px 0 rgba(26, 44, 57, 0.14);
-    border: none;
+.hi {
+    padding-left: 20%;
+    padding-right: 20%;
 }
 
-.follower-wrapper li {
-    list-style-type: none;
-    color: #fff;
-    display: inline-block;
-    float: left;
-    margin-right: 20px;
-}
-
-
-.text-blue {
-    color: #3afe;
-}
-
-
-.info-card h4 {
-    font-size: 15px;
-}
-
-.info-card h2 {
-    font-size: 18px;
-    margin-bottom: 20px;
-}
-
-.info-card i {
-    color: #3afe;
-}
-
-.card-one {
-    position: relative;
-    width: 300px;
-    background: #fff;
-    box-shadow: 0 10px 7px -5px rgba(0, 0, 0, 0.4);
-}
-
-
-
-.card-one h3 {
-    position: relative;
-    margin: 80px 0 30px;
-    text-align: center;
-}
-
-.card-one h3::after {
-    content: '';
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    margin-left: -15px;
-    width: 30px;
-    height: 1px;
-    background: #000;
-}
-
-.card-one .desc {
-    padding: 0 1rem 2rem;
-    text-align: center;
-    line-height: 1.5;
-    color: #777;
-}
-
-.card-one .footer {
-    position: relative;
-    padding: 1rem;
-    background-color: #3afe;
-    text-align: center;
-}
-
-.card-one .footer a {
-    padding: 0 1rem;
-    color: #e2e2e2;
-    transition: color .4s;
-}
-
-.card-one .footer a:hover {
-    color: #c8c;
-}
-
-.card-one .footer::before {
-    content: '';
-    position: absolute;
-    top: -27px;
-    left: 50%;
-    margin-left: -15px;
-    border: 15px solid transparent;
-    border-bottom-color: #3afe;
-}
-
-.card-title, .card .card-title, .card-2 .card-title {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 20px;
-}
-a {
-    color: #333;
-}
-
-
-
-/*end social*/
 </style>

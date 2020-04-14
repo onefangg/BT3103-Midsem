@@ -14,7 +14,7 @@
         </div>
         <div class="form-label-group">
             <label for="inputPassword">Password</label>
-            <input v-model="password" placeholder="Password" type="password">
+            <input v-model="password" v-on:keyup.enter="login" placeholder="Password" type="password">
         </div>
         Not Registered? Click <router-link to="/Register"><u>here</u></router-link> to sign up!
         <br>

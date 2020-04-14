@@ -144,7 +144,8 @@
           Password: '',
           Telegram: '',
           UserName: '',
-          Year: ''
+          Year: '',
+          Picture: "https://i.picsum.photos/id/58/125/125.jpg"
         }
       }
     },
