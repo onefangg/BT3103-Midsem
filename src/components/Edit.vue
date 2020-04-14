@@ -13,6 +13,7 @@
             size="sm"
             class="float-right"
             @click="showModal=false"
+            to="/ProfileNew"
           >
             Close
           </b-button>
