@@ -24,15 +24,13 @@
             </b-col>
 
           </b-row> 
-          
          
           <!-- showing all members button -->
           <b-row>
             <b-button size="sm"
-                        
-                        variant = "primary"
-                        @click ="showMem = !showMem"
-                        >View members ▼</b-button>
+              variant = "primary"
+              @click ="showMem = !showMem"
+              >View members ▼</b-button>
           </b-row>
               <!-- generating all members in the group -->
               <b-row>
@@ -44,8 +42,6 @@
                   </b-card>
                 </b-row>
               </b-row>
-
-
         </b-list-group-item>
       </b-list-group>
      
@@ -63,10 +59,10 @@
             <b-button v-if="!byUser(userId)" variant = 'primary' @click="modalShow = !modalShow">Join group!</b-button>
               <!-- delete post button and pop-up -->
               <b-button
-                        v-if="byUser(userId)" 
-                        variant = "danger"
-                        @click ="showdelete = !showdelete"
-                        >Delete Group</b-button>
+                v-if="byUser(userId)" 
+                variant = "danger"
+                @click ="showdelete = !showdelete"
+                >Delete Group</b-button>
               <b-modal v-model ="showdelete" @ok = "deletePost()">
                 Are you sure you want to delete this post?
               </b-modal>

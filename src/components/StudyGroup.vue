@@ -3,56 +3,41 @@
       <template v-slot:header>
         <h6 class="mb-0"><b>{{groupName}}</b></h6>
       </template>
-      
-      
           <b-list-group flush>
-          
-
             <b-row id = 'post_body'> 
             <b-list-group-item>
               {{mod_code}}:{{post_desc}}
-            </b-list-group-item></b-row>
-            
-            
-            
+            </b-list-group-item></b-row>         
             <b-list-group-item>
               <b-row id ='post_body'>
                 <b-col>
                   <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'users'}" class="faicon"/>
                   {{post_status}}
-                </b-col>
-                  
+                </b-col>                 
               </b-row> 
 
           <b-row>
             <b-button size="sm"
-                        variant = "primary"
-                        @click ="showMem = !showMem"
-                        >View members ▼</b-button>
+              variant = "primary"
+              @click ="showMem = !showMem"
+              >View members ▼</b-button>
           </b-row>
               <b-row>
                 <b-row v-show="showMem" class="mt-2">
                  <b-card id='members'>
                   <a href="#" v-for="item in members" :key="item" @click="redirect">
                   @{{item}}</a>
-                 
                  </b-card>
                 </b-row>
               </b-row>
             </b-list-group-item>
-
-
           </b-list-group>
      
-      <template v-slot:footer>
-       
-        
+      <template v-slot:footer>        
         <b-modal v-model="modalShow" @ok = "joinGroup()">Are you sure you want to join this group?</b-modal>
         <b-modal v-model="teleShow">Successfully joined group! Please contact the creator of the group on telegram @{{creatorTele}}</b-modal>
         <b-modal v-model="alreadyin">You are already in this group!</b-modal>
-
-        <b-row>
-          
+        <b-row>        
           <b-col cols = "8"  id = 'post_author'>
             <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'user-circle'}" class="faicon"/>Created by: <br><a href="#" @click="redirect">@{{members[0]}}</a>
           <br> <div id="date">{{disp_date}}</div>
@@ -61,10 +46,10 @@
             <b-button variant = 'primary' v-if="!byUser(userId)" @click="modalShow = !modalShow">Join group!</b-button>
             <!-- delete post button and pop-up -->
                   <b-button                        
-                            v-if="byUser(userId)" 
-                            variant = "danger"
-                            @click ="showdelete = !showdelete"
-                      >     Delete Group</b-button>
+                    v-if="byUser(userId)" 
+                    variant = "danger"
+                    @click ="showdelete = !showdelete">     
+                    Delete Group</b-button>
                   <b-modal v-model ="showdelete" @ok = "deletePost()">
                     Are you sure you want to delete this post?
                   </b-modal>
@@ -78,7 +63,6 @@
 var moment = require('moment')
 import database from '../firebase.js'
 import firebase from 'firebase'
-
 
 export default {
   data() {
