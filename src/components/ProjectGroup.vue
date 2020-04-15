@@ -48,8 +48,8 @@
               <b-row>
                 <b-row v-show="showMem" class="mt-2">
                   <b-card id='members'>
-                    <a href="#" v-for="item in members" :key="item" @click="redirect">
-                      @{{item}}
+                    <a v-for="item in members" :key="item" >
+                      <router-link :to= "{name: 'profile', params: {userId: item}}">@{{item}}</router-link>
                     </a>
                   </b-card>
                 </b-row>
@@ -63,7 +63,8 @@
         <b-modal v-model="modalShow">Success!</b-modal>
         <b-row>
           <b-col cols = "8"  id = 'post_author'>
-            <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'user-circle'}" class="faicon"/>Created by: <br><a href="#" @click="redirect">@{{members[0]}}</a>
+            <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'user-circle'}" class="faicon"/>Created by: <br> 
+            <router-link :to= "{name: 'profile', params: {userId: members[0]}}">@{{members[0]}}</router-link>
             <br> <div id="date">{{disp_date}}</div>
           </b-col>
           <b-col cols = "2">
@@ -91,9 +92,7 @@ export default {
     redirect: function(){
       this.$router.push({
         path: '/users' +'/' + this.userId, 
-        params: {
-          userId: this.userId
-      }})
+        })
     },
     deletePost: function() {
       this.hide_post = !this.hide_post
