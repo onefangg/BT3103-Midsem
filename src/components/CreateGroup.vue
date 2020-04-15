@@ -200,7 +200,7 @@
 
 
     <b-form @submit = "submit">
-                <b-button to="/Group-Page" variant = 'primary' type = 'submit'>Submit</b-button>
+            <b-button variant = 'primary' type = 'submit'>Submit</b-button>
         </b-form>
 
 </div>
