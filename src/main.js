@@ -46,7 +46,7 @@ router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title
   let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   if (requiresAuth && !await firebase.getCurrentUser()){
-     next('NotSignedIn') 
+     next('Not-Signed-In') 
   }
   else next()
 })

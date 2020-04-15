@@ -54,7 +54,7 @@
             <b-form-input
             id="input-4"
             v-model.number="proj.Limit"
-            type="max"
+            type="number"
             required
             placeholder="Enter Maximum Number of Members Required"
             ></b-form-input>
@@ -75,7 +75,6 @@
             separator=" "
             placeholder="Enter Usernames of Current Members"
             remove-on-delete
-            no-add-on-enter
             class="mb-2"
             ></b-form-tags>
         </b-form-group>
@@ -170,7 +169,7 @@
             <b-form-input
             id="input-13"
             v-model.number="study.Limit"
-            type="max"
+            type="number"
             required
             placeholder="Enter Maximum Number of Members Required"
             ></b-form-input>
@@ -200,7 +199,7 @@
 
 
     <b-form @submit = "submit">
-                <b-button to="/Group-Page" variant = 'primary' type = 'submit'>Submit</b-button>
+            <b-button variant = 'primary' type = 'submit'>Submit</b-button>
         </b-form>
 
 </div>
@@ -210,12 +209,17 @@
 <script>
 import NavBar from './NavBar.vue'
 import database from '../firebase.js'
+import firebase from 'firebase'
+
 export default {
     components: {
         'nb' : NavBar
     },
     data() {
-        return {
+        return {      
+            user: null,
+            email: '',
+            currUser: '',
             proj:{
                 ModuleCode:'',
                 Description:'',
@@ -237,7 +241,6 @@ export default {
                 GroupName:'',
                 Poster:''
             },
-            currUser:'', 
             create_type: 'project',
             faculties: [{ text: 'Select Faculty', value: null }, 'Computing','FASS', 'Science', 'Engineering','Business','Medicine','Law'],
         }
@@ -248,12 +251,14 @@ export default {
                 this.getNowstu()
                 this.getNumMembersStu()
                 this.setPosterstu()
+                this.proj.UserNames.push(this.currUser)                
                 database.collection('Study Group').add(this.study)
             }
             else{
                 this.getNowproj()
                 this.getNumMembersProj()
                 this.setPosterproj()
+                this.study.UserNames.push(this.currUser)
                 database.collection('Project Group').add(this.proj)
             }
             alert("Post Successfully Created!")
@@ -268,11 +273,9 @@ export default {
         },
         addMemberproj: function(){
             this.proj.UserNames.push(this.currUser);
-            this.currUser=''
         },
         addMemberstudy: function(){
             this.study.UserNames.push(this.currUser);
-            this.currUser=''
         },
         getNowproj: function() {
                
@@ -283,15 +286,35 @@ export default {
                     this.study.DatePosted = new Date();
                 },
         setPosterstu: function(){
-            this.study.Poster = this.study.UserNames[0];
-
+            this.study.Poster = this.currUser;
         },
-
         setPosterproj: function(){
-            this.proj.Poster = this.proj.UserNames[0];
-
+            this.proj.Poster = this.currUser;
         }
     
+    },
+  created: function () {
+    var vm = this;
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        vm.user = user;
+        vm.email = user.email;
+        vm.email = vm.email.substring(0, vm.email.indexOf("@"))
+        const emailToCheck = vm.email;
+        database.collection('Users')
+            .where('NUSNET' , '==', emailToCheck)
+            .get().then((querySnapShot) => {
+                querySnapShot.forEach((doc) => {
+                    vm.currUser = doc.data().UserName;
+                })
+            })
+            .catch(function(error) {
+                console.log("Error getting documents: ", error);
+             });
+      } else {
+        vm.user = null;
+      }
+    });
     }
 }
 </script>
@@ -300,18 +323,15 @@ export default {
 #input-label {
     font-weight: bold
 }
-
 #name{
     padding:18px;   
     padding-left:190px;
     padding-right:2px;
 }
-
 #box{
     padding:10px;
     background-color: white;
 }
-
 h4{
   background-color: #007bff;
   color: white;
@@ -319,7 +339,6 @@ h4{
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
-
 #radio {
     padding-top:10px;
 }
@@ -328,18 +347,14 @@ h4{
   max-width:1300px;
   padding: 20px;
   margin: auto;
-
 }
-
 #memberNames{
     padding-left:10px
 }
-
 #input-group-33{
     width: 100%;
-  max-width:1300px;
-  padding: 20px;
-  margin: auto;
+    max-width:1300px;
+    padding: 20px;
+    margin: auto;
 }
-
 </style>

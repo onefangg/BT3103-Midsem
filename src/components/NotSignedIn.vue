@@ -21,7 +21,7 @@
 import NavBar from './NavBar.vue'
 
 export default {
-    name: 'NotSignedIn',
+    name: 'Not-Signed-In',
     components: {
         'nb':NavBar
       }

@@ -82,8 +82,6 @@
     <b-spinner variant = "primary" v-show = "finish_loading"></b-spinner>
 </b-container>
     
-    <!-- change userId later.... -->
-
     <br>
     <!-- This is where the project groups will show up -->
     <div v-show="selected_type === 'Project'">
@@ -98,9 +96,9 @@
         <b-row align-h="center">
                 <ProjectGroup v-for = "(item) in projectList" v-bind:key = "item.id"  
                 v-bind:module = "item.ModuleCode"
-                v-bind:userId = "A000001"
+                v-bind:userId = "item.Poster"
                 v-bind:post_desc = "item.Description"
-                v-bind:post_status = "item.Limit > item.UserNames.length ? item.Limit- item.UserNames.length + ' Needed' : 'Closed'"
+                v-bind:post_status = "item.Limit > item.UserNames.length ? item.Limit- item.UserNames.length + ' more needed' : 'Closed'"
                 v-bind:post_date = "item.DatePosted.toDate()"
                 v-bind:members = "item.UserNames"
                 :doc_id = "item.id"
@@ -122,10 +120,10 @@
             <StudyGroup v-for = "(item) in studyList" 
             :key = "item.id"
             :groupName = "item.GroupName"
-            :userId = "A000001" 
+            :userId = "item.Poster" 
             :post_desc = "item.Description"
             :mod_code = "item.ModuleCode"
-            :post_status= "item.UserNames.length < item.Limit ? 'Open' : 'Closed'"
+            :post_status= "item.UserNames.length < item.Limit ? item.Limit- item.UserNames.length + ' Needed' : 'Closed'"
             :post_date = "item.DatePosted.toDate()"
             :location = "item.Location"
             :members = "item.UserNames"
@@ -187,7 +185,7 @@ export default {
             })
         },
         searchModule: function() {
-            this.projectList.length = 0; // clear the exisitng project list
+            this.projectList.length = 0; // clear the existing project list
             let projectGrp = {};
             this.finish_loading = true;
            
@@ -211,7 +209,7 @@ export default {
         findFriends: function() {
             this.friendsPrivacy = !this.friendsPrivacy;
             if (this.selected_type == "Project") {
-                this.projectList.length = 0; // clear the exisitng project list
+                this.projectList.length = 0; // clear the existing project list
             } else if (this.selected_type == "Study") {
                 this.studyList.length = 0;
             }

@@ -24,7 +24,7 @@ export default [
     {path: "/Create-Group", component: CreateGroup, meta:{title:'Create Group', requiresAuth: true}},
     {path: "/Contact", component: Contact, meta:{title:'Contact Us'}},
     {path: "/Register", component: Register, meta:{title:'Register'}},
-    {path:'/NotSignedIn', component: NotSignedIn, meta:{title:'Please sign in'}},
+    {path:'/Not-Signed-In', component: NotSignedIn, meta:{title:'Please sign in'}},
     {path:'/ProfileNew', component: ProfileNew, meta:{title:'ProfileNew', requiresAuth: true}},
     {path:'/Edit-Details', component: Edit, meta:{title:'Edit Details'}}
 ]
