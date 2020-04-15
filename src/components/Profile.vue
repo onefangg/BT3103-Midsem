@@ -13,7 +13,8 @@
             <b-col id ='about'>
                
                 <b-row id = "Name">
-                {{spidey.name}} </b-row> 
+                    
+                    {{$route.params.userId}} </b-row> 
                 <b-row id = "username">@{{spidey.username}}</b-row>
                 <b-row id = 'details' cols=6>
                Year {{spidey.year}} {{spidey.major}} student

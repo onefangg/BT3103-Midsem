@@ -13,6 +13,8 @@
             <b-col id ='about'>
                
                 <b-row id = "Name">
+
+                
                 {{me.name}} </b-row> 
                 <b-row id = "username">@{{me.username}}</b-row>
                 <b-row id = 'details' cols=6>

@@ -41,6 +41,44 @@
       </b-col>
     </b-row>
 
+    <b-row class ="justify-content-left" inline>
+      <b-col cols = "12">
+      <b-form-group label-cols-lg="4"  label="Gender:" label-align-sm="right" label-align-lg="right">
+        <b-form-radio-group class="pt-2" v-model="form.Gender" :options="['Male', 'Female']" align="left" required style="width: 230px;">
+        </b-form-radio-group>
+      </b-form-group>
+      </b-col>
+      </b-row>
+
+    <!-- <b-row class ="justify-content-center" inline>
+      <b-col cols = "1">
+    <b-form-group  label="Faculty:">
+        <b-form-select
+          v-model="form.Faculty"
+          :options="Faculty"
+          required
+          align-items="left"
+          style="width: 400px;"  
+        ></b-form-select>
+      </b-form-group>
+      </b-col>
+    </b-row> -->
+    <b-form-group label="Faculty:"  label-cols-lg="4" label-align-lg="right" label-align-sm="right">
+      <b-form-select
+        v-model="form.Faculty"
+        :options="Faculty"
+        required  
+        display:inline-block
+    
+        style="width: 500px;"
+        
+      ></b-form-select>
+    </b-form-group>
+
+
+
+      
+    
     <b-form-group label="Major:" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
       <b-form-input
         v-model="form.Major"
@@ -133,12 +171,14 @@
       },
     data () {
       return {
+        Faculty: [{ text: 'Select One', value: null }, 'Faculty of Arts and Social Sciences', 'Faculty of Science', 'School of Computing', 'School of Design and Environment', "School of Business", "Faculty of Engineering"],
         confirm_password: '',
         form: {
           FirstName:'',
           GroupsCreated:[],
           GroupsJoined:[],
           LastName:'',
+          Gender:'',
           Major:'',
           NUSNET: '',
           Password: '',
