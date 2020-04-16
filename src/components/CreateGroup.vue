@@ -93,22 +93,6 @@
             ></b-form-select>
         </b-form-group>
 
-        <b-form-group
-            id="input-group-1" 
-            label-cols-sm="2"
-            label-cols-lg="3"
-            label-align-lg="right" label-align-sm="right"
-            label="Module Code:"
-            label-for="input-10">
-            <b-form-input
-            id="input-10"
-            v-model="study.ModuleCode"
-            type="module"
-            required
-            placeholder="Enter Module Code"
-            ></b-form-input>
-        </b-form-group>
-
             <b-form-group
             id="input-group-1"
             label-cols-sm="2"
@@ -137,7 +121,7 @@
             v-model="study.Description"
             type="description"
             required
-            placeholder="Enter Description"
+            placeholder="Enter Description. For privacy reasons, we do not recommend specifying the exact location of the study group."
             ></b-form-input>
         </b-form-group>
 
@@ -148,15 +132,15 @@
             label-align-lg="right" label-align-sm="right"
             label="Location:"
             label-for="input-15">
-            <b-form-input
-            id="input-15"
+            <b-form-select
+            id="input-33"
             v-model="study.Location"
-            type="location"
+            :options="locations"
             required
-            placeholder="Input Study Location"
-            
-            ></b-form-input>
+            name= "type"
+            ></b-form-select>
         </b-form-group>
+
 
 
         <b-form-group
@@ -231,18 +215,18 @@ export default {
             },
             study:{
                 Faculty:null,
-                ModuleCode:'',
                 Description:'',
                 Limit:null,
                 NumberOfMembers:0,
                 UserNames:[],
                 DatePosted:null,
-                Location:'',
+                Location:null,
                 GroupName:'',
                 Poster:''
             },
             create_type: 'project',
-            faculties: [{ text: 'Select Faculty', value: null }, 'Computing','FASS', 'Science', 'Engineering','Business','Medicine','Law'],
+            faculties: [{ text: 'Select Faculty', value: null }, 'Any Faculty', 'Faculty of Arts and Social Sciences', 'Faculty of Science', 'School of Computing', 'School of Design and Environment', "School of Business", "Faculty of Engineering"],
+            locations: [{ text: 'Select Location', value: null }, 'NUS', 'North', 'South', 'East', 'West']
         }
     },
     methods : {
@@ -251,14 +235,15 @@ export default {
                 this.getNowstu()
                 this.getNumMembersStu()
                 this.setPosterstu()
-                this.proj.UserNames.push(this.currUser)                
+                this.study.UserNames.push(this.currUser)                
                 database.collection('Study Group').add(this.study)
             }
             else{
                 this.getNowproj()
                 this.getNumMembersProj()
                 this.setPosterproj()
-                this.study.UserNames.push(this.currUser)
+                this.proj.ModuleCode = this.proj.ModuleCode.toUpperCase()
+                this.proj.UserNames.push(this.currUser)
                 database.collection('Project Group').add(this.proj)
             }
             alert("Post Successfully Created!")

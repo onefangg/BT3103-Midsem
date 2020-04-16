@@ -26,7 +26,7 @@
           </b-row> 
          
           <!-- showing all members button -->
-          <b-row>
+          <b-row class="mt-2">
             <b-button size="sm"
               variant = "primary"
               @click ="showMem = !showMem"
@@ -56,7 +56,7 @@
             <br> <div id="date">{{disp_date}}</div>
           </b-col>
           <b-col cols = "2">
-            <b-button v-if="!byUser(userId)" variant = 'primary' @click="modalShow = !modalShow">Join group!</b-button>
+            <b-button v-if="showjoin()" variant = 'primary' @click="modalShow = !modalShow">Join group!</b-button>
               <!-- delete post button and pop-up -->
               <b-button
                 v-if="byUser(userId)" 
@@ -119,6 +119,16 @@ export default {
         } else {
           return false;
         }
+    },
+    showjoin: function() {
+      if (this.byUser(this.userId)) {
+        return false;
+      } else {
+        if (this.post_status === "Closed") {
+          return false;
+        }
+        return true;
+      }
     }
   },
   computed: {

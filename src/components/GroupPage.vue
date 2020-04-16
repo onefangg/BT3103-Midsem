@@ -71,7 +71,8 @@
                 <b-button class="mt-3" variant="outline-success" block @click="findFriends()">I understand</b-button>
             </b-modal>
 
-            <b-form-select v-model="selected_faculty" :options="faculty" label-field= "location" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
+            <b-form-select v-model="selected_faculty" :options="faculty" label-field= "faculty" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
+            <b-form-select v-model="selected_location" :options="location" label-field= "location" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
             <b-form-select v-model="selected_sort" :options="sort" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
             
             </b-form>
@@ -266,16 +267,24 @@ export default {
             error_mod: "",
             error_proj_friend: "",
             error_study_friend: "",
-            selected_faculty: "All",
+            selected_faculty: 'Any Faculty',
             faculty:[
-                {value:'All', text: 'Select Faculty'},
-                {value:'Computing', text: 'Computing'},
-                {value:'FASS', text: 'FASS'},
-                {value:'Medicine', text: 'Medicine'},
-                {value:'Science', text: 'Science'},
-                {value:'Law', text: 'Law'},
-                {value:'Business', text: 'Business'}, 
-                {value:'Engineering', text: 'Engineering'}       
+                {value:'Any Faculty', text: 'Any Faculty'},
+                {value:'School of Computing', text: 'School of Computing'},
+                {value:'Faculty of Arts and Social Sciences', text: 'Faculty of Arts and Social Sciences'},
+                {value:'Faculty of Science', text: 'Faculty of Science'},
+                {value:'School of Design and Environment', text: 'School of Design and Environment'},
+                {value:"School of Business", text: "School of Business"}, 
+                {value:"Faculty of Engineering", text: "Faculty of Engineering"}       
+            ],
+            selected_location: 'Any Location',
+            location:[
+                {value:'Any Location', text: 'Any Location'},
+                {value:'NUS', text:'NUS'},
+                {value:'North', text:'North'},
+                {value:'South', text:'South'},
+                {value:'East', text:'East'},
+                {value:'West', text:'West'}
             ],
             projfriends: "",
             studyfriends: "",
@@ -353,11 +362,31 @@ export default {
             let studyGrp = {};
             this.finish_loading = true;
 
-            if (change_faculty == "All") {
+            if (change_faculty == 'Any Faculty') {
                 this.fetchStudy();
             } else {
             // otherwise filter based on options
                 database.collection("Study Group").where("Faculty", "==", change_faculty).get().then((querySnapshot) => {
+                    querySnapshot.forEach(doc => {
+                        studyGrp = doc.data()
+                        studyGrp.id = doc.id
+                        this.studyList.push(studyGrp)
+                    })
+                }).finally(() => {
+                    this.finish_loading = false;
+                })
+            }
+        },
+        selected_location: function(change_location) {
+            this.studyList.length = 0;
+            let studyGrp = {};
+            this.finish_loading = true;
+
+            if (change_location == 'Any Location') {
+                this.fetchStudy();
+            } else {
+            // otherwise filter based on options
+                database.collection("Study Group").where("Location", "==", change_location).get().then((querySnapshot) => {
                     querySnapshot.forEach(doc => {
                         studyGrp = doc.data()
                         studyGrp.id = doc.id
