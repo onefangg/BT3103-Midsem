@@ -294,30 +294,58 @@ export default {
     },
     watch: {
         selected_sort: function(change_sort) {
-            this.projectList.length = 0; // clear the exisitng project list
-            let projectGrp = {}
-            if (change_sort === "Old") {
-                this.finish_loading = true;
-                database.collection('Project Group').orderBy('DatePosted').get().then((querySnapshot) => {
-                    querySnapshot.forEach(doc => {
-                        projectGrp = doc.data()
-                        projectGrp.id = doc.id
-                        this.projectList.push(projectGrp)
+            if (this.selected_type == "Project") {
+                this.projectList.length = 0; // clear the exisitng project list
+                let projectGrp = {}
+                if (change_sort === "Old") {
+                    this.finish_loading = true;
+                    database.collection('Project Group').orderBy('DatePosted').get().then((querySnapshot) => {
+                        querySnapshot.forEach(doc => {
+                            projectGrp = doc.data()
+                            projectGrp.id = doc.id
+                            this.projectList.push(projectGrp)
+                        })
+                    }).finally(() => {
+                        this.finish_loading = false;
                     })
-                }).finally(() => {
-                    this.finish_loading = false;
-                })
-            } else if (change_sort === "New") {
-                this.finish_loading = true;
-                database.collection('Project Group').orderBy('DatePosted', "desc").get().then((querySnapshot) => {
-                    querySnapshot.forEach(doc => {
-                        projectGrp = doc.data()
-                        projectGrp.id = doc.id
-                        this.projectList.push(projectGrp)
+                } else if (change_sort === "New") {
+                    this.finish_loading = true;
+                    database.collection('Project Group').orderBy('DatePosted', "desc").get().then((querySnapshot) => {
+                        querySnapshot.forEach(doc => {
+                            projectGrp = doc.data()
+                            projectGrp.id = doc.id
+                            this.projectList.push(projectGrp)
+                        })
+                    }).finally(() => {
+                        this.finish_loading = false;
                     })
-                }).finally(() => {
-                    this.finish_loading = false;
-                })
+                }
+            } else if (this.selected_type == "Study") {
+                this.studyList.length = 0;
+                let studyGrp = {};
+                if (change_sort === "Old") {
+                    this.finish_loading = true;
+                    database.collection('Study Group').orderBy('DatePosted').get().then((querySnapshot) => {
+                        querySnapshot.forEach(doc => {
+                            studyGrp = doc.data();
+                            studyGrp.id = doc.id;
+                            this.studyList.push(studyGrp);
+                        })
+                    }).finally(() => {
+                        this.finish_loading = false;
+                    })
+                } else if (change_sort === "New") {
+                    this.finish_loading = true;
+                    database.collection('Study Group').orderBy('DatePosted', "desc").get().then((querySnapshot) => {
+                        querySnapshot.forEach(doc => {
+                            studyGrp = doc.data();
+                            studyGrp.id = doc.id;
+                            this.studyList.push(studyGrp);
+                        })
+                    }).finally(() => {
+                        this.finish_loading = false;
+                    })
+                }
             }
         },
         selected_faculty: function(change_faculty) {
