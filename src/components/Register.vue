@@ -5,7 +5,7 @@
       </div>
     <br>
     <h3>Create a new account</h3><br>
-
+    <b-modal v-model="usernamemodal" >This username is already taken, please use a different one.</b-modal>
     <b-form-group label="Username:" label-for="input-2" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
       <b-form-input
         v-model="form.UserName"
@@ -50,19 +50,6 @@
       </b-col>
       </b-row>
 
-    <!-- <b-row class ="justify-content-center" inline>
-      <b-col cols = "1">
-    <b-form-group  label="Faculty:">
-        <b-form-select
-          v-model="form.Faculty"
-          :options="Faculty"
-          required
-          align-items="left"
-          style="width: 400px;"  
-        ></b-form-select>
-      </b-form-group>
-      </b-col>
-    </b-row> -->
     <b-form-group label="Faculty:"  label-cols-lg="4" label-align-lg="right" label-align-sm="right">
       <b-form-select
         v-model="form.Faculty"
@@ -73,11 +60,7 @@
         style="width: 500px;"
         
       ></b-form-select>
-    </b-form-group>
-
-
-
-      
+    </b-form-group>  
     
     <b-form-group label="Major:" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
       <b-form-input
@@ -164,6 +147,7 @@
   import firebase from 'firebase'
   import NavBar from './NavBar.vue'
   import database from '../firebase.js'
+  
   export default {
     name: 'signup',
     components: {
@@ -173,6 +157,8 @@
       return {
         Faculty: [{ text: 'Select One', value: null }, 'Faculty of Arts and Social Sciences', 'Faculty of Science', 'School of Computing', 'School of Design and Environment', "School of Business", "Faculty of Engineering"],
         confirm_password: '',
+        usernamemodal: false,
+        usernameboolean: false,
         form: {
           FirstName:'',
           GroupsCreated:[],
@@ -190,17 +176,41 @@
       }
     },
     methods: {
+      checkUsername() {
+        console.log("checking username " + this.form.UserName)
+        database.collection('Users')
+            .where('UserName' , '==', this.form.UserName.toLowerCase())
+            .get().then((querySnapShot) => {
+                querySnapShot.forEach((doc) => {
+                  console.log("found!" + doc.data().UserName);
+                  this.usernameboolean=false;                  
+                })
+            }) 
+            .catch(function(error) {
+              console.log("Error getting documents: ", error);
+              this.usernameboolean = true;
+             });
+        return this.usernameboolean;
+      },
       insertintodatabase() {
+        this.form.FirstName = this.form.FirstName.charAt(0).toUpperCase() + this.form.FirstName.slice(1).toLowerCase();
+        this.form.LastName = this.form.LastName.charAt(0).toUpperCase() + this.form.LastName.slice(1).toLowerCase();
+        this.form.Major = this.form.Major.charAt(0).toUpperCase() + this.form.Major.slice(1).toLowerCase();
+        this.form.NUSNET = this.form.NUSNET.toUpperCase();
+        this.form.UserName = this.form.UserName.toLowerCase();
         database.collection('Users').add(this.form)
       },
       signUp () {
-        firebase.auth().createUserWithEmailAndPassword(this.form.NUSNET+"@u.nus.edu", this.form.Password).then(()=> {
-          this.insertintodatabase();}).then(() => {
-          this.$router.replace('/Sign-In');
-        }).catch((err) => {
-          alert(err.message)
-        });
-      }
-    }
+        this.checkUsername();
+        if (this.usernameboolean === false) { this.usernamemodal = !this.usernamemodal }
+        else {
+          firebase.auth().createUserWithEmailAndPassword(this.form.NUSNET.toUpperCase()+"@u.nus.edu", this.form.Password).then(()=> {
+            this.insertintodatabase();}).then(() => {
+            this.$router.replace('/Sign-In');
+          }).catch((err) => {
+            alert(err.message)
+          });
+        }
+    }}
   }
 </script>
