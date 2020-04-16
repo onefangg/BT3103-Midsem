@@ -51,13 +51,11 @@
       </b-row>
 
     <b-form-group label="Faculty:"  label-cols-lg="4" label-align-lg="right" label-align-sm="right">
-      <b-form-select
+      <b-form-select class = "custom_select"
         v-model="form.Faculty"
         :options="Faculty"
         required  
-        display:inline-block
-    
-        style="width: 500px;"
+        style="width: 230px;"
         
       ></b-form-select>
     </b-form-group>  
@@ -216,3 +214,7 @@
     }}
   }
 </script>
+
+<style>
+ 
+</style>
