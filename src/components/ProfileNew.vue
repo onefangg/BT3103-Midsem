@@ -4,12 +4,12 @@
 </nb>
 
 <div id="my-container" class="hi">
-    <div class="img" style="    background-image: linear-gradient(150deg, rgba(63, 174, 255, .3)15%, rgba(63, 174, 255, .3)70%, rgba(63, 174, 255, .3)94%), url(https://bootdey.com/img/Content/flores-amarillas-wallpaper.jpeg);height: 350px;background-size: cover;"></div>
-        <div class="card social-prof">
+    <div class="img" id='main' style="    background-image: linear-gradient(150deg, rgba(63, 174, 255, .3)15%, rgba(63, 174, 255, .3)70%, rgba(63, 174, 255, .3)94%), url(https://bootdey.com/img/Content/flores-amarillas-wallpaper.jpeg);height: 70px;width:1220px;background-size: cover;"></div>
+        <div class="card social-prof" id = 'img1'>
             <div class="card-body">
                 <div class="wrapper">
-                    <b-img v-bind:src="details.Picture" alt="" class="user-profile" width="150px" height="150px" rounded="circle"></b-img>
-                    <h2>{{details.FirstName}}</h2>
+                    <b-img v-bind:src="details.Picture" alt="" class="user-profile" width="100px" height="100px" rounded="circle"></b-img>
+                    <h5>{{details.FirstName}}</h5>
                     <p>I am from {{details.Major}} </p>
                     <b-button id="popover-reactive-1" v-on:click="changePic()">Change My Picture</b-button>
 
@@ -62,7 +62,7 @@
 
             </div>
         </div>
-        
+        <div id = 'data'>
         <b-row>
             <b-col>
                 <b-card no-body>
@@ -76,6 +76,9 @@
                                 <h5>Name: {{details.LastName}} {{details.FirstName}}</h5>
                             </b-row>
                             <b-row align-h="left">
+                                <h5>Username: {{details.UserName}}</h5>
+                            </b-row>
+                            <b-row align-h="left">
                                 <h5>Year and Major: Year {{details.Year}} {{details.Major}}</h5>
                             </b-row>
                         </b-tab>
@@ -87,10 +90,22 @@
                          <b-tab title = 'Groups Created'>
                             <b-row align-h="left" ></b-row>
                         </b-tab>
+                        <b-tab title = 'User Dashboard' id='dashboard'>
+                            <div id='chart'>
+                            <loginChart></loginChart>
+                            </div>
+                            <div id='chart'>
+                            <fc></fc>
+                            </div>
+                            <div id='chart'>
+                            <gj></gj>
+                            </div>
+                        </b-tab>
                     </b-tabs>
             </b-card>
         </b-col>
-    </b-row>       
+    </b-row>    
+    </div>   
 </div>
 </div>
 
@@ -100,11 +115,17 @@
 import NavBar from './NavBar.vue'
 import firebase from 'firebase'
 import database from '../firebase.js'
+import loginChart from '../LoginChart.js'
+import FacultyComparisons from '../FacultyComparison.js'
+import GroupsJoinedChart from '../GroupsJoinedChart.js'
 
 export default {
     name: 'ProfileNew',
     components: {
-        'nb':NavBar
+        'nb':NavBar, 
+        loginChart,
+        'fc':FacultyComparisons,
+        'gj':GroupsJoinedChart
       },
       data () {
       return {
@@ -229,9 +250,25 @@ body {
 
 }
 
+#img1{
+  height:250px;
+  width: 1220px
+}
 .hi {
-    padding-left: 20%;
-    padding-right: 20%;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+#chart{
+  height:180px;
+  width:380px;
+  float:left;
 }
 
+#info {
+  height: 1000px;
+  width:1230px
+}
+#dashboard{
+  height:500px
+}
 </style>
