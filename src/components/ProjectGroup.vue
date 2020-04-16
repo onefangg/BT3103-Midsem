@@ -88,7 +88,8 @@ export default {
       user: null,
       email: '',
       UserName: '',
-      creatorTele: ''
+      creatorTele: '',
+      userdoc_id: ''
     }
   },
   props: ['module', 'userId', 'post_desc', 'post_status', 'post_date', 'members', 'doc_id', 'hide_post'],
@@ -104,6 +105,9 @@ export default {
       } else {
         database.collection("Project Group").doc(this.doc_id).update({
           UserNames: firebase.firestore.FieldValue.arrayUnion(this.UserName)
+        })
+        database.collection("Users").doc(this.userdoc_id).update({
+          ProjectGroupsJoined: firebase.firestore.FieldValue.arrayUnion(this.doc_id)
         })
         this.teleShow = !this.teleShow
     }},
@@ -149,7 +153,8 @@ export default {
             .where('NUSNET' , '==', emailToCheck)
             .get().then((querySnapShot) => {
                 querySnapShot.forEach((doc) => {
-                    vm.UserName = doc.data().UserName;
+                  vm.userdoc_id = doc.id;
+                  vm.UserName = doc.data().UserName;
                 })
             })
             .then(database.collection('Users').where('UserName' , '==',  vm.userId ) 

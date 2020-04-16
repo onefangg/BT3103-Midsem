@@ -141,8 +141,6 @@
             ></b-form-select>
         </b-form-group>
 
-
-
         <b-form-group
             id="input-group-1"
             label-cols-sm="2"
@@ -178,7 +176,6 @@
             class="mb-2"
             ></b-form-tags>
         </b-form-group>
-        
     </div>
 
 
@@ -204,6 +201,7 @@ export default {
             user: null,
             email: '',
             currUser: '',
+            userdoc_id: '',
             proj:{
                 ModuleCode:'',
                 Description:'',
@@ -231,23 +229,44 @@ export default {
     },
     methods : {
         submit: function() {
+            const userdocid = this.userdoc_id
             if (this.create_type==='study'){
                 this.getNowstu()
                 this.getNumMembersStu()
                 this.setPosterstu()
                 this.study.UserNames.push(this.currUser)                
                 database.collection('Study Group').add(this.study)
-            }
-            else{
+                database.collection("Study Group")
+                    .orderBy("DatePosted", 'desc')
+                    .limit(1).onSnapshot((snap) => {
+                        snap.forEach(function(doc) {
+                            database.collection("Users").doc(userdocid).update({
+                            StudyGroupsCreated: firebase.firestore.FieldValue.arrayUnion(doc.id)
+                        })
+                    })})
+                console.log("DONE!")
+                alert("Post Successfully Created!")
+                this.$router.push('/Group-Page') 
+            } else{
                 this.getNowproj()
                 this.getNumMembersProj()
                 this.setPosterproj()
                 this.proj.ModuleCode = this.proj.ModuleCode.toUpperCase()
                 this.proj.UserNames.push(this.currUser)
                 database.collection('Project Group').add(this.proj)
+                database.collection("Project Group")
+                    .orderBy("DatePosted", 'desc')
+                    .limit(1).onSnapshot((snap) => {
+                        snap.forEach(function(doc) {
+                            database.collection("Users").doc(userdocid).update({
+                            ProjectGroupsCreated: firebase.firestore.FieldValue.arrayUnion(doc.id)
+                        })
+                    })})
+                console.log("DONE!")
+                alert("Post Successfully Created!")
+                this.$router.push('/Group-Page') 
             }
-            alert("Post Successfully Created!")
-            this.$router.push('/Group-Page') 
+            
         },
         getNumMembersStu: function(){
             this.study.NumberOfMembers = this.study.UserNames.length
@@ -291,10 +310,11 @@ export default {
             .get().then((querySnapShot) => {
                 querySnapShot.forEach((doc) => {
                     vm.currUser = doc.data().UserName;
+                    vm.userdoc_id = doc.id;
                 })
             })
             .catch(function(error) {
-                console.log("Error getting documents: ", error);
+                console.log("Error getting documents on creation: ", error);
              });
       } else {
         vm.user = null;

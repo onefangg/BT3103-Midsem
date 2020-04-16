@@ -161,8 +161,10 @@
         usernameboolean: false,
         form: {
           FirstName:'',
-          GroupsCreated:[],
-          GroupsJoined:[],
+          StudyGroupsCreated:[],
+          StudyGroupsJoined:[],
+          ProjectGroupsCreated:[],
+          ProjectGroupsJoined:[],
           LastName:'',
           Gender:'',
           Major:'',

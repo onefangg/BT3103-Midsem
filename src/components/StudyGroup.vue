@@ -80,7 +80,8 @@ export default {
       user: null,
       email: '',
       UserName: '',
-      creatorTele: ''
+      creatorTele: '',
+      userdoc_id: ''
     }
   },
   props: ['groupName', 'userId', 'post_desc', 'post_status', 'post_date', 'location', 'faculty', 'members', 'hide_post', 'mod_code'],
@@ -96,14 +97,17 @@ export default {
       if (this.members.includes(this.UserName)) {
         this.alreadyin = !this.alreadyin
       } else {
-        database.collection("Project Group").doc(this.doc_id).update({
+        database.collection("Study Group").doc(this.doc_id).update({
           UserNames: firebase.firestore.FieldValue.arrayUnion(this.UserName)
+        })
+        database.collection("Users").doc(this.userdoc_id).update({
+          StudyGroupsJoined: firebase.firestore.FieldValue.arrayUnion(this.doc_id)
         })
         this.teleShow = !this.teleShow
     }},
     deletePost: function() {
       this.hide_post = !this.hide_post
-      database.collection("Project Group").doc(this.doc_id).update({
+      database.collection("Study Group").doc(this.doc_id).update({
         hidden: true
       })
     },
@@ -143,13 +147,13 @@ export default {
             .get().then((querySnapShot) => {
                 querySnapShot.forEach((doc) => {
                     vm.UserName = doc.data().UserName;
+                    vm.userdoc_id = doc.id;
                 })
             })
             .then(database.collection('Users').where('UserName' , '==',  vm.userId ) 
             .get().then((querySnapShot) => {
                 querySnapShot.forEach((doc) => {
                     vm.creatorTele = doc.data().Telegram;
-                    console.log("got creator") 
                 })}))
             .catch(function(error) {
                 console.log("Error getting documents: ", error);
