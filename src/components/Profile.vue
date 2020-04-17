@@ -74,18 +74,31 @@
                 </b-tab>
 
                 <b-tab title='Group Joined' >
-                  <b-row align-h="center" class="justify-content-md-center">
-                    <ProjectGroup v-for = "(item) in this.details['GroupsJoined']" v-bind:key = "item.id"  
-                    v-bind:module = "item.ModuleCode"
-                    v-bind:userId = "item.Poster"
-                    v-bind:post_desc = "item.Description"
-                    v-bind:post_status = "item.Limit > item.UserNames.length ? item.Limit- item.UserNames.length + ' more needed' : 'Closed'"
-                    v-bind:post_date = "item.DatePosted.toDate()"
-                    v-bind:members = "item.UserNames"
-                    :doc_id = "item.id"
-                    :hide_post = "item.hidden"
-                    ></ProjectGroup>
+                  <h1>Project Groups</h1>
+                  <span class = 'divider'></span>
+                  <br>
+                  <b-row align-h="center">
+                      <ProjectGroup v-for = "(item) in this.details['GroupsJoined']" v-bind:key = "item.id"  
+                      v-bind:module = "item.ModuleCode"
+                      v-bind:userId = "item.Poster"
+                      v-bind:post_desc = "item.Description"
+                      v-bind:post_status = "item.Limit > item.UserNames.length ? item.Limit- item.UserNames.length + ' more needed' : 'Closed'"
+                      v-bind:post_date = "item.DatePosted.toDate()"
+                      v-bind:members = "item.UserNames"
+                      :doc_id = "item.id"
+                      :hide_post = "item.hidden"
+                      ></ProjectGroup>
+                      <div v-show = "this.details['GroupsCreated'].length == 0">
+                        No Project Groups joined...
+                      </div>
+                  </b-row>
+                    <br>
+                    <h1>Study Groups</h1>
+                    <span class = 'divider'></span>
+                    <br>
 
+                  <b-row  align-h= "center">
+                    <b-col>
                     <StudyGroup v-for = "(item) in this.details['StudyJoined']" 
                     :key = "item.id"
                     :groupName = "item.GroupName"
@@ -98,37 +111,59 @@
                     :members = "item.UserNames"
                     :doc_id = "item.id"
                     :hide_post = "item.hidden">
-                    </StudyGroup> 
+                    </StudyGroup>
+                    <div v-show = "this.details['StudyJoined'].length == 0">
+                        No Study Groups joined...
+                      </div>  
+                    </b-col>
                   </b-row>
                 </b-tab>
 
                 <b-tab title='Groups Created'>
-                  <b-row  align-h="center" class="justify-content-md-center">
-                    <ProjectGroup v-for = "(item) in this.details['GroupsCreated']" v-bind:key = "item.id"  
-                    v-bind:module = "item.ModuleCode"
-                    v-bind:userId = "item.Poster"
-                    v-bind:post_desc = "item.Description"
-                    v-bind:post_status = "item.Limit > item.UserNames.length ? item.Limit- item.UserNames.length + ' more needed' : 'Closed'"
-                    v-bind:post_date = "item.DatePosted.toDate()"
-                    v-bind:members = "item.UserNames"
-                    :doc_id = "item.id"
-                    :hide_post = "item.hidden"
-                    ></ProjectGroup>
+                  <h1>Project Groups</h1>
+                  <span class = 'divider'></span>
+                  <br>
+                  <b-row align-h="center">
+                    <b-col>
+                      <ProjectGroup v-for = "(item) in this.details['GroupsCreated']" v-bind:key = "item.id"  
+                      v-bind:module = "item.ModuleCode"
+                      v-bind:userId = "item.Poster"
+                      v-bind:post_desc = "item.Description"
+                      v-bind:post_status = "item.Limit > item.UserNames.length ? item.Limit- item.UserNames.length + ' more needed' : 'Closed'"
+                      v-bind:post_date = "item.DatePosted.toDate()"
+                      v-bind:members = "item.UserNames"
+                      :doc_id = "item.id"
+                      :hide_post = "item.hidden"
+                      ></ProjectGroup>
+                    </b-col>
+                    <div v-show = "this.details['GroupsCreated'].length == 0">
+                        No Project Groups created...
+                    </div> 
+                  </b-row>
 
+                  <br>
+                  <h1>Study Groups</h1>
+                  <span class = 'divider'></span>
+                  <br>
+                  <b-row  align-h= "start">
+                    <b-col >
                     <StudyGroup v-for = "(item) in this.details['StudyCreated']" 
-                    :key = "item.id"
-                    :groupName = "item.GroupName"
-                    :userId = "item.Poster" 
-                    :post_desc = "item.Description"
-                    :mod_code = "item.ModuleCode"
-                    :post_status= "item.UserNames.length < item.Limit ? item.Limit- item.UserNames.length + ' Needed' : 'Closed'"
-                    :post_date = "item.DatePosted.toDate()"
-                    :location = "item.Location"
-                    :members = "item.UserNames"
-                    :doc_id = "item.id"
-                    :hide_post = "item.hidden">
-                    </StudyGroup> 
-
+                      :key = "item.id"
+                      :groupName = "item.GroupName"
+                      :userId = "item.Poster" 
+                      :post_desc = "item.Description"
+                      :mod_code = "item.ModuleCode"
+                      :post_status= "item.UserNames.length < item.Limit ? item.Limit- item.UserNames.length + ' Needed' : 'Closed'"
+                      :post_date = "item.DatePosted.toDate()"
+                      :location = "item.Location"
+                      :members = "item.UserNames"
+                      :doc_id = "item.id"
+                      :hide_post = "item.hidden">
+                      </StudyGroup>
+                      <div v-show = "this.details['StudyCreated'].length == 0">
+                        No Study Groups created...
+                      </div> 
+                    </b-col>                  
                   </b-row>
                 </b-tab>
                 
@@ -318,6 +353,13 @@
     background-color: #f0f6ff;
     color: #28384d;
 
+  }
+
+  .divider {
+    display:block;
+    width: 100 px;
+    height: 2px;
+    background-color:#28384d;
   }
 
   #img1 {

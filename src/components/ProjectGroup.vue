@@ -92,7 +92,7 @@ export default {
       userdoc_id: ''
     }
   },
-  props: ['module', 'userId', 'post_desc', 'post_status', 'post_date', 'members', 'doc_id', 'hide_post'],
+  props: ['module', 'userId', 'post_desc', 'post_status', 'post_date', 'members', 'doc_id', 'hide_post','poster'],
   methods: {
     redirect: function(){
       this.$router.push({
