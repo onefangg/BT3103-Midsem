@@ -63,6 +63,9 @@
                     <b-col xl="4">
                     <gj></gj>
                     </b-col>
+                    <b-col xl="4">
+                    <pie-chart :chartdata="chartData" :options="chartOptions"/>
+                    </b-col>
                   </b-row>
                 </b-tab>
                 <b-tab title="Profile">
@@ -135,10 +138,10 @@
                       :doc_id = "item.id"
                       :hide_post = "item.hidden"
                       ></ProjectGroup>
-                    </b-col>
+                    
                     <div v-show = "this.details['GroupsCreated'].length == 0">
                         No Project Groups created...
-                    </div> 
+                    </div> </b-col>
                   </b-row>
 
                   <br>
@@ -173,6 +176,9 @@
         </b-row>
       </div>
     </div>
+
+   
+
   </div>
 
 </template>
@@ -186,6 +192,7 @@
   import GroupsJoinedChart from '../GroupsJoinedChart.js'
   import ProjectGroup from './ProjectGroup.vue'
   import StudyGroup from './StudyGroup.vue'
+  import Pie from '../Pie.js'
 
   export default {
     name: 'Profile',
@@ -195,10 +202,53 @@
       'fc': FacultyComparisons,
       'gj': GroupsJoinedChart,
       ProjectGroup,
-      StudyGroup
+      StudyGroup,
+      'pie-chart': Pie
     },
     data() {
       return {
+        /* Data for Group types */
+        chartData: {
+          labels: [],
+          datasets: [
+            {
+              data: [],
+              backgroundColor:['aqua','lightgreen','red','orange'],
+              borderWidth:0.5,
+              borderColor:"#000"
+            }
+          ]
+          
+        },
+        chartOptions: {
+            title:{
+                display:true,
+                text:'Breakdown of Groups (%)',
+                fontColor:'Black',
+                fontSize:15
+
+            },
+            scales:{
+                yAxes:[{
+                    ticks:{
+                        min:0
+                    }
+
+                }]
+            },
+            layout:{
+              padding:{
+                  left: 5,
+                  right: 0,
+                  top: 0,
+                  bottom: 10
+              }
+          }
+          
+        },
+
+
+
         showModal: false,
         user: null,
         email: '',
@@ -333,6 +383,15 @@
                 vm.details.UserName = doc.data().UserName;
                 vm.details.Year = doc.data().Year;
                 vm.details.Picture = doc.data().Picture;
+                
+                vm.chartData.datasets[0].data.push(doc.data().ProjectGroupsCreated.length);
+                vm.chartData.labels.push("Project Groups Created")
+                vm.chartData.datasets[0].data.push(doc.data().ProjectGroupsJoined.length);
+                vm.chartData.labels.push("Project Groups Joined")
+                vm.chartData.datasets[0].data.push(doc.data().StudyGroupsCreated.length);
+                vm.chartData.labels.push("Study Groups Created")
+                vm.chartData.datasets[0].data.push(doc.data().StudyGroupsJoined.length);
+                vm.chartData.labels.push("Study Groups Joined")
                 vm.getGroups();
               })
             })
