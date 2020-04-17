@@ -20,11 +20,11 @@ export default [
     {path: "/About", component: About, meta:{title:'About'}},
     {path: "/profile", component: Profile, meta:{title:'Profile', requiresAuth: true}},
     {path: "/myprofile", component: MyProfile, meta:{title:'Profile', requiresAuth: true}},
-    {path: "/users/:userId", component: Profile, props: true, meta : {title : 'User Profile', requiresAuth: true}},
+    {path: "/users/:userId",name:'profile', component: Profile, props: true, meta : { requiresAuth: true}},
     {path: "/Create-Group", component: CreateGroup, meta:{title:'Create Group', requiresAuth: true}},
     {path: "/Contact", component: Contact, meta:{title:'Contact Us'}},
     {path: "/Register", component: Register, meta:{title:'Register'}},
-    {path:'/NotSignedIn', component: NotSignedIn, meta:{title:'Please sign in'}},
+    {path:'/Not-Signed-In', component: NotSignedIn, meta:{title:'Please sign in'}},
     {path:'/ProfileNew', component: ProfileNew, meta:{title:'ProfileNew', requiresAuth: true}},
     {path:'/Edit-Details', component: Edit, meta:{title:'Edit Details'}}
 ]

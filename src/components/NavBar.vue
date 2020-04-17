@@ -11,8 +11,10 @@
       <a class="py-3 d-none d-md-inline-block" href="#"><router-link to="/Group-Page">Join Group</router-link></a>
       <div class="dropdown-1" v-if="user">
       <b-dropdown id="dropdown-1" right text="User" variant="primary" class="m-3" size="15px">
-        <b-dropdown-item href="#" to="/ProfileNew"><b-img v-bind:src="details.Picture"  alt="" class="user-profile" width="40px" height="40px" rounded="circle"></b-img>
-                    Profile</b-dropdown-item>
+        <b-dropdown-item>
+          <router-link :to= "{name: 'profile', params: {userId: details.UserName}}"> Profile</router-link>
+
+        </b-dropdown-item>
         <b-dropdown-item href="#" to="/Group-Page">Find friends</b-dropdown-item> 
         <b-dropdown-item v-on:click="signOut">Sign Out</b-dropdown-item>
       </b-dropdown>

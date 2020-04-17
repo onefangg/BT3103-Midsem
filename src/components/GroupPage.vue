@@ -71,7 +71,8 @@
                 <b-button class="mt-3" variant="outline-success" block @click="findFriends()">I understand</b-button>
             </b-modal>
 
-            <b-form-select v-model="selected_faculty" :options="faculty" label-field= "location" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
+            <b-form-select v-model="selected_faculty" :options="faculty" label-field= "faculty" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
+            <b-form-select v-model="selected_location" :options="location" label-field= "location" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
             <b-form-select v-model="selected_sort" :options="sort" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
             
             </b-form>
@@ -82,8 +83,6 @@
     <b-spinner variant = "primary" v-show = "finish_loading"></b-spinner>
 </b-container>
     
-    <!-- change userId later.... -->
-
     <br>
     <!-- This is where the project groups will show up -->
     <div v-show="selected_type === 'Project'">
@@ -98,9 +97,9 @@
         <b-row align-h="center">
                 <ProjectGroup v-for = "(item) in projectList" v-bind:key = "item.id"  
                 v-bind:module = "item.ModuleCode"
-                v-bind:userId = "A000001"
+                v-bind:userId = "item.Poster"
                 v-bind:post_desc = "item.Description"
-                v-bind:post_status = "item.Limit > item.UserNames.length ? item.Limit- item.UserNames.length + ' Needed' : 'Closed'"
+                v-bind:post_status = "item.Limit > item.UserNames.length ? item.Limit- item.UserNames.length + ' more needed' : 'Closed'"
                 v-bind:post_date = "item.DatePosted.toDate()"
                 v-bind:members = "item.UserNames"
                 :doc_id = "item.id"
@@ -122,10 +121,10 @@
             <StudyGroup v-for = "(item) in studyList" 
             :key = "item.id"
             :groupName = "item.GroupName"
-            :userId = "A000001" 
+            :userId = "item.Poster" 
             :post_desc = "item.Description"
             :mod_code = "item.ModuleCode"
-            :post_status= "item.UserNames.length < item.Limit ? 'Open' : 'Closed'"
+            :post_status= "item.UserNames.length < item.Limit ? item.Limit- item.UserNames.length + ' Needed' : 'Closed'"
             :post_date = "item.DatePosted.toDate()"
             :location = "item.Location"
             :members = "item.UserNames"
@@ -187,7 +186,7 @@ export default {
             })
         },
         searchModule: function() {
-            this.projectList.length = 0; // clear the exisitng project list
+            this.projectList.length = 0; // clear the existing project list
             let projectGrp = {};
             this.finish_loading = true;
            
@@ -211,7 +210,7 @@ export default {
         findFriends: function() {
             this.friendsPrivacy = !this.friendsPrivacy;
             if (this.selected_type == "Project") {
-                this.projectList.length = 0; // clear the exisitng project list
+                this.projectList.length = 0; // clear the existing project list
             } else if (this.selected_type == "Study") {
                 this.studyList.length = 0;
             }
@@ -268,16 +267,24 @@ export default {
             error_mod: "",
             error_proj_friend: "",
             error_study_friend: "",
-            selected_faculty: "All",
+            selected_faculty: 'Any Faculty',
             faculty:[
-                {value:'All', text: 'Select Faculty'},
-                {value:'Computing', text: 'Computing'},
-                {value:'FASS', text: 'FASS'},
-                {value:'Medicine', text: 'Medicine'},
-                {value:'Science', text: 'Science'},
-                {value:'Law', text: 'Law'},
-                {value:'Business', text: 'Business'}, 
-                {value:'Engineering', text: 'Engineering'}       
+                {value:'Any Faculty', text: 'Any Faculty'},
+                {value:'School of Computing', text: 'School of Computing'},
+                {value:'Faculty of Arts and Social Sciences', text: 'Faculty of Arts and Social Sciences'},
+                {value:'Faculty of Science', text: 'Faculty of Science'},
+                {value:'School of Design and Environment', text: 'School of Design and Environment'},
+                {value:"School of Business", text: "School of Business"}, 
+                {value:"Faculty of Engineering", text: "Faculty of Engineering"}       
+            ],
+            selected_location: 'Any Location',
+            location:[
+                {value:'Any Location', text: 'Any Location'},
+                {value:'NUS', text:'NUS'},
+                {value:'North', text:'North'},
+                {value:'South', text:'South'},
+                {value:'East', text:'East'},
+                {value:'West', text:'West'}
             ],
             projfriends: "",
             studyfriends: "",
@@ -296,30 +303,58 @@ export default {
     },
     watch: {
         selected_sort: function(change_sort) {
-            this.projectList.length = 0; // clear the exisitng project list
-            let projectGrp = {}
-            if (change_sort === "Old") {
-                this.finish_loading = true;
-                database.collection('Project Group').orderBy('DatePosted').get().then((querySnapshot) => {
-                    querySnapshot.forEach(doc => {
-                        projectGrp = doc.data()
-                        projectGrp.id = doc.id
-                        this.projectList.push(projectGrp)
+            if (this.selected_type == "Project") {
+                this.projectList.length = 0; // clear the exisitng project list
+                let projectGrp = {}
+                if (change_sort === "Old") {
+                    this.finish_loading = true;
+                    database.collection('Project Group').orderBy('DatePosted').get().then((querySnapshot) => {
+                        querySnapshot.forEach(doc => {
+                            projectGrp = doc.data()
+                            projectGrp.id = doc.id
+                            this.projectList.push(projectGrp)
+                        })
+                    }).finally(() => {
+                        this.finish_loading = false;
                     })
-                }).finally(() => {
-                    this.finish_loading = false;
-                })
-            } else if (change_sort === "New") {
-                this.finish_loading = true;
-                database.collection('Project Group').orderBy('DatePosted', "desc").get().then((querySnapshot) => {
-                    querySnapshot.forEach(doc => {
-                        projectGrp = doc.data()
-                        projectGrp.id = doc.id
-                        this.projectList.push(projectGrp)
+                } else if (change_sort === "New") {
+                    this.finish_loading = true;
+                    database.collection('Project Group').orderBy('DatePosted', "desc").get().then((querySnapshot) => {
+                        querySnapshot.forEach(doc => {
+                            projectGrp = doc.data()
+                            projectGrp.id = doc.id
+                            this.projectList.push(projectGrp)
+                        })
+                    }).finally(() => {
+                        this.finish_loading = false;
                     })
-                }).finally(() => {
-                    this.finish_loading = false;
-                })
+                }
+            } else if (this.selected_type == "Study") {
+                this.studyList.length = 0;
+                let studyGrp = {};
+                if (change_sort === "Old") {
+                    this.finish_loading = true;
+                    database.collection('Study Group').orderBy('DatePosted').get().then((querySnapshot) => {
+                        querySnapshot.forEach(doc => {
+                            studyGrp = doc.data();
+                            studyGrp.id = doc.id;
+                            this.studyList.push(studyGrp);
+                        })
+                    }).finally(() => {
+                        this.finish_loading = false;
+                    })
+                } else if (change_sort === "New") {
+                    this.finish_loading = true;
+                    database.collection('Study Group').orderBy('DatePosted', "desc").get().then((querySnapshot) => {
+                        querySnapshot.forEach(doc => {
+                            studyGrp = doc.data();
+                            studyGrp.id = doc.id;
+                            this.studyList.push(studyGrp);
+                        })
+                    }).finally(() => {
+                        this.finish_loading = false;
+                    })
+                }
             }
         },
         selected_faculty: function(change_faculty) {
@@ -327,11 +362,31 @@ export default {
             let studyGrp = {};
             this.finish_loading = true;
 
-            if (change_faculty == "All") {
+            if (change_faculty == 'Any Faculty') {
                 this.fetchStudy();
             } else {
             // otherwise filter based on options
                 database.collection("Study Group").where("Faculty", "==", change_faculty).get().then((querySnapshot) => {
+                    querySnapshot.forEach(doc => {
+                        studyGrp = doc.data()
+                        studyGrp.id = doc.id
+                        this.studyList.push(studyGrp)
+                    })
+                }).finally(() => {
+                    this.finish_loading = false;
+                })
+            }
+        },
+        selected_location: function(change_location) {
+            this.studyList.length = 0;
+            let studyGrp = {};
+            this.finish_loading = true;
+
+            if (change_location == 'Any Location') {
+                this.fetchStudy();
+            } else {
+            // otherwise filter based on options
+                database.collection("Study Group").where("Location", "==", change_location).get().then((querySnapshot) => {
                     querySnapshot.forEach(doc => {
                         studyGrp = doc.data()
                         studyGrp.id = doc.id
