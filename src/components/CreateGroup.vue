@@ -232,9 +232,9 @@ export default {
             const userdocid = this.userdoc_id
             if (this.create_type==='study'){
                 this.getNowstu()
-                this.getNumMembersStu()
                 this.setPosterstu()
-                this.study.UserNames.push(this.currUser)                
+                this.study.UserNames.push(this.currUser) 
+                this.getNumMembersStu()               
                 database.collection('Study Group').add(this.study)
                 database.collection("Study Group")
                     .orderBy("DatePosted", 'desc')
@@ -249,10 +249,10 @@ export default {
                 this.$router.push('/Group-Page') 
             } else{
                 this.getNowproj()
-                this.getNumMembersProj()
                 this.setPosterproj()
                 this.proj.ModuleCode = this.proj.ModuleCode.toUpperCase()
                 this.proj.UserNames.push(this.currUser)
+                this.getNumMembersProj()
                 database.collection('Project Group').add(this.proj)
                 database.collection("Project Group")
                     .orderBy("DatePosted", 'desc')

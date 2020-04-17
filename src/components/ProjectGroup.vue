@@ -52,7 +52,7 @@
         <b-row>
           <b-col cols = "8"  id = 'post_author'>
             <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'user-circle'}" class="faicon"/>Created by: <br> 
-            <router-link :to= "{name: 'profile', params: {userId: members[0]}}">@{{members[0]}}</router-link>
+            <router-link :to= "{name: 'profile', params: {userId: userId}}">@{{userId}}</router-link>
             <br> <div id="date">{{disp_date}}</div>
           </b-col>
           <b-col cols = "2">

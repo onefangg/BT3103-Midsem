@@ -6,7 +6,7 @@
           <b-list-group flush>
             <b-row id = 'post_body'> 
             <b-list-group-item>
-              {{mod_code}}:{{post_desc}}
+            {{post_desc}}
             </b-list-group-item></b-row>         
             <b-list-group-item>
               <b-row id ='post_body'>
@@ -44,7 +44,7 @@
         <b-modal v-model="alreadyin">You are already in this group!</b-modal>
         <b-row>        
           <b-col cols = "8"  id = 'post_author'>
-            <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'user-circle'}" class="faicon"/>Created by: <br><a href="#" @click="redirect">@{{members[0]}}</a>
+            <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'user-circle'}" class="faicon"/>Created by: <br><a href="#" @click="redirect">@{{userId}}</a>
           <br> <div id="date">{{disp_date}}</div>
           </b-col>
           <b-col cols = "2">
