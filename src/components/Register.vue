@@ -16,7 +16,7 @@
       ></b-form-input>
     </b-form-group>
 
-    <b-row class ="justify-content-center" inline>
+    <b-row class ="justify-content-md-center" inline>
       <b-col cols = "3">
         <b-form-group label="First Name:" label-for="input-3" label-cols-lg="4" label-align-lg="right" label-align-sm="center">
           <b-form-input
@@ -50,15 +50,17 @@
       </b-col>
       </b-row>
 
-    <b-form-group label="Faculty:"  label-cols-lg="4" label-align-lg="right" label-align-sm="right">
-      <b-form-select class = "custom_select"
+    <b-row cols="1" cols-lg="12">
+    <b-form-group label="Faculty:" label-cols-lg="4" label-align-lg="right">
+      <b-col lg="6"><b-form-select class = "custom_select"
         v-model="form.Faculty"
         :options="Faculty"
         required  
-        style="width: 230px;"
-        
-      ></b-form-select>
-    </b-form-group>  
+        style="margin-left: -20px; width: 100%;"></b-form-select>
+      </b-col>
+    </b-form-group>
+
+      </b-row>
     
     <b-form-group label="Major:" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
       <b-form-input
