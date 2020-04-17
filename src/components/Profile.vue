@@ -5,7 +5,7 @@
 
     <div id="my-container" class="hi" align="center">
       <div class="img" id='main'
-        style="    background-image: linear-gradient(150deg, rgba(63, 174, 255, .3)15%, rgba(63, 174, 255, .3)70%, rgba(63, 174, 255, .3)94%), url(https://bootdey.com/img/Content/flores-amarillas-wallpaper.jpeg);height: 70px;width:1220px;background-size: cover;">
+        style="    background-image: linear-gradient(150deg, rgba(63, 174, 255, .3)15%, rgba(63, 174, 255, .3)70%, rgba(63, 174, 255, .3)94%), url(https://bootdey.com/img/Content/flores-amarillas-wallpaper.jpeg);height: 200px;width:100%;background-size: cover;">
       </div>
       <div class="card social-prof" id='img1' style = "height: 290px">
         <div class="card-body">
@@ -15,23 +15,19 @@
             <h4 id = "name_field">{{details.LastName}} {{details.FirstName}}</h4>
             <h6 id = "username_field">{{$route.params.userId}}</h6>
             <h6 id = "yearmajor_field">Year {{details.Year}} {{details.Major}}</h6>
-            <b-button variant="info" size= "sm" id="popover-reactive-1" v-on:click="changePic()">Change My Picture</b-button> <a> </a>
-            <b-button variant="info" size= "sm" to="/Edit-Details">Edit Details</b-button>
+            <b-button id="popover-reactive-1" v-on:click="changePic()">Change My Picture</b-button>
 
           </div>
 
           <b-popover target="popover-reactive-1" triggers="click" :show.sync="popoverShow" placement="auto"
             container="my-container" ref="popover" @show="onShow" @shown="onShown" @hidden="onHidden">
-            
+
             <template v-slot:title>
               <b-button @click="onClose" class="close" aria-label="Close">
                 <span class="d-inline-block" aria-hidden="true">&times;</span>
               </b-button>
               Change my profile picture
             </template>
-            
-              
-            
 
             <div>
               <b-form-group label="URL" label-for="popover-input-1" label-cols="3" :state="input1state" class="mb-1"
@@ -49,28 +45,36 @@
 
         </div>
       </div>
-      <div class='hi' id='tabs'>
+      <div>
         <b-row>
           <b-col>
-            <!-- This card contains 3 tabs - Dashboard (Active), Group Created, Groups Joined  -->
+            <!-- This card contains 4 tabs - Dashboard (Active), Profile, Group Created, Groups Joined  -->
             <b-card no-body>
               <!-- setting active makes it the default tab -->
               <b-tabs pills card active>
                 <b-tab title='User Dashboard' id='dashboard'>
-                  <div id='chart'>
+                  <b-row  align-h="center" class="justify-content-md-center">
+                    <b-col xl="4">
                     <loginChart></loginChart>
-                  </div>
-                  <div id='chart'>
+                    </b-col>
+                    <b-col  xl="4">
                     <fc></fc>
-                  </div>
-                  <div id='chart'>
+                    </b-col>
+                    <b-col xl="4">
                     <gj></gj>
-                  </div>
+                    </b-col>
+                  </b-row>
+                </b-tab>
+                <b-tab title="Profile">
+                  <b-row alight-h="right">
+                    <b-button variant="light" to="/Edit-Details">Edit Details</b-button>
+                  </b-row>
+                  <br>
+                  
                 </b-tab>
 
-
                 <b-tab title='Group Joined' >
-                  <b-row align-h="left">
+                  <b-row align-h="center" class="justify-content-md-center">
                     <ProjectGroup v-for = "(item) in this.details['GroupsJoined']" v-bind:key = "item.id"  
                     v-bind:module = "item.ModuleCode"
                     v-bind:userId = "item.Poster"
@@ -99,7 +103,7 @@
                 </b-tab>
 
                 <b-tab title='Groups Created'>
-                  <b-row align-h="left">
+                  <b-row  align-h="center" class="justify-content-md-center">
                     <ProjectGroup v-for = "(item) in this.details['GroupsCreated']" v-bind:key = "item.id"  
                     v-bind:module = "item.ModuleCode"
                     v-bind:userId = "item.Poster"
@@ -318,23 +322,17 @@
 
   #img1 {
     height: 250px;
-    width: 1220px
   }
 
   .hi {
     padding-left: 10%;
-    padding-right: 10%;
+    padding-right: 10%
   }
 
-  #chart {
-    height: 180px;
-    width: 380px;
-    float: left;
-  }
 
   #info {
-    height: 1500px;
-    width: 1230px
+    height: 1000px;
+    width: 1230px;
   }
 
   #dashboard {
@@ -354,9 +352,4 @@
     font-family: "sans-serif";
     font-size:120%;
   }
-#tabs{
-  width:1345px;
-  padding-left:0px
- 
-}
 </style>
