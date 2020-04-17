@@ -2,20 +2,21 @@
 <div class="sign-up">
     <div id="nav">
       <nb></nb>
-      <h4 id="top">Create a new account</h4><br>
       </div>
     <br>
-    
+    <h3>Create a new account</h3><br>
+    <b-modal v-model="usernamemodal" >This username is already taken, please use a different one.</b-modal>
     <b-form-group label="Username:" label-for="input-2" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
       <b-form-input
         v-model="form.UserName"
         required
         placeholder="Enter Username"
         style="width: 230px;"
+        
       ></b-form-input>
     </b-form-group>
 
-    <b-row class ="justify-content-center" inline>
+    <b-row class ="justify-content-md-center" inline>
       <b-col cols = "3">
         <b-form-group label="First Name:" label-for="input-3" label-cols-lg="4" label-align-lg="right" label-align-sm="center">
           <b-form-input
@@ -49,15 +50,17 @@
       </b-col>
       </b-row>
 
-    <b-form-group label="Faculty:"  label-cols-lg="4" label-align-lg="right" label-align-sm="right">
-      <b-form-select class = "custom_select"
+    <b-row cols="1" cols-lg="12">
+    <b-form-group label="Faculty:" label-cols-lg="4" label-align-lg="right">
+      <b-col lg="6"><b-form-select class = "custom_select"
         v-model="form.Faculty"
         :options="Faculty"
         required  
-        style="width: 230px;"
-        
-      ></b-form-select>
-    </b-form-group>  
+        style="margin-left: -20px; width: 100%;"></b-form-select>
+      </b-col>
+    </b-form-group>
+
+      </b-row>
     
     <b-form-group label="Major:" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
       <b-form-input
@@ -152,8 +155,10 @@
       },
     data () {
       return {
-        faculties: [{ text: 'Select Faculty', value: null }, 'Any Faculty', 'Faculty of Arts and Social Sciences', 'Faculty of Science', 'School of Computing', 'School of Design and Environment', "School of Business", "Faculty of Engineering"],
+        Faculty: [{ text: 'Select One', value: null }, 'Faculty of Arts and Social Sciences', 'Faculty of Science', 'School of Computing', 'School of Design and Environment', "School of Business", "Faculty of Engineering"],
         confirm_password: '',
+        usernamemodal: false,
+        usernameboolean: false,
         form: {
           FirstName:'',
           StudyGroupsCreated:[],
@@ -168,12 +173,27 @@
           Telegram: '',
           UserName: '',
           Year: '',
-          Picture: "https://i.picsum.photos/id/58/125/125.jpg",
-          Faculty: null
+          Picture: "https://i.picsum.photos/id/58/125/125.jpg"
         }
       }
     },
     methods: {
+      checkUsername() {
+        console.log("checking username " + this.form.UserName)
+        database.collection('Users')
+            .where('UserName' , '==', this.form.UserName.toLowerCase())
+            .get().then((querySnapShot) => {
+                querySnapShot.forEach((doc) => {
+                  console.log("found!" + doc.data().UserName);
+                  this.usernameboolean=false;                  
+                })
+            }) 
+            .catch(function(error) {
+              console.log("Error getting documents: ", error);
+              this.usernameboolean = true;
+             });
+        return this.usernameboolean;
+      },
       insertintodatabase() {
         this.form.FirstName = this.form.FirstName.charAt(0).toUpperCase() + this.form.FirstName.slice(1).toLowerCase();
         this.form.LastName = this.form.LastName.charAt(0).toUpperCase() + this.form.LastName.slice(1).toLowerCase();
@@ -183,28 +203,20 @@
         database.collection('Users').add(this.form)
       },
       signUp () {
-        firebase.auth().createUserWithEmailAndPassword(this.form.NUSNET.toUpperCase()+"@u.nus.edu", this.form.Password).then(()=> {
-          this.insertintodatabase();}).then(() => {
-          this.$router.replace('/Sign-In');
-        }).catch((err) => {
-          alert(err.message)
-        });
-      
+        this.checkUsername();
+        if (this.usernameboolean === false) { this.usernamemodal = !this.usernamemodal }
+        else {
+          firebase.auth().createUserWithEmailAndPassword(this.form.NUSNET.toUpperCase()+"@u.nus.edu", this.form.Password).then(()=> {
+            this.insertintodatabase();}).then(() => {
+            this.$router.replace('/Sign-In');
+          }).catch((err) => {
+            alert(err.message)
+          });
+        }
     }}
   }
 </script>
 
 <style>
-#top{
-  background-color: #007bff;
-  color: white;
-  font-weight: 600;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-
-#fac{
-  padding-left: 425px;
-  width: 750px
-}
+ 
 </style>
