@@ -15,19 +15,23 @@
             <h4 id = "name_field">{{details.LastName}} {{details.FirstName}}</h4>
             <h6 id = "username_field">{{$route.params.userId}}</h6>
             <h6 id = "yearmajor_field">Year {{details.Year}} {{details.Major}}</h6>
-            <b-button id="popover-reactive-1" v-on:click="changePic()">Change My Picture</b-button>
+            <b-button variant="info" size= "sm" id="popover-reactive-1" v-on:click="changePic()">Change My Picture</b-button> <a> </a>
+            <b-button variant="info" size= "sm" to="/Edit-Details">Edit Details</b-button>
 
           </div>
 
           <b-popover target="popover-reactive-1" triggers="click" :show.sync="popoverShow" placement="auto"
             container="my-container" ref="popover" @show="onShow" @shown="onShown" @hidden="onHidden">
-
+            
             <template v-slot:title>
               <b-button @click="onClose" class="close" aria-label="Close">
                 <span class="d-inline-block" aria-hidden="true">&times;</span>
               </b-button>
               Change my profile picture
             </template>
+            
+              
+            
 
             <div>
               <b-form-group label="URL" label-for="popover-input-1" label-cols="3" :state="input1state" class="mb-1"
@@ -45,10 +49,10 @@
 
         </div>
       </div>
-      <div class='hi'>
+      <div class='hi' id='tabs'>
         <b-row>
           <b-col>
-            <!-- This card contains 4 tabs - Dashboard (Active), Profile, Group Created, Groups Joined  -->
+            <!-- This card contains 3 tabs - Dashboard (Active), Group Created, Groups Joined  -->
             <b-card no-body>
               <!-- setting active makes it the default tab -->
               <b-tabs pills card active>
@@ -63,13 +67,7 @@
                     <gj></gj>
                   </div>
                 </b-tab>
-                <b-tab title="Profile">
-                  <b-row alight-h="right">
-                    <b-button variant="light" to="/Edit-Details">Edit Details</b-button>
-                  </b-row>
-                  <br>
-                  
-                </b-tab>
+
 
                 <b-tab title='Group Joined' >
                   <b-row align-h="left">
@@ -335,7 +333,7 @@
   }
 
   #info {
-    height: 1000px;
+    height: 1500px;
     width: 1230px
   }
 
@@ -356,4 +354,9 @@
     font-family: "sans-serif";
     font-size:120%;
   }
+#tabs{
+  width:1345px;
+  padding-left:0px
+ 
+}
 </style>

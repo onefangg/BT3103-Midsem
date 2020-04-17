@@ -2,9 +2,10 @@
 <div class="sign-up">
     <div id="nav">
       <nb></nb>
+      <h4 id="top">Create a new account</h4><br>
       </div>
     <br>
-    <h3>Create a new account</h3><br>
+    
     <b-modal v-model="usernamemodal" >This username is already taken, please use a different one.</b-modal>
     <b-form-group label="Username:" label-for="input-2" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
       <b-form-input
@@ -50,15 +51,15 @@
       </b-col>
       </b-row>
 
-    <b-form-group label="Faculty:"  label-cols-lg="4" label-align-lg="right" label-align-sm="right">
-      <b-form-select class = "custom_select"
-        v-model="form.Faculty"
-        :options="Faculty"
-        required  
-        style="width: 230px;"
-        
-      ></b-form-select>
-    </b-form-group>  
+    <b-form-group id="fac" label="Faculty:" label-for="input-3" label-cols-sm="2" label-cols-lg="3" label-align-lg="right" label-align-sm="right">
+            <b-form-select
+            id="input-33"
+            v-model="form.Faculty"
+            :options="faculties"
+            required
+            name= "type"
+            ></b-form-select>
+        </b-form-group>
     
     <b-form-group label="Major:" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
       <b-form-input
@@ -153,7 +154,7 @@
       },
     data () {
       return {
-        Faculty: [{ text: 'Select One', value: null }, 'Faculty of Arts and Social Sciences', 'Faculty of Science', 'School of Computing', 'School of Design and Environment', "School of Business", "Faculty of Engineering"],
+        faculties: [{ text: 'Select Faculty', value: null }, 'Any Faculty', 'Faculty of Arts and Social Sciences', 'Faculty of Science', 'School of Computing', 'School of Design and Environment', "School of Business", "Faculty of Engineering"],
         confirm_password: '',
         usernamemodal: false,
         usernameboolean: false,
@@ -171,7 +172,8 @@
           Telegram: '',
           UserName: '',
           Year: '',
-          Picture: "https://i.picsum.photos/id/58/125/125.jpg"
+          Picture: "https://i.picsum.photos/id/58/125/125.jpg",
+          Faculty:''
         }
       }
     },
@@ -216,5 +218,16 @@
 </script>
 
 <style>
- 
+#top{
+  background-color: #007bff;
+  color: white;
+  font-weight: 600;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+#fac{
+  padding-left: 425px;
+  width: 750px
+}
 </style>
