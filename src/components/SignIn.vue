@@ -3,7 +3,7 @@
       <nb></nb>
         <form class="form-signin">
             <div class="text-center mb-4">
-                <img src="https://sagehouse.sg/wp-content/uploads/2017/08/national-university-of-singapore.jpg" alt="" width="300" height="200">
+                <img src="https://logos-download.com/wp-content/uploads/2016/12/National_University_of_Singapore_logo_NUS.png" alt="" width="300" height="140">
                 <p> Sign in with your <b>NUS Email</b> and Password </p>
             </div>
         </form>
