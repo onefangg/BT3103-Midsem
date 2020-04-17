@@ -5,7 +5,7 @@
 
     <div id="my-container" class="hi" align="center">
       <div class="img" id='main'
-        style="    background-image: linear-gradient(150deg, rgba(63, 174, 255, .3)15%, rgba(63, 174, 255, .3)70%, rgba(63, 174, 255, .3)94%), url(https://bootdey.com/img/Content/flores-amarillas-wallpaper.jpeg);height: 200px;width:100%;background-size: cover;">
+        style="    background-image: linear-gradient(150deg, rgba(63, 174, 255, .3)15%, rgba(63, 174, 255, .3)70%, rgba(63, 174, 255, .3)94%), url(https://bootdey.com/img/Content/flores-amarillas-wallpaper.jpeg);height: 70px;width:1220px;background-size: cover;">
       </div>
       <div class="card social-prof" id='img1' style = "height: 290px">
         <div class="card-body">
@@ -45,7 +45,7 @@
 
         </div>
       </div>
-      <div>
+      <div class='hi'>
         <b-row>
           <b-col>
             <!-- This card contains 4 tabs - Dashboard (Active), Profile, Group Created, Groups Joined  -->
@@ -53,17 +53,15 @@
               <!-- setting active makes it the default tab -->
               <b-tabs pills card active>
                 <b-tab title='User Dashboard' id='dashboard'>
-                  <b-row  align-h="center" class="justify-content-md-center">
-                    <b-col xl="4">
+                  <div id='chart'>
                     <loginChart></loginChart>
-                    </b-col>
-                    <b-col  xl="4">
+                  </div>
+                  <div id='chart'>
                     <fc></fc>
-                    </b-col>
-                    <b-col xl="4">
+                  </div>
+                  <div id='chart'>
                     <gj></gj>
-                    </b-col>
-                  </b-row>
+                  </div>
                 </b-tab>
                 <b-tab title="Profile">
                   <b-row alight-h="right">
@@ -74,7 +72,7 @@
                 </b-tab>
 
                 <b-tab title='Group Joined' >
-                  <b-row align-h="center" class="justify-content-md-center">
+                  <b-row align-h="left">
                     <ProjectGroup v-for = "(item) in this.details['GroupsJoined']" v-bind:key = "item.id"  
                     v-bind:module = "item.ModuleCode"
                     v-bind:userId = "item.Poster"
@@ -103,7 +101,7 @@
                 </b-tab>
 
                 <b-tab title='Groups Created'>
-                  <b-row  align-h="center" class="justify-content-md-center">
+                  <b-row align-h="left">
                     <ProjectGroup v-for = "(item) in this.details['GroupsCreated']" v-bind:key = "item.id"  
                     v-bind:module = "item.ModuleCode"
                     v-bind:userId = "item.Poster"
@@ -322,17 +320,23 @@
 
   #img1 {
     height: 250px;
+    width: 1220px
   }
 
   .hi {
     padding-left: 10%;
-    padding-right: 10%
+    padding-right: 10%;
   }
 
+  #chart {
+    height: 180px;
+    width: 380px;
+    float: left;
+  }
 
   #info {
     height: 1000px;
-    width: 1230px;
+    width: 1230px
   }
 
   #dashboard {
