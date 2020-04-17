@@ -72,11 +72,62 @@
                 </b-tab>
 
                 <b-tab title='Group Joined' >
-                  <b-row align-h="left"></b-row>
+                  <b-row align-h="left">
+                    <ProjectGroup v-for = "(item) in this.details['GroupsJoined']" v-bind:key = "item.id"  
+                    v-bind:module = "item.ModuleCode"
+                    v-bind:userId = "item.Poster"
+                    v-bind:post_desc = "item.Description"
+                    v-bind:post_status = "item.Limit > item.UserNames.length ? item.Limit- item.UserNames.length + ' more needed' : 'Closed'"
+                    v-bind:post_date = "item.DatePosted.toDate()"
+                    v-bind:members = "item.UserNames"
+                    :doc_id = "item.id"
+                    :hide_post = "item.hidden"
+                    ></ProjectGroup>
+
+                    <StudyGroup v-for = "(item) in this.details['StudyJoined']" 
+                    :key = "item.id"
+                    :groupName = "item.GroupName"
+                    :userId = "item.Poster" 
+                    :post_desc = "item.Description"
+                    :mod_code = "item.ModuleCode"
+                    :post_status= "item.UserNames.length < item.Limit ? item.Limit- item.UserNames.length + ' Needed' : 'Closed'"
+                    :post_date = "item.DatePosted.toDate()"
+                    :location = "item.Location"
+                    :members = "item.UserNames"
+                    :doc_id = "item.id"
+                    :hide_post = "item.hidden">
+                    </StudyGroup> 
+                  </b-row>
                 </b-tab>
 
                 <b-tab title='Groups Created'>
-                  <b-row align-h="left"></b-row>
+                  <b-row align-h="left">
+                    <ProjectGroup v-for = "(item) in this.details['GroupsCreated']" v-bind:key = "item.id"  
+                    v-bind:module = "item.ModuleCode"
+                    v-bind:userId = "item.Poster"
+                    v-bind:post_desc = "item.Description"
+                    v-bind:post_status = "item.Limit > item.UserNames.length ? item.Limit- item.UserNames.length + ' more needed' : 'Closed'"
+                    v-bind:post_date = "item.DatePosted.toDate()"
+                    v-bind:members = "item.UserNames"
+                    :doc_id = "item.id"
+                    :hide_post = "item.hidden"
+                    ></ProjectGroup>
+
+                    <StudyGroup v-for = "(item) in this.details['StudyCreated']" 
+                    :key = "item.id"
+                    :groupName = "item.GroupName"
+                    :userId = "item.Poster" 
+                    :post_desc = "item.Description"
+                    :mod_code = "item.ModuleCode"
+                    :post_status= "item.UserNames.length < item.Limit ? item.Limit- item.UserNames.length + ' Needed' : 'Closed'"
+                    :post_date = "item.DatePosted.toDate()"
+                    :location = "item.Location"
+                    :members = "item.UserNames"
+                    :doc_id = "item.id"
+                    :hide_post = "item.hidden">
+                    </StudyGroup> 
+
+                  </b-row>
                 </b-tab>
                 
               </b-tabs>
@@ -96,6 +147,8 @@
   import loginChart from '../LoginChart.js'
   import FacultyComparisons from '../FacultyComparison.js'
   import GroupsJoinedChart from '../GroupsJoinedChart.js'
+  import ProjectGroup from './ProjectGroup.vue'
+  import StudyGroup from './StudyGroup.vue'
 
   export default {
     name: 'Profile',
@@ -103,7 +156,9 @@
       'nb': NavBar,
       loginChart,
       'fc': FacultyComparisons,
-      'gj': GroupsJoinedChart
+      'gj': GroupsJoinedChart,
+      ProjectGroup,
+      StudyGroup
     },
     data() {
       return {
@@ -115,6 +170,8 @@
           FirstName: '',
           GroupsCreated: [],
           GroupsJoined: [],
+          StudyCreated: [],
+          StudyJoined: [],
           LastName: '',
           Major: '',
           NUSNET: '',
@@ -187,6 +244,37 @@
             (ref.$el || ref).focus()
           })
         })
+      },
+      getGroups: function () {
+        let grp = {};
+        database.collection("Project Group").where("UserNames", "array-contains", this.details.UserName).get().then(
+          (querySnapshot) => {
+              querySnapshot.forEach(doc => {
+                  grp = doc.data()
+                  grp.id = doc.id
+
+                  if (grp.Poster === this.details.UserName) {
+                    this.details.GroupsCreated.push(grp);
+                  } else {
+                    this.details.GroupsJoined.push(grp)
+                  }          
+          })  
+        });
+        database.collection("Study Group").where("UserNames", "array-contains", this.details.UserName).get().then(
+          (querySnapshot) => {
+              querySnapshot.forEach(doc => {
+                  grp = doc.data()
+                  grp.id = doc.id
+
+                  if (grp.Poster === this.details.UserName) {
+                    this.details.StudyCreated.push(grp);
+                  } else {
+                    this.details.StudyJoined.push(grp)
+                  }          
+          })  
+        })
+
+        console.log(this.details.GroupsJoined);
       }
     },
     created: function () {
@@ -208,11 +296,13 @@
                 vm.details.UserName = doc.data().UserName;
                 vm.details.Year = doc.data().Year;
                 vm.details.Picture = doc.data().Picture;
+                vm.getGroups();
               })
             })
             .catch(function (error) {
               console.log("Error getting documents: ", error);
             });
+          
         } else {
           vm.user = null;
         }
