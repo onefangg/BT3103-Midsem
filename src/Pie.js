@@ -14,5 +14,6 @@ export default {
   },
   mounted () {
     this.renderChart(this.chartdata, this.options)
+    window.dispatchEvent(new Event('resize'));
   }
 } 

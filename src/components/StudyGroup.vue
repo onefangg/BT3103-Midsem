@@ -143,7 +143,7 @@ export default {
         vm.email = vm.email.substring(0, vm.email.indexOf("@"))
         const emailToCheck = vm.email;
         database.collection('Users')
-            .where('NUSNET' , '==', emailToCheck)
+            .where('NUSNET' , '==', emailToCheck.toUpperCase())
             .get().then((querySnapShot) => {
                 querySnapShot.forEach((doc) => {
                     vm.UserName = doc.data().UserName;

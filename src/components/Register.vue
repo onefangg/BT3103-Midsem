@@ -155,10 +155,10 @@
       },
     data () {
       return {
-        Faculty: [{ text: 'Select One', value: null }, 'Faculty of Arts and Social Sciences', 'Faculty of Science', 'School of Computing', 'School of Design and Environment', "School of Business", "Faculty of Engineering"],
+        Faculty: [{ text: 'Select a Faculty', value: null }, 'Faculty of Arts and Social Sciences', 'Faculty of Science', 'School of Computing', 'School of Design and Environment', "School of Business", "Faculty of Engineering"],
         confirm_password: '',
         usernamemodal: false,
-        usernameboolean: false,
+        usernameboolean: true,
         form: {
           FirstName:'',
           StudyGroupsCreated:[],
@@ -166,6 +166,7 @@
           ProjectGroupsCreated:[],
           ProjectGroupsJoined:[],
           LastName:'',
+          Faculty: null,
           Gender:'',
           Major:'',
           NUSNET: '',
@@ -179,12 +180,10 @@
     },
     methods: {
       checkUsername() {
-        console.log("checking username " + this.form.UserName)
-        database.collection('Users')
+        return database.collection('Users')
             .where('UserName' , '==', this.form.UserName.toLowerCase())
             .get().then((querySnapShot) => {
-                querySnapShot.forEach((doc) => {
-                  console.log("found!" + doc.data().UserName);
+                querySnapShot.forEach(() => {
                   this.usernameboolean=false;                  
                 })
             }) 
@@ -192,7 +191,6 @@
               console.log("Error getting documents: ", error);
               this.usernameboolean = true;
              });
-        return this.usernameboolean;
       },
       insertintodatabase() {
         this.form.FirstName = this.form.FirstName.charAt(0).toUpperCase() + this.form.FirstName.slice(1).toLowerCase();
@@ -203,16 +201,17 @@
         database.collection('Users').add(this.form)
       },
       signUp () {
-        this.checkUsername();
-        if (this.usernameboolean === false) { this.usernamemodal = !this.usernamemodal }
-        else {
-          firebase.auth().createUserWithEmailAndPassword(this.form.NUSNET.toUpperCase()+"@u.nus.edu", this.form.Password).then(()=> {
-            this.insertintodatabase();}).then(() => {
-            this.$router.replace('/Sign-In');
-          }).catch((err) => {
-            alert(err.message)
-          });
-        }
+        this.checkUsername().then(() => {
+          if (this.usernameboolean === false) { this.usernamemodal = !this.usernamemodal }
+          else {
+            firebase.auth().createUserWithEmailAndPassword(this.form.NUSNET.toUpperCase()+"@u.nus.edu", this.form.Password).then(()=> {
+              this.insertintodatabase();}).then(() => {
+              this.$router.replace('/');
+            }).catch((err) => {
+              alert(err.message)
+            });
+        }})
+
     }}
   }
 </script>

@@ -24,7 +24,7 @@
 
             <template v-slot:title>
               <b-button @click="onClose" class="close" aria-label="Close">
-                <span class="d-inline-block" aria-hidden="true">&times;</span>
+                <span class="d-inline-block" aria-hidden=true>&times;</span>
               </b-button>
               Change my profile picture
             </template>
@@ -48,26 +48,11 @@
       <div>
         <b-row>
           <b-col>
-            <!-- This card contains 4 tabs - Dashboard (Active), Profile, Group Created, Groups Joined  -->
+            <!-- This card contains 4 tabs - Profile (active), Group Created, Groups Joined, User Dashboard -->
             <b-card no-body>
               <!-- setting active makes it the default tab -->
               <b-tabs pills card active>
-                <b-tab title='User Dashboard' id='dashboard'>
-                  <b-row  align-h="center" class="justify-content-md-center">
-                    <b-col xl="4">
-                    <loginChart></loginChart>
-                    </b-col>
-                    <b-col  xl="4">
-                    <fc></fc>
-                    </b-col>
-                    <b-col xl="4">
-                    <gj></gj>
-                    </b-col>
-                    <b-col xl="4">
-                    <pie-chart :chartdata="chartData" :options="chartOptions"/>
-                    </b-col>
-                  </b-row>
-                </b-tab>
+                
                 <b-tab title="Profile">
                   <b-row alight-h="right">
                     <b-button variant="light" to="/Edit-Details">Edit Details</b-button>
@@ -169,7 +154,27 @@
                     </b-col>                  
                   </b-row>
                 </b-tab>
-                
+                <b-tab title='User Dashboard' id='dashboard' v-if="$route.params.userId == this.details.UserName">
+                  <!-- <b-row>
+                    <b-col xl="4">
+                    <loginChart></loginChart>
+                    </b-col>
+                    <b-col xl="4">
+                    <fc></fc>
+                    </b-col>
+                    <b-col xl="4">
+                    <gj></gj>
+                    </b-col>
+                  </b-row> -->
+                  <b-row>
+                    <b-col xl="4">
+                      <div v-if="!chart1show" style="text-align: center; width: 100%; height: 100%; position: absolute; left: 0; top: 100px; z-index: 20;">
+                        <b>No groups created or joined yet!</b>
+                      </div>
+                    <pie-chart :chartdata="chartData" :options="chartOptions"/>
+                    </b-col>
+                  </b-row>
+                </b-tab>
               </b-tabs>
             </b-card>
           </b-col>
@@ -187,9 +192,9 @@
   import NavBar from './NavBar.vue'
   import firebase from 'firebase'
   import database from '../firebase.js'
-  import loginChart from '../LoginChart.js'
-  import FacultyComparisons from '../FacultyComparison.js'
-  import GroupsJoinedChart from '../GroupsJoinedChart.js'
+  // import loginChart from '../LoginChart.js'
+  // import FacultyComparisons from '../FacultyComparison.js'
+  // import GroupsJoinedChart from '../GroupsJoinedChart.js'
   import ProjectGroup from './ProjectGroup.vue'
   import StudyGroup from './StudyGroup.vue'
   import Pie from '../Pie.js'
@@ -198,15 +203,16 @@
     name: 'Profile',
     components: {
       'nb': NavBar,
-      loginChart,
-      'fc': FacultyComparisons,
-      'gj': GroupsJoinedChart,
+      // loginChart,
+      // 'fc': FacultyComparisons,
+      // 'gj': GroupsJoinedChart,
       ProjectGroup,
       StudyGroup,
       'pie-chart': Pie
     },
     data() {
       return {
+        chart1show:true,
         /* Data for Group types */
         chartData: {
           labels: [],
@@ -221,6 +227,46 @@
           
         },
         chartOptions: {
+            title:{
+                display:true,
+                text:'Breakdown of Group types',
+                fontColor:'Black',
+                fontSize:15
+
+            },
+            scales:{
+                yAxes:[{
+                    ticks:{
+                        min:0
+                    }
+
+                }]
+            },
+            layout:{
+              padding:{
+                  left: 5,
+                  right: 0,
+                  top: 0,
+                  bottom: 10
+              }
+          }
+          
+        },
+
+        /* Data for ??? */
+        chartData2: {
+          labels: [],
+          datasets: [
+            {
+              data: [],
+              backgroundColor:['aqua','lightgreen','red','orange'],
+              borderWidth:0.5,
+              borderColor:"#000"
+            }
+          ]
+          
+        },
+        chartOptions2: {
             title:{
                 display:true,
                 text:'Breakdown of Groups (%)',
@@ -247,8 +293,6 @@
           
         },
 
-
-
         showModal: false,
         user: null,
         email: '',
@@ -267,6 +311,7 @@
           Year: '',
           Picture: ''
         },
+        routeuserid: this.$route.params.userId,
         input1: '',
         input1state: null,
         popoverShow: false
@@ -371,9 +416,9 @@
           vm.user = user;
           vm.email = user.email;
           vm.email = vm.email.substring(0, vm.email.indexOf("@"))
-          const emailToCheck = vm.email;
+          const userToCheck = vm.routeuserid;
           database.collection('Users')
-            .where('NUSNET', '==', emailToCheck)
+            .where('UserName', '==', userToCheck)
             .get().then((querySnapShot) => {
               querySnapShot.forEach((doc) => {
                 vm.id = doc.id
@@ -383,15 +428,23 @@
                 vm.details.UserName = doc.data().UserName;
                 vm.details.Year = doc.data().Year;
                 vm.details.Picture = doc.data().Picture;
-                
-                vm.chartData.datasets[0].data.push(doc.data().ProjectGroupsCreated.length);
-                vm.chartData.labels.push("Project Groups Created")
-                vm.chartData.datasets[0].data.push(doc.data().ProjectGroupsJoined.length);
-                vm.chartData.labels.push("Project Groups Joined")
-                vm.chartData.datasets[0].data.push(doc.data().StudyGroupsCreated.length);
-                vm.chartData.labels.push("Study Groups Created")
-                vm.chartData.datasets[0].data.push(doc.data().StudyGroupsJoined.length);
-                vm.chartData.labels.push("Study Groups Joined")
+                if (doc.data().ProjectGroupsCreated.length>0) {
+                  vm.chartData.datasets[0].data.push(doc.data().ProjectGroupsCreated.length);
+                  vm.chartData.labels.push("Project Groups Created")
+                }
+                if (doc.data().ProjectGroupsJoined.length>0) {
+                  vm.chartData.datasets[0].data.push(doc.data().ProjectGroupsJoined.length);
+                  vm.chartData.labels.push("Project Groups Joined")
+                }
+                if (doc.data().StudyGroupsCreated.length>0) {
+                  vm.chartData.datasets[0].data.push(doc.data().StudyGroupsCreated.length);
+                  vm.chartData.labels.push("Study Groups Created")
+                }
+                if (doc.data().StudyGroupsJoined.length>0) {
+                  vm.chartData.datasets[0].data.push(doc.data().StudyGroupsJoined.length);
+                  vm.chartData.labels.push("Study Groups Joined")
+                }
+                if (vm.chartData.labels.length == 0) {vm.chart1show=false;}
                 vm.getGroups();
               })
             })
