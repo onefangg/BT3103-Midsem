@@ -245,7 +245,7 @@ export default {
                         })
                     })})
                 console.log("DONE!")
-                alert("Post Successfully Created!")
+                alert("Group Successfully Created!")
                 this.$router.push('/Group-Page') 
             } else{
                 this.getNowproj()
@@ -263,7 +263,7 @@ export default {
                         })
                     })})
                 console.log("DONE!")
-                alert("Post Successfully Created!")
+                alert("Group Successfully Created!")
                 this.$router.push('/Group-Page') 
             }
             

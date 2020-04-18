@@ -174,6 +174,14 @@
                     <pie-chart :chartdata="chartData" :options="chartOptions"/>
                     </b-col>
                   </b-row>
+                  <b-row>
+                    <b-col xl="4">
+                      <div v-if="!chart2show" style="text-align: center; width: 100%; height: 100%; position: absolute; left: 0; top: 100px; z-index: 20;">
+                        <b>No study groups created or joined yet!</b>
+                      </div>
+                    <pie-chart :chartdata="chartData2" :options="chartOptions2"/>
+                    </b-col>
+                  </b-row>
                 </b-tab>
               </b-tabs>
             </b-card>
@@ -212,8 +220,8 @@
     },
     data() {
       return {
+        /* Data for Group types graph */
         chart1show:true,
-        /* Data for Group types */
         chartData: {
           labels: [],
           datasets: [
@@ -229,7 +237,7 @@
         chartOptions: {
             title:{
                 display:true,
-                text:'Breakdown of Group types',
+                text:'Breakdown of Group Joined and Created',
                 fontColor:'Black',
                 fontSize:15
 
@@ -253,7 +261,8 @@
           
         },
 
-        /* Data for ??? */
+        /* Data for Study group graph */
+        chart2show:true,
         chartData2: {
           labels: [],
           datasets: [
@@ -269,7 +278,7 @@
         chartOptions2: {
             title:{
                 display:true,
-                text:'Breakdown of Groups (%)',
+                text:'Breakdown of Study Groups by Faculty',
                 fontColor:'Black',
                 fontSize:15
 
@@ -397,7 +406,6 @@
               querySnapshot.forEach(doc => {
                   grp = doc.data()
                   grp.id = doc.id
-
                   if (grp.Poster === this.details.UserName) {
                     this.details.StudyCreated.push(grp);
                   } else {
@@ -439,11 +447,19 @@
                 if (doc.data().StudyGroupsCreated.length>0) {
                   vm.chartData.datasets[0].data.push(doc.data().StudyGroupsCreated.length);
                   vm.chartData.labels.push("Study Groups Created")
+                  vm.chartData2.datasets[0].data.push(doc.data().StudyGroupsCreated);
                 }
                 if (doc.data().StudyGroupsJoined.length>0) {
                   vm.chartData.datasets[0].data.push(doc.data().StudyGroupsJoined.length);
                   vm.chartData.labels.push("Study Groups Joined")
+                  doc.data().StudyGroupsJoined.forEach((studygrpid) => {
+                    /* use studygrpid to cross into study database  */
+                    vm.chartData2.labels.push(studygrpid);
+                  })
+                  
                 }
+                 console.log(vm.chartData.datasets[0].data)
+                console.log(vm.chartData2.datasets[0].data)
                 if (vm.chartData.labels.length == 0) {vm.chart1show=false;}
                 vm.getGroups();
               })

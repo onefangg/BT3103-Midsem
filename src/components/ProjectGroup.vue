@@ -100,17 +100,15 @@ export default {
         })
     },
     joinGroup: function() {
-      console.log("joinGroup fn")
-      console.log(this.UserName)
       if (this.members.includes(this.UserName)) {
         this.alreadyin = !this.alreadyin
       } else {
-        // database.collection("Project Group").doc(this.doc_id).update({
-        //   UserNames: firebase.firestore.FieldValue.arrayUnion(this.UserName)
-        // })
-        // database.collection("Users").doc(this.userdoc_id).update({
-        //   ProjectGroupsJoined: firebase.firestore.FieldValue.arrayUnion(this.doc_id)
-        // })
+        database.collection("Project Group").doc(this.doc_id).update({
+          UserNames: firebase.firestore.FieldValue.arrayUnion(this.UserName)
+        })
+        database.collection("Users").doc(this.userdoc_id).update({
+          ProjectGroupsJoined: {id: firebase.firestore.FieldValue.arrayUnion(this.doc_id), timestamp: new Date()}
+        })
         this.teleShow = !this.teleShow
     }},
     deletePost: function() {
@@ -144,7 +142,6 @@ export default {
         
   },
   created: function () {
-    console.log("created")
     var vm = this;
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
@@ -158,7 +155,6 @@ export default {
                 querySnapShot.forEach((doc) => {
                   vm.userdoc_id = doc.id;
                   vm.UserName = doc.data().UserName;
-                  console.log("Username: " +vm.UserName)
                 })
             })
             .then(database.collection('Users').where('UserName' , '==',  vm.userId ) 

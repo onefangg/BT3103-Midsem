@@ -84,7 +84,7 @@ export default {
       userdoc_id: ''
     }
   },
-  props: ['groupName', 'userId', 'post_desc', 'post_status', 'post_date', 'location', 'faculty', 'members', 'hide_post', 'mod_code'],
+  props: ['groupName', 'userId', 'post_desc', 'post_status', 'post_date', 'location', 'faculty', 'members', 'hide_post', 'doc_id', 'mod_code'],
   methods: {
     redirect: function(){
       this.$router.push({
@@ -101,7 +101,7 @@ export default {
           UserNames: firebase.firestore.FieldValue.arrayUnion(this.UserName)
         })
         database.collection("Users").doc(this.userdoc_id).update({
-          StudyGroupsJoined: firebase.firestore.FieldValue.arrayUnion(this.doc_id)
+          StudyGroupsJoined: {id: firebase.firestore.FieldValue.arrayUnion(this.doc_id), timestamp: new Date()}
         })
         this.teleShow = !this.teleShow
     }},
