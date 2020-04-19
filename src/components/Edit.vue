@@ -4,19 +4,19 @@
       <nb></nb>
       </div>
     <br>
-    <b-modal v-model="showModal">
+    <b-modal v-model="showModal" ok-only>
         Changes submitted successfully!
         <template v-slot:modal-footer>
         <div class="w-100">
-          <b-button
+          <router-link :to= "{name: 'profile', params: {userId: details.UserName}}">
+            <b-button
             variant="primary"
             size="sm"
             class="float-right"
             @click="showModal=false"
-            to="/Profile"
-          >
+          > 
             Close
-          </b-button>
+          </b-button></router-link>
         </div>
       </template>
     </b-modal>

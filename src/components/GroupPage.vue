@@ -208,39 +208,46 @@ export default {
             })
            },
         findFriends: function() {
+            this.error_proj_friend = ''
+            this.noResultsFriendProj = false
             this.friendsPrivacy = !this.friendsPrivacy;
             if (this.selected_type == "Project") {
                 this.projectList.length = 0; // clear the existing project list
             } else if (this.selected_type == "Study") {
                 this.studyList.length = 0;
             }
-            let templist = [];
-            let grp = {};
             let friends = (this.selected_type == "Project") ? this.projfriends : this.studyfriends
             this.finish_loading = true;
-            let select_group = this.selected_type + " Group"
-            database.collection(select_group).where("UserNames", "array-contains", friends).get().then(
+            database.collection('Users').where("UserName", "==", friends).get().then(
                 (querySnapshot) => {
-                    querySnapshot.forEach(doc => {
-                        grp = doc.data()
-                        grp.id = doc.id
-                        templist.push(grp)
+                    querySnapshot.forEach((userdoc) => { //userdoc is the FRIEND
+                        this.projectidList = userdoc.data().ProjectGroupsCreated.concat(userdoc.data().ProjectGroupsJoined.id)
+                        this.projectidList.forEach((grpid) => {
+                            database.collection('Project Group').doc(grpid).get().then((grpdoc) => {
+                                this.projectList.push(grpdoc.data())
+                            })
+                        })
+                        
+                        this.studyidList = userdoc.data().StudyGroupsCreated.concat(userdoc.data().StudyGroupsJoined.id)
+                        this.studyidList.forEach((grpid) => {
+                            database.collection('Study Group').doc(grpid).get().then((grpdoc) => {
+                                this.studyList.push(grpdoc.data())
+                            })
+                        })
+                        
                 })
             }).finally(() => {
                 
                 if (this.selected_type == "Project") {
-                    this.projectList = [...templist];
                     this.searchResultsProject = true;
-
                     // if there is no matching results
-                    if (this.projectList.length == 0) {
+                    if (this.projectidList.length == 0) {
                         this.error_proj_friend = this.projfriends;
                         this.noResultsFriendProj = true;
                     }
                 } else if (this.selected_type == "Study") {
-                    this.studyList = [...templist];
                     this.searchResultsStudy = true;
-                     if (this.studyList.length == 0) {
+                     if (this.studyidList.length == 0) {
                         this.error_study_friend = this.studyfriends;
                         this.noResultsFriendStudy = true;
                     }
@@ -253,6 +260,8 @@ export default {
         return {
             studyList: [],
             projectList: [],
+            studyidList: [],
+            projectidList: [],
             selected_type: "Project",
             group_types: [ 
                 {text: 'Project', value: 'Project'},

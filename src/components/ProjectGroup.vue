@@ -64,7 +64,7 @@
                 @click ="showdelete = !showdelete"
                 >Delete Group</b-button>
               <b-modal v-model ="showdelete" @ok = "deletePost()">
-                Are you sure you want to delete this post?
+                Are you sure you want to delete this group?
               </b-modal>
           </b-col>
         </b-row>
