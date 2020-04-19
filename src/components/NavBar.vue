@@ -15,7 +15,6 @@
           <router-link :to= "{name: 'profile', params: {userId: details.UserName}}"> Profile</router-link>
 
         </b-dropdown-item>
-        <b-dropdown-item href="#" to="/Group-Page">Find friends</b-dropdown-item> 
         <b-dropdown-item v-on:click="signOut">Sign Out</b-dropdown-item>
       </b-dropdown>
       </div> 

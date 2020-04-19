@@ -244,14 +244,13 @@ export default {
                             StudyGroupsCreated: firebase.firestore.FieldValue.arrayUnion(doc.id)
                         })
                     })})
-                console.log("DONE!")
                 alert("Group Successfully Created!")
                 this.$router.push('/Group-Page') 
             } else{
                 this.getNowproj()
                 this.setPosterproj()
                 this.proj.ModuleCode = this.proj.ModuleCode.toUpperCase()
-                this.proj.UserNames.push(this.currUser)
+                this.proj.UserNames.unshift(this.currUser)
                 this.getNumMembersProj()
                 database.collection('Project Group').add(this.proj)
                 database.collection("Project Group")
@@ -262,7 +261,6 @@ export default {
                             ProjectGroupsCreated: firebase.firestore.FieldValue.arrayUnion(doc.id)
                         })
                     })})
-                console.log("DONE!")
                 alert("Group Successfully Created!")
                 this.$router.push('/Group-Page') 
             }

@@ -162,8 +162,8 @@
         form: {
           FirstName:'',
           StudyGroupsCreated:[],
-          StudyGroupsJoined:[],
-          ProjectGroupsCreated:[],
+          StudyGroupsJoined:{},
+          ProjectGroupsCreated:{},
           ProjectGroupsJoined:[],
           LastName:'',
           Faculty: null,

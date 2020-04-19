@@ -47,8 +47,8 @@
      
       <template v-slot:footer>
         <b-modal v-model="modalShow" @ok = "joinGroup()">Are you sure you want to join this group?</b-modal>
-        <b-modal v-model="teleShow">Successfully joined group! Please contact the creator of the group on telegram @{{creatorTele}}</b-modal>
-        <b-modal v-model="alreadyin">You are already in this group!</b-modal>
+        <b-modal v-model="teleShow" @ok="refreshPg()">Successfully joined group! Please contact the creator of the group on telegram @{{creatorTele}}</b-modal>
+        <b-modal v-model="alreadyin">You are already in this group! Please contact the creator of the group on telegram @{{creatorTele}}</b-modal>
         <b-row>
           <b-col cols = "8"  id = 'post_author'>
             <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'user-circle'}" class="faicon"/>Created by: <br> 
@@ -99,6 +99,9 @@ export default {
         path: '/users' +'/' + this.userId, 
         })
     },
+    refreshPg: function() {
+      this.$router.go()
+    },
     joinGroup: function() {
       if (this.members.includes(this.UserName)) {
         this.alreadyin = !this.alreadyin
@@ -107,7 +110,8 @@ export default {
           UserNames: firebase.firestore.FieldValue.arrayUnion(this.UserName)
         })
         database.collection("Users").doc(this.userdoc_id).update({
-          ProjectGroupsJoined: {id: firebase.firestore.FieldValue.arrayUnion(this.doc_id), timestamp: new Date()}
+          "ProjectGroupsJoined.id": firebase.firestore.FieldValue.arrayUnion(this.doc_id),
+          "ProjectGroupsJoined.timestamp": firebase.firestore.FieldValue.arrayUnion(new Date())
         })
         this.teleShow = !this.teleShow
     }},
