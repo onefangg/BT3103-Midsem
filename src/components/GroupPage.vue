@@ -85,7 +85,7 @@
     <br>
     <!-- This is where the project groups will show up -->
     <div v-show="selected_type === 'Project'">
-        <div v-show = "searchResultsProject">
+        <div v-show = "searchResultsProject || searchResultsStudy">
             <b-button v-on:click = "fetchProject()">Clear Search Results</b-button>
             <br>
             <h3 v-show = "noResultsFriendProj">No results for {{error_proj_friend}}</h3>
@@ -109,7 +109,7 @@
     <!-- This is where the study groups will show up -->
     <br>
     <div v-show="selected_type === 'Study'">
-        <div v-show = "searchResultsStudy">       
+        <div v-show = "searchResultsStudy || searchResultsProject">       
             <b-button v-on:click = "fetchStudy()">Clear Search Results</b-button>
             <br>
             <h3 v-show = "noResultsFriendStudy">No results for {{error_study_friend}}</h3>
@@ -148,6 +148,7 @@ export default {
     }, methods: {
         fetchStudy: function() {
             this.studyList.length = 0;
+            this.studyidList.length = 0;
             if (this.searchResultsStudy) {
                 this.searchResultsStudy = false;
             }
@@ -164,8 +165,12 @@ export default {
         },
         fetchProject: function() {
             this.projectList.length = 0;
+            this.projectidList.length = 0;
             if (this.searchResultsProject) {
                 this.searchResultsProject = false;
+            }
+            if (this.noResultsMod) {
+                this.noResultsMod = false
             }
             let projectGrp = {}
             database.collection('Project Group').get().then((querySnapshot) => {
@@ -179,10 +184,11 @@ export default {
             })
         },
         searchModule: function() {
+            this.projfriends = '';
             this.projectList.length = 0; // clear the existing project list
             let projectGrp = {};
             this.finish_loading = true;
-            database.collection("Project Group").where("ModuleCode", "==", this.mod).get().then(
+            database.collection("Project Group").where("ModuleCode", "==", this.mod.toUpperCase()).get().then(
                 (querySnapshot) => {
                     querySnapshot.forEach(doc => {
                         projectGrp = doc.data()
@@ -200,17 +206,20 @@ export default {
             })
            },
         findFriends: function() {
+            this.mod = ''
             this.error_proj_friend = ''
+            this.error_study_friend = ''
             this.noResultsFriendProj = false
+            this.noResultsFriendStudy= false
             this.friendsPrivacy = !this.friendsPrivacy;
-            if (this.selected_type == "Project") {
-                this.projectList.length = 0; // clear the existing project list
-            } else if (this.selected_type == "Study") {
-                this.studyList.length = 0;
-            }
+            this.projectList.length = 0; // clear the existing project list
+            this.projectidList.length = 0;
+            this.studyList.length = 0;
+            this.studyidList.length = 0;
+            console.log(this.studyList.length)
             let friends = (this.selected_type == "Project") ? this.projfriends : this.studyfriends
             this.finish_loading = true;
-            database.collection('Users').where("UserName", "==", friends).get().then(
+            database.collection('Users').where("UserName", "==", friends.toLowerCase()).get().then(
                 (querySnapshot) => {
                     querySnapshot.forEach((userdoc) => { //userdoc is the FRIEND
                         this.projectidList = userdoc.data().ProjectGroupsCreated.concat(userdoc.data().ProjectGroupsJoined.id)
@@ -292,7 +301,7 @@ export default {
             searchResultsProject: false,
             searchResultsStudy: false,
             finish_loading: true,
-            friendsPrivacy: false,
+            friendsPrivacy: false
         }
     },
     created() {
