@@ -104,24 +104,23 @@
       }
     },
     methods: {
-        submitChanges: function() {
-            database.collection('Users')
-                .doc(this.id)
-                .update({ 
-                    FirstName: this.details.FirstName,
-                    LastName: this.details.LastName,
-                    Major: this.details.Major,
-                    Telegram: this.details.Telegram,
-                    UserName: this.details.UserName,
-                    Year: this.details.Year   
-                })
-                .then(() => {
-                    console.log('account details updated!')
-                    this.showModal = true;
-                })
-            }
-        
-    },
+      submitChanges: function() {
+        database.collection('Users')
+          .doc(this.id)
+          .update({ 
+              FirstName: this.details.FirstName,
+              LastName: this.details.LastName,
+              Major: this.details.Major,
+              Telegram: this.details.Telegram,
+              UserName: this.details.UserName,
+              Year: this.details.Year   
+          })
+          .then(() => {
+              console.log('account details updated!')
+              this.showModal = true;
+          })
+        }
+  },
   created: function () {
     var vm = this;
     firebase.auth().onAuthStateChanged(function(user) {

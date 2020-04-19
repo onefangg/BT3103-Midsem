@@ -6,7 +6,6 @@
     <br>
     <h3>Create a new account</h3><br>
     <b-modal v-model="usernamemodal" >This username is already taken, please use a different one.</b-modal>
-    <b-modal v-model="loginmodal" ok-only>Congratulations, you are now logged in.</b-modal>
     <b-form-group label="Username:" label-for="input-2" label-cols-lg="4" label-align-lg="right" label-align-sm="right">
       <b-form-input
         v-model="form.UserName"
@@ -36,7 +35,6 @@
             required
             placeholder="Last Name"
             style="width: 230px;"
-            
           ></b-form-input>
         </b-form-group>
       </b-col>
@@ -208,7 +206,6 @@
           else {
             firebase.auth().createUserWithEmailAndPassword(this.form.NUSNET.toUpperCase()+"@u.nus.edu", this.form.Password).then(()=> {
               this.insertintodatabase();}).then(() => {
-                this.loginmodal = !this.loginmodal
                 this.$router.replace('/');
             }).catch((err) => {
               alert(err.message)
@@ -218,7 +215,5 @@
     }}
   }
 </script>
-
 <style>
- 
 </style>

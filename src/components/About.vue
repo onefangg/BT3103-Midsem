@@ -90,7 +90,7 @@
                                     </a>
                                 </div>
                                 <div class="p-4">
-                                    <a href="https://www.instagram.com">
+                                    <a href="https://www.instagram.com/chuawf/">
                                         <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'instagram'}"/>
                                     </a>
                                 </div>
@@ -110,7 +110,7 @@
                                     </a>
                                 </div>
                                 <div class="p-4">
-                                    <a href="https://www.instagram.com">
+                                    <a href="https://www.instagram.com/wei_zhenggg/">
                                         <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'instagram'}"/>
                                     </a>
                                 </div>

@@ -1,11 +1,9 @@
 <template>
   <div>
-    <nb>
-    </nb>
-
+    <nb></nb>
     <div id="my-container" class="hi" align="center">
       <div class="img" id='main'
-        style="    background-image: linear-gradient(150deg, rgba(63, 174, 255, .3)15%, rgba(63, 174, 255, .3)70%, rgba(63, 174, 255, .3)94%), url(https://bootdey.com/img/Content/flores-amarillas-wallpaper.jpeg);height: 200px;width:100%;background-size: cover;">
+        style="background-image: linear-gradient(150deg, rgba(63, 174, 255, .3)15%, rgba(63, 174, 255, .3)70%, rgba(63, 174, 255, .3)94%), url(https://bootdey.com/img/Content/flores-amarillas-wallpaper.jpeg);height: 200px;width:100%;background-size: cover;">
       </div>
       <div class="card social-prof" id='img1' style = "height: 290px">
         <div class="card-body">
@@ -17,12 +15,10 @@
             <h6 id = "yearmajor_field">Year {{details.Year}} {{details.Major}}</h6>
             <b-button v-if="$route.params.userId===this.myaccid" id="popover-reactive-1" v-on:click="changePic()">Change My Picture</b-button>
             <b-button class='ml-3' v-if="$route.params.userId===this.myaccid" variant="secondary" to="/Edit-Details">Edit Details</b-button>
-
           </div>
 
           <b-popover target="popover-reactive-1" triggers="click" :show.sync="popoverShow" placement="auto"
             container="my-container" ref="popover" @show="onShow" @shown="onShown" @hidden="onHidden">
-
             <template v-slot:title>
               <b-button @click="onClose" class="close" aria-label="Close">
                 <span class="d-inline-block" aria-hidden=true>&times;</span>
@@ -41,20 +37,16 @@
               <b-button @click="onOk" size="sm" variant="primary">Ok</b-button>
             </div>
           </b-popover>
-
-
-
         </div>
       </div>
       <div>
+        
         <b-row>
           <b-col>
             <!-- This card contains 4 tabs - Profile (active), Group Created, Groups Joined, User Dashboard -->
             <b-card no-body>
               <!-- setting active makes it the default tab -->
-              <b-tabs pills card active>
-                
-               
+              <b-tabs pills card active>               
                 <b-tab title='Group Joined' >
                   <h1>Project Groups</h1>
                   <span class = 'divider'></span>
@@ -70,17 +62,16 @@
                       :doc_id = "item.id"
                       :hide_post = "item.hidden"
                       ></ProjectGroup>
-                      <div v-show = "this.details['GroupsJoined'].length == 0">
-                        No Project Groups joined...
+                      <div v-show = "this.details['GroupsJoined'].length == 0" class='ml-3'>
+                        No Project Groups joined yet.
                       </div>
                   </b-row>
-                    <br>
-                    <h1>Study Groups</h1>
-                    <span class = 'divider'></span>
-                    <br>
 
-                  <b-row  align-h= "start">
-                    
+                  <br>
+                  <h1>Study Groups</h1>
+                  <span class = 'divider'></span>
+                  <br>
+                  <b-row align-h= "start">
                     <StudyGroup v-for = "(item) in this.details['StudyJoined']" 
                     :key = "item.id"
                     :groupName = "item.GroupName"
@@ -94,8 +85,8 @@
                     :doc_id = "item.id"
                     :hide_post = "item.hidden">
                     </StudyGroup>
-                    <div v-show = "this.details['StudyJoined'].length == 0">
-                        No Study Groups joined...
+                    <div v-show = "this.details['StudyJoined'].length == 0" class='ml-3'>
+                        No Study Groups joined yet.
                       </div>  
                   </b-row>
                 </b-tab>
@@ -115,9 +106,8 @@
                       :doc_id = "item.id"
                       :hide_post = "item.hidden"
                       ></ProjectGroup>
-                    
-                    <div v-show = "this.details['GroupsCreated'].length == 0">
-                        No Project Groups created...
+                    <div v-show = "this.details['GroupsCreated'].length == 0" class='ml-3'>
+                        No Project Groups created yet.
                     </div> 
                   </b-row>
 
@@ -126,7 +116,6 @@
                   <span class = 'divider'></span>
                   <br>
                   <b-row align-h= "start">
-                   
                     <StudyGroup v-for = "(item) in this.details['StudyCreated']" 
                       :key = "item.id"
                       :groupName = "item.GroupName"
@@ -140,12 +129,12 @@
                       :doc_id = "item.id"
                       :hide_post = "item.hidden">
                       </StudyGroup>
-                      <div v-show = "this.details['StudyCreated'].length == 0">
-                        No Study Groups created...
-                      </div> 
-                                     
+                      <div v-show = "this.details['StudyCreated'].length == 0" class='ml-3'>
+                        No Study Groups created yet.
+                      </div>          
                   </b-row>
                 </b-tab>
+
                 <b-tab title='User Dashboard' id='dashboard'>
                   <b-row>
                     <b-col xl="4">
@@ -176,11 +165,7 @@
         </b-row>
       </div>
     </div>
-
-   
-
   </div>
-
 </template>
 
 <script>
@@ -215,7 +200,6 @@
               borderColor:'#000'
             }
           ]
-          
         },
         chartOptions: {
             title:{
@@ -223,14 +207,12 @@
                 text:'Breakdown of all Group Joined and Created',
                 fontColor:'Black',
                 fontSize:15
-
             },
             scales:{
                 yAxes:[{
                     ticks:{
                         min:0
                     }
-
                 }]
             },
             layout:{
@@ -241,9 +223,7 @@
                   bottom: 10
               }
           }
-          
         },
-
         /* Data for joined groups graph */
         chart2show:true,
         chartData2: {
@@ -264,7 +244,6 @@
               borderColor:"#000"
             }
           ]
-          
         },
         chartOptions2: {
             title:{
@@ -272,14 +251,12 @@
                 text:'Breakdown of Groups Joined over time',
                 fontColor:'Black',
                 fontSize:15
-
             },
             scales:{
                 yAxes:[{
                     ticks:{
                         min:0
                     }
-
                 }]
             },
             layout:{
@@ -321,14 +298,12 @@
                 text:'Breakdown of Groups Created over time',
                 fontColor:'Black',
                 fontSize:15
-
             },
             scales:{
                 yAxes:[{
                     ticks:{
                         min:0
                     }
-
                 }]
             },
             layout:{
@@ -339,7 +314,6 @@
                   bottom: 10
               }
           }
-          
         },
         showModal: false,
         user: null,
@@ -374,6 +348,9 @@
       }
     },
     methods: {
+      changePic: function() {
+        this.popoverShow =true
+      },
       submitChanges: function () {
         database.collection('Users')
           .doc(this.id)
@@ -431,26 +408,25 @@
         database.collection("Project Group").where("UserNames", "array-contains", this.details.UserName).get().then(
           (querySnapshot) => {
               querySnapshot.forEach(doc => {
-                  grp = doc.data()
-                  grp.id = doc.id
-
-                  if (grp.Poster === this.details.UserName) {
-                    this.details.GroupsCreated.push(grp);
-                  } else {
-                    this.details.GroupsJoined.push(grp)
-                  }          
+                grp = doc.data()
+                grp.id = doc.id
+                if (grp.Poster === this.details.UserName) {
+                  this.details.GroupsCreated.push(grp);
+                } else {
+                  this.details.GroupsJoined.push(grp)
+                }          
           })  
         });
         database.collection("Study Group").where("UserNames", "array-contains", this.details.UserName).get().then(
           (querySnapshot) => {
               querySnapshot.forEach(doc => {
-                  grp = doc.data()
-                  grp.id = doc.id
-                  if (grp.Poster === this.details.UserName) {
-                    this.details.StudyCreated.push(grp);
-                  } else {
-                    this.details.StudyJoined.push(grp)
-                  }          
+                grp = doc.data()
+                grp.id = doc.id
+                if (grp.Poster === this.details.UserName) {
+                  this.details.StudyCreated.push(grp);
+                } else {
+                  this.details.StudyJoined.push(grp)
+                }          
           })  
         })
       }
@@ -583,7 +559,6 @@
             .catch(function (error) {
               console.log("Error getting documents: ", error);
             });
-          
         } else {
           vm.user = null;
         }
@@ -596,7 +571,6 @@
   body {
     background-color: #f0f6ff;
     color: #28384d;
-
   }
 
   .divider {
@@ -614,7 +588,6 @@
     padding-left: 10%;
     padding-right: 10%
   }
-
 
   #info {
     height: 1000px;

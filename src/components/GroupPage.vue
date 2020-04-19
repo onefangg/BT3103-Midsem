@@ -70,7 +70,7 @@
                 <b-button class="mt-3" variant="outline-danger" block>Cancel</b-button>
                 <b-button class="mt-3" variant="outline-success" block @click="findFriends()">I understand</b-button>
             </b-modal>
-
+            
             <b-form-select v-model="selected_faculty" :options="faculty" label-field= "faculty" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
             <b-form-select v-model="selected_location" :options="location" label-field= "location" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
             <b-form-select v-model="selected_sort" :options="sort" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
@@ -78,10 +78,9 @@
             </b-form>
         </div>
     </div>
-
     <br>
     <b-spinner variant = "primary" v-show = "finish_loading"></b-spinner>
-</b-container>
+    </b-container>
     
     <br>
     <!-- This is where the project groups will show up -->
@@ -93,7 +92,6 @@
             <h3 v-show = "noResultsMod">No results for {{error_mod}}</h3>
         </div>
         <br>
-
         <b-row align-h="center">
                 <ProjectGroup v-for = "(item) in projectList" v-bind:key = "item.id"  
                 v-bind:module = "item.ModuleCode"
@@ -105,7 +103,6 @@
                 :doc_id = "item.id"
                 :hide_post = "item.hidden"
                 ></ProjectGroup>
-
         </b-row>
      </div>
 
@@ -131,13 +128,11 @@
             :doc_id = "item.id"
             :hide_post = "item.hidden">
             </StudyGroup>    
-
       </b-row>
     </div>
   </b-container>    
   </div>
 </template>
-
 
 <script>
 import ProjectGroup from './ProjectGroup.vue'
@@ -156,7 +151,6 @@ export default {
             if (this.searchResultsStudy) {
                 this.searchResultsStudy = false;
             }
-
             let studyGrp = {}
             database.collection('Study Group').get().then((querySnapshot) => {
                 querySnapshot.forEach(doc => {
@@ -170,7 +164,6 @@ export default {
         },
         fetchProject: function() {
             this.projectList.length = 0;
-
             if (this.searchResultsProject) {
                 this.searchResultsProject = false;
             }
@@ -189,7 +182,6 @@ export default {
             this.projectList.length = 0; // clear the existing project list
             let projectGrp = {};
             this.finish_loading = true;
-           
             database.collection("Project Group").where("ModuleCode", "==", this.mod).get().then(
                 (querySnapshot) => {
                     querySnapshot.forEach(doc => {
@@ -227,17 +219,14 @@ export default {
                                 this.projectList.push(grpdoc.data())
                             })
                         })
-                        
                         this.studyidList = userdoc.data().StudyGroupsCreated.concat(userdoc.data().StudyGroupsJoined.id)
                         this.studyidList.forEach((grpid) => {
                             database.collection('Study Group').doc(grpid).get().then((grpdoc) => {
                                 this.studyList.push(grpdoc.data())
                             })
                         })
-                        
                 })
             }).finally(() => {
-                
                 if (this.selected_type == "Project") {
                     this.searchResultsProject = true;
                     // if there is no matching results
@@ -256,7 +245,7 @@ export default {
             })
         }   
     }
-    , data() {
+    ,data() {
         return {
             studyList: [],
             projectList: [],
@@ -408,7 +397,6 @@ export default {
         }
     }
 }
-
 </script>
 
 <style scoped>
@@ -424,11 +412,10 @@ export default {
 }
 
 #filterbox {
-    
     padding-top: 20px;
     padding-bottom: 2px;
-
 }
+
 .filters {
     text-align: left;
     display: inline-block;
@@ -437,7 +424,6 @@ export default {
 
 .radio {
     padding-top: 10px; 
-
 }
 
 h4{
@@ -447,6 +433,4 @@ h4{
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
-
-
 </style>

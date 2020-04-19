@@ -2,12 +2,11 @@
     <div>
       <nb></nb>
         <form class="form-signin">
-            <div class="text-center mb-4">
-                <img src="https://logos-download.com/wp-content/uploads/2016/12/National_University_of_Singapore_logo_NUS.png" alt="" width="300" height="140">
+            <div class="text-center mb-2">
+                <img src='..\assets\undraw_authentication.svg' alt="" width="400" height="220" class="mb-4"><br>
                 <p> Sign in with your <b>NUS Email</b> and Password </p>
             </div>
         </form>
-
         <div class="form-label-group">
             <label for="inputEmail">Email address</label>
             <input v-model="email" v-on:keyup.enter="check" placeholder="Email Address" type="email">
@@ -19,7 +18,6 @@
         Not Registered? Click <router-link to="/Register"><u>here</u></router-link> to sign up!
         <br>
         <br>
-
         <div class="checkbox mb-3">
             <b-button type="submit" variant="primary" v-on:click="login">Sign In</b-button>
         </div>  

@@ -1,8 +1,6 @@
 <template>
-       
     <div>
       <nb></nb>
-      
       <b-container><div id="pleaseSignIn">
       <b-row>
       <b-col cols="4"><b-img src='..\assets\sad_face.svg' id="illustration"></b-img></b-col>
@@ -12,19 +10,17 @@
       <b-button variant="primary" class="btn btn-primary float-left" to="/Register">Register</b-button>
       </b-col></b-row>
       </div>
-      </b-container>
-
-      
+      </b-container>      
     </div>
 </template>
 <script>
 import NavBar from './NavBar.vue'
 
 export default {
-    name: 'Not-Signed-In',
-    components: {
-        'nb':NavBar
-      }
+  name: 'Not-Signed-In',
+  components: {
+      'nb':NavBar
+    }
 }
 </script>
 

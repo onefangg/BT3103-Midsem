@@ -6,7 +6,7 @@
           <b-col><b-img src='..\assets\team_meeting blue.svg' id="illustration"></b-img></b-col>
           <b-col><hr align="left" id="shortline"> 
           <div id = "text">Finding groupmates in NUS is easier than ever.</div>
-          <div id ="subtext">Having difficulty finding project groupmates? Or just tired of studying alone? LoNUS does the heavy lifting for you to find new people to work with. 
+          <div id ="subtext">Having difficulty finding project groupmates? Or just tired of studying alone? LoNUS does the heavy lifting for you to find people to work with. 
           </div>
           <div id = "joinbutton">
             <b-button variant="primary" v-if="!user" class="btn btn-primary float-left" to="/Sign-In">Join Now</b-button>

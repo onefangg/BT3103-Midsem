@@ -1,74 +1,72 @@
 <template>
   <b-card id = 'post' v-show = "!hide_post" style="max-width: 20rem;" >       
-        <!-- header (module code etc.) -->
-        <template v-slot:header>
-          <h6 class="mb-0">
-            <b>Module code: {{module}}</b>  
-          </h6>   
-        </template>
+    <!-- header (module code etc.) -->
+    <template v-slot:header>
+      <h6 class="mb-0">
+        <b>Module code: {{module}}</b>  
+      </h6>   
+    </template>
 
-      <!-- card body -->
-      <b-list-group flush>
-        <b-row id = 'post_body'> 
-          <b-list-group-item>
-            {{post_desc}}    
-          </b-list-group-item>
-        </b-row>
-      
+    <!-- card body -->
+    <b-list-group flush>
+      <b-row id = 'post_body'> 
         <b-list-group-item>
-          <!-- is there enough members/full capacity -->
-          <b-row id ='post_body'>     
-            <b-col>
-              <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'users'}" class="faicon"/>
-              {{post_status}}
-            </b-col>
-
-          </b-row> 
-         
-          <!-- showing all members button -->
-          <b-row class="mt-2">
-            <b-button size="sm"
-              variant = "primary"
-              @click ="showMem = !showMem"
-              >View members ▼</b-button>
-          </b-row>
-              <!-- generating all members in the group -->
-              <b-row>
-                <b-row v-show="showMem" class="mt-2">
-                  <b-card id='members'>
-                    <a v-for="item in members" :key="item" >
-                      <router-link :to= "{name: 'profile', params: {userId: item}}">@{{item}}</router-link>
-                    </a>
-                  </b-card>
-                </b-row>
-              </b-row>
+          {{post_desc}}    
         </b-list-group-item>
-      </b-list-group>
-     
-      <template v-slot:footer>
-        <b-modal v-model="modalShow" @ok = "joinGroup()">Are you sure you want to join this group?</b-modal>
-        <b-modal v-model="teleShow" @ok="refreshPg()">Successfully joined group! Please contact the creator of the group on telegram @{{creatorTele}}</b-modal>
-        <b-modal v-model="alreadyin">You are already in this group! Please contact the creator of the group on telegram @{{creatorTele}}</b-modal>
-        <b-row>
-          <b-col cols = "8"  id = 'post_author'>
-            <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'user-circle'}" class="faicon"/>Created by: <br> 
-            <router-link :to= "{name: 'profile', params: {userId: userId}}">@{{userId}}</router-link>
-            <br> <div id="date">{{disp_date}}</div>
+      </b-row>
+    
+      <b-list-group-item>
+        <!-- is there enough members/full capacity -->
+        <b-row id ='post_body'>     
+          <b-col>
+            <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'users'}" class="faicon"/>
+            {{post_status}}
           </b-col>
-          <b-col cols = "2">
-            <b-button v-if="showjoin()" variant = 'primary' @click="modalShow = !modalShow">Join group!</b-button>
-              <!-- delete post button and pop-up -->
-              <b-button
-                v-if="byUser(userId)" 
-                variant = "danger"
-                @click ="showdelete = !showdelete"
-                >Delete Group</b-button>
-              <b-modal v-model ="showdelete" @ok = "deletePost()">
-                Are you sure you want to delete this group?
-              </b-modal>
-          </b-col>
+        </b-row> 
+        <!-- showing all members button -->
+        <b-row class="mt-2">
+          <b-button size="sm"
+            variant = "primary"
+            @click ="showMem = !showMem"
+            >View members ▼</b-button>
         </b-row>
-      </template>
+            <!-- generating all members in the group -->
+            <b-row>
+              <b-row v-show="showMem" class="mt-2">
+                <b-card id='members'>
+                  <a v-for="item in members" :key="item" >
+                    <router-link :to= "{name: 'profile', params: {userId: item}}">@{{item}}</router-link>
+                  </a>
+                </b-card>
+              </b-row>
+            </b-row>
+      </b-list-group-item>
+    </b-list-group>
+    
+    <template v-slot:footer>
+      <b-modal v-model="modalShow" @ok = "joinGroup()">Are you sure you want to join this group?</b-modal>
+      <b-modal v-model="teleShow" @ok="refreshPg()">Successfully joined group! Please contact the creator of the group on telegram @{{creatorTele}}</b-modal>
+      <b-modal v-model="alreadyin">You are already in this group! Please contact the creator of the group on telegram @{{creatorTele}}</b-modal>
+      <b-row>
+        <b-col cols = "8"  id = 'post_author'>
+          <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'user-circle'}" class="faicon"/>Created by: <br> 
+          <router-link :to= "{name: 'profile', params: {userId: userId}}">@{{userId}}</router-link>
+          <br> <div id="date">{{disp_date}}</div>
+        </b-col>
+        <b-col cols = "2">
+          <b-button v-if="showjoin()" variant = 'primary' @click="modalShow = !modalShow">Join group!</b-button>
+            <!-- delete post button and pop-up -->
+            <b-button
+              v-if="byUser(userId)" 
+              variant = "danger"
+              @click ="showdelete = !showdelete"
+              >Delete Group</b-button>
+            <b-modal v-model ="showdelete" @ok = "deletePost()">
+              Are you sure you want to delete this group?
+            </b-modal>
+        </b-col>
+      </b-row>
+    </template>
   </b-card>
 </template>
 
@@ -139,11 +137,17 @@ export default {
       }
     }
   },
+  watch: {
+    '$route' (to, from) {
+      if (from.params.id === to.params.id) {
+        return this.$router.go()
+      }
+    }
+  },
   computed: {
     disp_date() {
       return moment(this.post_date).fromNow();
-    },
-        
+    }
   },
   created: function () {
     var vm = this;
@@ -156,10 +160,10 @@ export default {
         database.collection('Users')
             .where('NUSNET' , '==', emailToCheck.toUpperCase())
             .get().then((querySnapShot) => {
-                querySnapShot.forEach((doc) => {
-                  vm.userdoc_id = doc.id;
-                  vm.UserName = doc.data().UserName;
-                })
+              querySnapShot.forEach((doc) => {
+                vm.userdoc_id = doc.id;
+                vm.UserName = doc.data().UserName;
+              })
             })
             .then(database.collection('Users').where('UserName' , '==',  vm.userId ) 
             .get().then((querySnapShot) => {
@@ -181,10 +185,10 @@ export default {
 #post_  title {
   font-weight: bold
 }
+
 #post {
   margin: 5px;
   width: 20rem;
-
 }
 
 #post_body {
@@ -211,7 +215,6 @@ export default {
   top: 0px;
   right: 0px;
 }
-
 
 #collapse-button-1 {
   margin-top:10px;

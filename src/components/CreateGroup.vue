@@ -8,7 +8,6 @@
         Choose Type of Group:  
         <b-form-radio value = 'project'>Project Group</b-form-radio>
         <b-form-radio value = 'study'>Study Group</b-form-radio>
-        
     </b-form-radio-group>
     <br>
     <div v-show="create_type === 'project'">
@@ -59,28 +58,7 @@
             placeholder="Enter Maximum Number of Members Required"
             ></b-form-input>
         </b-form-group>
-
-    <b-form-group
-            id="input-group-1"
-            label-cols-sm="2"
-            label-cols-lg="3"
-            label-align-lg="right" label-align-sm="right"
-            label="Current Members:"
-            label-for='inputmembers1'>
-            <b-form-tags
-            id="inputmembers1"
-            input-id="tags-remove-on-delete1"
-            :input-attrs="{ 'aria-describedby': 'tags-remove-on-delete-help' }"
-            v-model="proj.UserNames"
-            separator=" "
-            placeholder="Enter Usernames of Current Members"
-            remove-on-delete
-            class="mb-2"
-            ></b-form-tags>
-        </b-form-group>
-        
     </div>
-
 
     <div v-show="create_type === 'study'">
         <b-form-group id="input-group-33" label="Faculty:" label-for="input-3" label-cols-sm="2" label-cols-lg="3" label-align-lg="right" label-align-sm="right">
@@ -121,7 +99,7 @@
             v-model="study.Description"
             type="description"
             required
-            placeholder="Enter Description. For privacy reasons, we do not recommend specifying the exact location of the study group."
+            placeholder="Enter Description. For privacy reasons, we do not recommend specifying the exact location & time of the study group."
             ></b-form-input>
         </b-form-group>
 
@@ -156,34 +134,12 @@
             placeholder="Enter Maximum Number of Members Required"
             ></b-form-input>
         </b-form-group>
-        
-        <b-form-group
-            id="input-group-1"
-            label-cols-sm="2"
-            label-cols-lg="3"
-            label-align-lg="right" label-align-sm="right"
-            label="Current Members:"
-            label-for='inputmembers'>
-            <b-form-tags
-            id="inputmembers"
-            input-id="tags-remove-on-delete"
-            :input-attrs="{ 'aria-describedby': 'tags-remove-on-delete-help' }"
-            v-model="study.UserNames"
-            separator=" "
-            placeholder="Enter Usernames of Current Members"
-            remove-on-delete
-            no-add-on-enter
-            class="mb-2"
-            ></b-form-tags>
-        </b-form-group>
     </div>
 
-
     <b-form @submit = "submit">
-            <b-button variant = 'primary' type = 'submit'>Submit</b-button>
-        </b-form>
-
-</div>
+        <b-button variant = 'primary' type = 'submit'>Submit</b-button>
+    </b-form>
+    </div>
 </div>
 </template>
 
@@ -233,38 +189,37 @@ export default {
             if (this.create_type==='study'){
                 this.getNowstu()
                 this.setPosterstu()
-                this.study.UserNames.push(this.currUser) 
-                this.getNumMembersStu()               
+                this.getNumMembersStu()   
+                this.study.UserNames.unshift(this.currUser)             
                 database.collection('Study Group').add(this.study)
                 database.collection("Study Group")
                     .orderBy("DatePosted", 'desc')
                     .limit(1).onSnapshot((snap) => {
                         snap.forEach(function(doc) {
                             database.collection("Users").doc(userdocid).update({
-                            StudyGroupsCreated: firebase.firestore.FieldValue.arrayUnion(doc.id)
-                        })
-                    })})
-                alert("Group Successfully Created!")
+                                StudyGroupsCreated: firebase.firestore.FieldValue.arrayUnion(doc.id)
+                            }) })          
+                })
+                alert("Group Successfully Created! Users who join your group will receive your telegram username.")
                 this.$router.push('/Group-Page') 
             } else{
                 this.getNowproj()
                 this.setPosterproj()
-                this.proj.ModuleCode = this.proj.ModuleCode.toUpperCase()
                 this.proj.UserNames.unshift(this.currUser)
+                this.proj.ModuleCode = this.proj.ModuleCode.toUpperCase()
                 this.getNumMembersProj()
                 database.collection('Project Group').add(this.proj)
                 database.collection("Project Group")
                     .orderBy("DatePosted", 'desc')
                     .limit(1).onSnapshot((snap) => {
-                        snap.forEach(function(doc) {
+                        snap.forEach(function(docie) { //docie is the latest grp made
                             database.collection("Users").doc(userdocid).update({
-                            ProjectGroupsCreated: firebase.firestore.FieldValue.arrayUnion(doc.id)
-                        })
-                    })})
-                alert("Group Successfully Created!")
-                this.$router.push('/Group-Page') 
-            }
-            
+                                ProjectGroupsCreated: firebase.firestore.FieldValue.arrayUnion(docie.id)
+                            })})
+                    })
+                    alert("Group Successfully Created! Users who join your group will receive your telegram username.")
+                    this.$router.push('/Group-Page') 
+            } 
         },
         getNumMembersStu: function(){
             this.study.NumberOfMembers = this.study.UserNames.length
