@@ -28,18 +28,27 @@ export default {
     'nb':NavBar
   }, 
   data () {
-      return {
-      user: null
+    return {
+      user: null,
+      verifymodal: false,
     }
   },
   created: function () {
     var vm = this;
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        vm.user = user;
+    firebase.auth().onAuthStateChanged((u) => {
+      if (u) {
+        vm.user = u;
+        if (!u.emailVerified) {
+          alert("Please verify your email address to log in.")
+          firebase
+            .auth()
+            .signOut();
+          this.$router.replace('/Sign-In'); 
+        }
       } else {
         vm.user = null;
       }
+      
     });
 }
 }

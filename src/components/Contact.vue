@@ -1,8 +1,6 @@
 <template>
-
   <div>
     <nb></nb>
-
     <h4> Having issues with LoNUS? Drop us an message to let us help you! </h4>
     <form @submit="onSubmit" @reset="onReset" v-if="show">
     <b-form-group id="input-group-3" label="Enquiry Type:" label-for="input-3" label-cols-sm="2" label-cols-lg="3" label-align-lg="right" label-align-sm="right">
@@ -14,7 +12,6 @@
           name= "type"
         ></b-form-select>
       </b-form-group>
-
 
     <b-form-group id="input-group-1" label="Subject Line:" label-for="input-1" label-cols-sm="2" label-cols-lg="3" label-align-lg="right" label-align-sm="right">
         <b-form-input
@@ -47,7 +44,6 @@
         ></b-form-input>
       </b-form-group>
       
-
       <b-form-group id="input-group-4">
         <b-form-checkbox-group v-model="form.checked" id="checkboxes-4">
           <b-form-checkbox value="me">Send me an Email Confirmation</b-form-checkbox>
@@ -57,7 +53,6 @@
       <b-button type="submit" variant="primary">Submit</b-button> &nbsp;
       <b-button type="reset" variant="danger">Reset</b-button>
     </form>
-    
   </div>
 </template>
 
@@ -123,7 +118,6 @@ export default {
   max-width: 1200px;
   padding: 20px;
   margin: auto;
-
 }
 
 #input-group-1{
@@ -131,7 +125,6 @@ export default {
   max-width: 1200px;
   padding: 20px;
   margin: auto;
-
 }
 
 #input-group-2{
@@ -139,15 +132,11 @@ export default {
   max-width: 1200px;
   padding: 20px;
   margin: auto;
-  
-
-  
 }
 
 #input-group-4{
   padding: 20px;
   margin: auto;
- 
 }
 
 h4{
@@ -157,7 +146,4 @@ h4{
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
-
-
-
 </style>
