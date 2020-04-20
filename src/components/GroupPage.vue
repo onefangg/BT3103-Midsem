@@ -22,7 +22,7 @@
                     <b-input
                         id="b-form-input-module"
                         class = "mb-2 mr-sm-2 mb-sm-0 search"
-                        placeholder="Enter module code"
+                        placeholder="Enter Module Code"
                         v-model="mod"
                         v-on:keyup.enter = "searchModule()"
                     ></b-input>    
@@ -31,7 +31,7 @@
                     <b-input
                         id="b-form-input-module"
                         class = "mb-2 mr-sm-2 mb-sm-0 search"
-                        placeholder="Enter friend's username"
+                        placeholder="Enter Username"
                         v-model="projfriends"
                         v-on:keyup.enter = "friendsPrivacy = !friendsPrivacy"
                     ></b-input>    
@@ -46,7 +46,8 @@
                     <b-form-select 
                     v-model="selected_sort" 
                     :options="sort" 
-                    class = "mb-2 mr-sm-2 mb-sm-0">
+                    class = "mb-2 mr-sm-2 mb-sm-0"
+                    id="b-form-input-module">
                     </b-form-select>
                 </b-form>  
         </div>
@@ -60,7 +61,7 @@
             <b-input
                 id="b-form-input-module"
                 class = "mb-2 mr-sm-2 mb-sm-0 search"
-                placeholder="Enter friend's username"
+                placeholder="Enter Username"
                 v-model="studyfriends"
                 v-on:keyup.enter = "friendsPrivacy = !friendsPrivacy"
             ></b-input>    
@@ -71,9 +72,9 @@
                 <b-button class="mt-3" variant="outline-success" block @click="findFriends()">I understand</b-button>
             </b-modal>
             
-            <b-form-select v-model="selected_faculty" :options="faculty" label-field= "faculty" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
-            <b-form-select v-model="selected_location" :options="location" label-field= "location" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
-            <b-form-select v-model="selected_sort" :options="sort" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
+            <b-form-select id="b-form-input-module" v-model="selected_faculty" :options="faculty" label-field= "faculty" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
+            <b-form-select id="b-form-input-module" v-model="selected_location" :options="location" label-field= "location" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
+            <b-form-select id="b-form-input-module" v-model="selected_sort" :options="sort" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
             
             </b-form>
         </div>
@@ -441,5 +442,11 @@ h4{
   font-weight: 600;
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+
+#b-form-input-module{
+    padding-top: 2px;
+    padding-bottom: 2px;
+    width: 200px
 }
 </style>
