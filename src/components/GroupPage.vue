@@ -38,8 +38,8 @@
                     <b-modal v-model = "friendsPrivacy" hide-footer=true>
                         <b>NOTE!</b>
                         Abuse and misuse of this function will result in the suspension from this platform.
-                        <b-button class="mt-3" variant="outline-danger" block>Cancel</b-button>
-                        <b-button class="mt-3" variant="outline-success" block @click="findFriends()">I understand</b-button>
+                        <b-button class="mt-3" variant="outline-danger" block @click = "friendsPrivacy = !friendsPrivacy; consent=false">Cancel</b-button>
+                        <b-button class="mt-3" variant="outline-success" block @click="consent=true;findFriends()">I understand</b-button>
                     </b-modal>
 
                     <!-- Sorting options -->
@@ -68,8 +68,8 @@
             <b-modal v-model = "friendsPrivacy" hide-footer=true>
                 <b>NOTE!</b>
                 Abuse and misuse of this function will result in the suspension from this platform.
-                <b-button class="mt-3" variant="outline-danger" block>Cancel</b-button>
-                <b-button class="mt-3" variant="outline-success" block @click="findFriends()">I understand</b-button>
+                <b-button class="mt-3" variant="outline-danger" block @click = "friendsPrivacy = !friendsPrivacy; consent=false">Cancel</b-button>
+                <b-button class="mt-3" variant="outline-success" block @click="consent=true;findFriends()">I understand</b-button>
             </b-modal>
             
             <b-form-select id="b-form-input-module" v-model="selected_faculty" :options="faculty" label-field= "faculty" class = "mb-2 mr-sm-2 mb-sm-0"></b-form-select>
@@ -86,7 +86,7 @@
     <br>
     <!-- This is where the project groups will show up -->
     <div v-show="selected_type === 'Project'">
-        <div v-show = "searchResultsProject || searchResultsStudy">
+        <div v-show = "searchResultsProject">
             <b-button v-on:click = "fetchProject()">Clear Search Results</b-button>
             <br>
             <h3 v-show = "noResultsFriendProj">No results for {{error_proj_friend}}</h3>
@@ -110,7 +110,7 @@
     <!-- This is where the study groups will show up -->
     <br>
     <div v-show="selected_type === 'Study'">
-        <div v-show = "searchResultsStudy || searchResultsProject">       
+        <div v-show = "searchResultsStudy">       
             <b-button v-on:click = "fetchStudy()">Clear Search Results</b-button>
             <br>
             <h3 v-show = "noResultsFriendStudy">No results for {{error_study_friend}}</h3>
@@ -148,6 +148,7 @@ export default {
         'nb':NavBar
     }, methods: {
         fetchStudy: function() {
+            this.finish_loading = true;
             this.studyList.length = 0;
             this.studyidList.length = 0;
             if (this.searchResultsStudy) {
@@ -165,6 +166,7 @@ export default {
             })
         },
         fetchProject: function() {
+            this.finish_loading = true;
             this.projectList.length = 0;
             this.projectidList.length = 0;
             if (this.searchResultsProject) {
@@ -217,7 +219,11 @@ export default {
             this.projectidList.length = 0;
             this.studyList.length = 0;
             this.studyidList.length = 0;
-            console.log(this.studyList.length)
+
+            if (this.consent == false) {
+                return;
+            }
+            
             let friends = (this.selected_type == "Project") ? this.projfriends : this.studyfriends
             this.finish_loading = true;
             database.collection('Users').where("UserName", "==", friends.toLowerCase()).get().then(
@@ -229,6 +235,7 @@ export default {
                                 this.projectList.push(grpdoc.data())
                             })
                         })
+                        
                         this.studyidList = userdoc.data().StudyGroupsCreated.concat(userdoc.data().StudyGroupsJoined.id)
                         this.studyidList.forEach((grpid) => {
                             database.collection('Study Group').doc(grpid).get().then((grpdoc) => {
@@ -302,7 +309,8 @@ export default {
             searchResultsProject: false,
             searchResultsStudy: false,
             finish_loading: true,
-            friendsPrivacy: false
+            friendsPrivacy: false,
+            consent: false
         }
     },
     created() {
@@ -310,6 +318,19 @@ export default {
         this.fetchProject();
     },
     watch: {
+        selected_type: function() {
+            if (this.selected_type == "Project") {
+                this.fetchProject();
+                this.searchResultsProject = false;
+                this.noResultsFriendProj = false;
+                this.noResultsMod = false;
+            } else if (this.selected_type == "Study") {
+                this.fetchStudy();
+                this.searchResultsStudy = false;
+                this.noResultsFriendStudy = false;
+                this.noResultsMod = false;
+            }
+        },
         selected_sort: function(change_sort) {
             if (this.selected_type == "Project") {
                 this.projectList.length = 0; // clear the exisitng project list

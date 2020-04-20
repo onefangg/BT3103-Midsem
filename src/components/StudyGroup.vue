@@ -6,7 +6,8 @@
           <b-list-group flush>
             <b-row id = 'post_body'> 
             <b-list-group-item>
-            {{post_desc}}
+
+              {{mod_code}}{{post_desc}}
             </b-list-group-item></b-row>         
             <b-list-group-item>
               <b-row id ='post_body'>
