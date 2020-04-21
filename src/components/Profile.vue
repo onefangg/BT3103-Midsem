@@ -232,14 +232,14 @@
             {
               label: 'Project Groups Joined',
               data: [],
-              backgroundColor:['cyan'],
+              backgroundColor:'cyan',
               borderWidth:0.5,
               borderColor:"#000"
             },
             {
               label: 'Study Groups Joined',
               data: [],
-              backgroundColor:['hotpink'],
+              backgroundColor:'hotpink',
               borderWidth:0.5,
               borderColor:"#000"
             }
