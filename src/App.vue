@@ -23,7 +23,7 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap');
 
-#app {
+#app,body,html {
   font-family: 'Open Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -31,6 +31,7 @@ export default {
   margin-top: 0px;
   background-color: #FAFAFA;
   height: 100%;
+  width: 100%;
   margin: 0;
 }
 </style>

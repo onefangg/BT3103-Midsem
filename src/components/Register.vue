@@ -204,22 +204,22 @@
         this.checkUsername().then(() => {
           if (this.usernameboolean === false) { this.usernamemodal = !this.usernamemodal }
           else {
-            const promise = firebase.auth().createUserWithEmailAndPassword(this.form.NUSNET.toUpperCase()+"@u.nus.edu", this.form.Password);
+            this.insertintodatabase();
+            const promise = firebase.auth().createUserWithEmailAndPassword(this.form.NUSNET+"@u.nus.edu", this.form.Password);
             promise.then(() => {
-              this.insertintodatabase();
               var actionCodeSettings = {
                 url: 'http://tbbt-df76e.firebaseapp.com',
                 handleCodeInApp: false,
               };
               firebase.auth().currentUser.sendEmailVerification(actionCodeSettings);
-              console.log(actionCodeSettings)
-            }).then(() => {
-              alert("Registration successful")
+            }).catch(error => console.log("first error: " + error))
+            .then(() => {
+              alert("Registration successful. Please verify your email address to log in.")
               //please verify your email
               firebase
                 .auth()
                 .signOut()
-                .then(() => {
+              .then(() => {
                   this.$router.replace('/Sign-In');
               });
             })
