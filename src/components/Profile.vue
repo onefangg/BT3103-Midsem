@@ -475,14 +475,32 @@
                     .doc(grpid).get()
                     .then((grpdoc) => {
                       const t = grpdoc.data().DatePosted;
-                      var day = t.toDate().getDate();
-                      var month = t.toDate().getMonth() + 1;
+                      var day = ("0" + t.toDate().getDate()).slice(-2)
+                      var month = ("0" + (t.toDate().getMonth() + 1)).slice(-2) 
                       var year = t.toDate().getFullYear();
                       var dmy = day + "/" + month + "/" + year;
                       if (!vm.chartData3.labels.includes(dmy)) { 
-                        vm.chartData3.labels.push(dmy);
-                        vm.chartData3.datasets[1].data.push(0); 
-                        vm.chartData3.datasets[0].data.push(1); //[1] is study, [0] is prj
+                        if (vm.chartData3.labels.length >= 1) {
+                          if (Number(month) >= Number(vm.chartData3.labels[vm.chartData3.labels.length-1].substring(3,5).replace(/^0+/, ''))) {
+                            if (Number(day) > Number(vm.chartData3.labels[vm.chartData3.labels.length-1].substring(0,2).replace(/^0+/, ''))) {
+                              vm.chartData3.labels.push(dmy);
+                              vm.chartData3.datasets[1].data.push(1); //[1] is study, [0] is prj
+                              vm.chartData3.datasets[0].data.push(0); 
+                            } else {
+                              vm.chartData3.labels.unshift(dmy);
+                              vm.chartData3.datasets[1].data.unshift(1); //[1] is study, [0] is prj
+                              vm.chartData3.datasets[0].data.unshift(0); 
+                            }
+                          } else {
+                            vm.chartData3.labels.unshift(dmy);
+                              vm.chartData3.datasets[1].data.unshift(1); //[1] is study, [0] is prj
+                              vm.chartData3.datasets[0].data.unshift(0); 
+                          }
+                        } else {
+                              vm.chartData3.labels.push(dmy);
+                              vm.chartData3.datasets[1].data.push(1); //[1] is study, [0] is prj
+                              vm.chartData3.datasets[0].data.push(0); 
+                        }
                       } else { 
                         vm.chartData3.datasets[0].data[vm.chartData3.labels.indexOf(dmy)] = vm.chartData3.datasets[0].data[vm.chartData3.labels.indexOf(dmy)]+1
                       }
@@ -494,14 +512,32 @@
                   vm.chartData.datasets[0].backgroundColor.push('cyan')
                   /* for chartData2 (joined) */
                   doc.data().ProjectGroupsJoined.timestamp.forEach((t) => {
-                    var day = t.toDate().getDate();
-                    var month = t.toDate().getMonth() + 1;
+                    var day = ("0" + t.toDate().getDate()).slice(-2)
+                    var month = ("0" + (t.toDate().getMonth() + 1)).slice(-2) 
                     var year = t.toDate().getFullYear();
                     var dmy = day + "/" + month + "/" + year;
                     if (!vm.chartData2.labels.includes(dmy)) { 
-                      vm.chartData2.labels.push(dmy);
-                      vm.chartData2.datasets[1].data.push(0); 
-                      vm.chartData2.datasets[0].data.push(1); //[1] is study, [0] is prj
+                      if (vm.chartData2.labels.length >= 1) {
+                        if (Number(month) >= Number(vm.chartData2.labels[vm.chartData2.labels.length-1].substring(3,5).replace(/^0+/, ''))) {
+                          if (Number(day) > Number(vm.chartData2.labels[vm.chartData2.labels.length-1].substring(0,2).replace(/^0+/, ''))) {
+                            vm.chartData2.labels.push(dmy);
+                            vm.chartData2.datasets[1].data.push(1); //[1] is study, [0] is prj
+                            vm.chartData2.datasets[0].data.push(0); 
+                          } else {
+                            vm.chartData2.labels.unshift(dmy);
+                            vm.chartData2.datasets[1].data.unshift(1); //[1] is study, [0] is prj
+                            vm.chartData2.datasets[0].data.unshift(0); 
+                          }
+                          } else {
+                                vm.chartData2.labels.push(dmy);
+                                vm.chartData2.datasets[1].data.push(1); //[1] is study, [0] is prj
+                                vm.chartData2.datasets[0].data.push(0); 
+                          }
+                      } else {
+                        vm.chartData2.labels.unshift(dmy);
+                          vm.chartData2.datasets[1].data.unshift(1); //[1] is study, [0] is prj
+                          vm.chartData2.datasets[0].data.unshift(0); 
+                      }
                     } else { 
                       vm.chartData2.datasets[0].data[vm.chartData2.labels.indexOf(dmy)] = vm.chartData2.datasets[0].data[vm.chartData2.labels.indexOf(dmy)]+1
                     }
@@ -519,14 +555,32 @@
                     .doc(grpid).get()
                     .then((grpdoc) => {
                       const t = grpdoc.data().DatePosted;
-                      var day = t.toDate().getDate();
-                      var month = t.toDate().getMonth() + 1;
+                      var day = ("0" + t.toDate().getDate()).slice(-2)
+                      var month = ("0" + (t.toDate().getMonth() + 1)).slice(-2) 
                       var year = t.toDate().getFullYear();
                       var dmy = day + "/" + month + "/" + year;
                       if (!vm.chartData3.labels.includes(dmy)) { 
-                        vm.chartData3.labels.push(dmy);
-                        vm.chartData3.datasets[0].data.push(0); 
-                        vm.chartData3.datasets[1].data.push(1); //[1] is study, [0] is prj
+                        if (vm.chartData3.labels.length >= 1) {
+                          if (Number(month) >= Number(vm.chartData3.labels[vm.chartData3.labels.length-1].substring(3,5).replace(/^0+/, ''))) {
+                            if (Number(day) > Number(vm.chartData3.labels[vm.chartData3.labels.length-1].substring(0,2).replace(/^0+/, ''))) {
+                              vm.chartData3.labels.push(dmy);
+                              vm.chartData3.datasets[1].data.push(1); //[1] is study, [0] is prj
+                              vm.chartData3.datasets[0].data.push(0); 
+                            } else {
+                              vm.chartData3.labels.unshift(dmy);
+                              vm.chartData3.datasets[1].data.unshift(1); //[1] is study, [0] is prj
+                              vm.chartData3.datasets[0].data.unshift(0); 
+                            }
+                          } else {
+                            vm.chartData3.labels.unshift(dmy);
+                              vm.chartData3.datasets[1].data.unshift(1); //[1] is study, [0] is prj
+                              vm.chartData3.datasets[0].data.unshift(0); 
+                          }
+                        } else {
+                            vm.chartData3.labels.push(dmy);
+                            vm.chartData3.datasets[1].data.push(1); //[1] is study, [0] is prj
+                            vm.chartData3.datasets[0].data.push(0); 
+                          }
                       } else { 
                         vm.chartData3.datasets[1].data[vm.chartData3.labels.indexOf(dmy)] = vm.chartData3.datasets[1].data[vm.chartData3.labels.indexOf(dmy)]+1
                       }
@@ -538,14 +592,32 @@
                   vm.chartData.datasets[0].backgroundColor.push('hotpink')
                   /* for chartData2 (joined) */
                   doc.data().StudyGroupsJoined.timestamp.forEach((t) => {
-                    var day = t.toDate().getDate();
-                    var month = t.toDate().getMonth() + 1;
+                    var day = ("0" + t.toDate().getDate()).slice(-2)
+                    var month = ("0" + (t.toDate().getMonth() + 1)).slice(-2) 
                     var year = t.toDate().getFullYear();
                     var dmy = day + "/" + month + "/" + year;
                     if (!vm.chartData2.labels.includes(dmy)) { 
-                      vm.chartData2.labels.push(dmy);
-                      vm.chartData2.datasets[1].data.push(1); //[1] is study, [0] is prj
-                      vm.chartData2.datasets[0].data.push(0); 
+                      if (vm.chartData2.labels.length >= 1) {
+                        if (Number(month) >= Number(vm.chartData2.labels[vm.chartData2.labels.length-1].substring(3,5).replace(/^0+/, ''))) {
+                          if (Number(day) > Number(vm.chartData2.labels[vm.chartData2.labels.length-1].substring(0,2).replace(/^0+/, ''))) {
+                            vm.chartData2.labels.push(dmy);
+                            vm.chartData2.datasets[1].data.push(1); //[1] is study, [0] is prj
+                            vm.chartData2.datasets[0].data.push(0); 
+                          } else {
+                            vm.chartData2.labels.unshift(dmy);
+                            vm.chartData2.datasets[1].data.unshift(1); //[1] is study, [0] is prj
+                            vm.chartData2.datasets[0].data.unshift(0); 
+                          }
+                        } else {
+                          vm.chartData2.labels.unshift(dmy);
+                            vm.chartData2.datasets[1].data.unshift(1); //[1] is study, [0] is prj
+                            vm.chartData2.datasets[0].data.unshift(0); 
+                        }
+                      } else {
+                          vm.chartData2.labels.push(dmy);
+                          vm.chartData2.datasets[1].data.push(1); //[1] is study, [0] is prj
+                          vm.chartData2.datasets[0].data.push(0); 
+                        }
                     } else {
                       vm.chartData2.datasets[1].data[vm.chartData2.labels.indexOf(dmy)] = vm.chartData2.datasets[1].data[vm.chartData2.labels.indexOf(dmy)]+1
                     }
