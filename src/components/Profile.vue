@@ -429,6 +429,11 @@
                 }          
           })  
         })
+      },
+      sortDate: function(a,b) {
+        if (new Date(a["date"]) - new Date(b["date"])) return 1;
+        if (new Date(b["date"]) - new Date(a["date"])) return -1;
+        return 0;
       }
     },
     created: function () {
@@ -448,192 +453,163 @@
             })
             .catch(function(error) {
                 console.log("Error getting documents: ", error);
-             });
-
-
-          const userToCheck = vm.routeuserid;
-          database.collection('Users')
-            .where('UserName', '==', userToCheck)
-            .get().then((querySnapShot) => {
-              querySnapShot.forEach((doc) => {
-                vm.id = doc.id
-                vm.details.FirstName = doc.data().FirstName;
-                vm.details.LastName = doc.data().LastName;
-                vm.details.Major = doc.data().Major;
-                vm.details.UserName = doc.data().UserName;
-                vm.details.Year = doc.data().Year;
-                vm.details.Picture = doc.data().Picture;
-                if (doc.data().ProjectGroupsCreated.length>0) {
-                  vm.chartData.datasets[0].data.push(doc.data().ProjectGroupsCreated.length);
-                  vm.chartData.labels.push("Project Groups Created")
-                  vm.chartData.datasets[0].backgroundColor.push('springgreen')
-                  vm.chart3show = true;
-                  /* for chartData3 (created) */
-                  doc.data().ProjectGroupsCreated.forEach((grpid) => {
-                    // look into Project Groups database using this grpid
-                    database.collection('Project Group')
-                    .doc(grpid).get()
-                    .then((grpdoc) => {
-                      const t = grpdoc.data().DatePosted;
-                      var day = ("0" + t.toDate().getDate()).slice(-2)
-                      var month = ("0" + (t.toDate().getMonth() + 1)).slice(-2) 
-                      var year = t.toDate().getFullYear();
-                      var dmy = day + "/" + month + "/" + year;
-                      if (!vm.chartData3.labels.includes(dmy)) { 
-                        if (vm.chartData3.labels.length >= 1) {
-                          if (Number(month) >= Number(vm.chartData3.labels[vm.chartData3.labels.length-1].substring(3,5).replace(/^0+/, ''))) {
-                            if (Number(day) > Number(vm.chartData3.labels[vm.chartData3.labels.length-1].substring(0,2).replace(/^0+/, ''))) {
-                              vm.chartData3.labels.push(dmy);
-                              vm.chartData3.datasets[1].data.push(1); //[1] is study, [0] is prj
-                              vm.chartData3.datasets[0].data.push(0); 
-                            } else {
-                              vm.chartData3.labels.unshift(dmy);
-                              vm.chartData3.datasets[1].data.unshift(1); //[1] is study, [0] is prj
-                              vm.chartData3.datasets[0].data.unshift(0); 
-                            }
-                          } else {
-                            vm.chartData3.labels.unshift(dmy);
-                              vm.chartData3.datasets[1].data.unshift(1); //[1] is study, [0] is prj
-                              vm.chartData3.datasets[0].data.unshift(0); 
-                          }
-                        } else {
-                              vm.chartData3.labels.push(dmy);
-                              vm.chartData3.datasets[1].data.push(1); //[1] is study, [0] is prj
-                              vm.chartData3.datasets[0].data.push(0); 
-                        }
-                      } else { 
-                        vm.chartData3.datasets[0].data[vm.chartData3.labels.indexOf(dmy)] = vm.chartData3.datasets[0].data[vm.chartData3.labels.indexOf(dmy)]+1
-                      }
-                    } ) } )                    
-                }
-                if (Object.keys(doc.data().ProjectGroupsJoined).length>0) {
-                  vm.chartData.datasets[0].data.push(doc.data().ProjectGroupsJoined.id.length);
-                  vm.chartData.labels.push("Project Groups Joined")
-                  vm.chartData.datasets[0].backgroundColor.push('cyan')
-                  /* for chartData2 (joined) */
-                  doc.data().ProjectGroupsJoined.timestamp.forEach((t) => {
-                    var day = ("0" + t.toDate().getDate()).slice(-2)
-                    var month = ("0" + (t.toDate().getMonth() + 1)).slice(-2) 
-                    var year = t.toDate().getFullYear();
-                    var dmy = day + "/" + month + "/" + year;
-                    if (!vm.chartData2.labels.includes(dmy)) { 
-                      if (vm.chartData2.labels.length >= 1) {
-                        if (Number(month) >= Number(vm.chartData2.labels[vm.chartData2.labels.length-1].substring(3,5).replace(/^0+/, ''))) {
-                          if (Number(day) > Number(vm.chartData2.labels[vm.chartData2.labels.length-1].substring(0,2).replace(/^0+/, ''))) {
-                            vm.chartData2.labels.push(dmy);
-                            vm.chartData2.datasets[1].data.push(1); //[1] is study, [0] is prj
-                            vm.chartData2.datasets[0].data.push(0); 
-                          } else {
-                            vm.chartData2.labels.unshift(dmy);
-                            vm.chartData2.datasets[1].data.unshift(1); //[1] is study, [0] is prj
-                            vm.chartData2.datasets[0].data.unshift(0); 
-                          }
-                          } else {
-                                vm.chartData2.labels.push(dmy);
-                                vm.chartData2.datasets[1].data.push(1); //[1] is study, [0] is prj
-                                vm.chartData2.datasets[0].data.push(0); 
-                          }
-                      } else {
-                        vm.chartData2.labels.unshift(dmy);
-                          vm.chartData2.datasets[1].data.unshift(1); //[1] is study, [0] is prj
-                          vm.chartData2.datasets[0].data.unshift(0); 
-                      }
-                    } else { 
-                      vm.chartData2.datasets[0].data[vm.chartData2.labels.indexOf(dmy)] = vm.chartData2.datasets[0].data[vm.chartData2.labels.indexOf(dmy)]+1
-                    }
-                  })
-                }
-                if (doc.data().StudyGroupsCreated.length>0) {
-                  vm.chartData.datasets[0].data.push(doc.data().StudyGroupsCreated.length);
-                  vm.chartData.labels.push("Study Groups Created")
-                  vm.chartData.datasets[0].backgroundColor.push('orange')
-                  vm.chart3show = true;
-                  /* for chartData3 (created) */
-                  doc.data().StudyGroupsCreated.forEach((grpid) => {
-                    // look into Project Groups database using this grpid
-                    database.collection('Study Group')
-                    .doc(grpid).get()
-                    .then((grpdoc) => {
-                      const t = grpdoc.data().DatePosted;
-                      var day = ("0" + t.toDate().getDate()).slice(-2)
-                      var month = ("0" + (t.toDate().getMonth() + 1)).slice(-2) 
-                      var year = t.toDate().getFullYear();
-                      var dmy = day + "/" + month + "/" + year;
-                      if (!vm.chartData3.labels.includes(dmy)) { 
-                        if (vm.chartData3.labels.length >= 1) {
-                          if (Number(month) >= Number(vm.chartData3.labels[vm.chartData3.labels.length-1].substring(3,5).replace(/^0+/, ''))) {
-                            if (Number(day) > Number(vm.chartData3.labels[vm.chartData3.labels.length-1].substring(0,2).replace(/^0+/, ''))) {
-                              vm.chartData3.labels.push(dmy);
-                              vm.chartData3.datasets[1].data.push(1); //[1] is study, [0] is prj
-                              vm.chartData3.datasets[0].data.push(0); 
-                            } else {
-                              vm.chartData3.labels.unshift(dmy);
-                              vm.chartData3.datasets[1].data.unshift(1); //[1] is study, [0] is prj
-                              vm.chartData3.datasets[0].data.unshift(0); 
-                            }
-                          } else {
-                            vm.chartData3.labels.unshift(dmy);
-                              vm.chartData3.datasets[1].data.unshift(1); //[1] is study, [0] is prj
-                              vm.chartData3.datasets[0].data.unshift(0); 
-                          }
-                        } else {
-                            vm.chartData3.labels.push(dmy);
-                            vm.chartData3.datasets[1].data.push(1); //[1] is study, [0] is prj
-                            vm.chartData3.datasets[0].data.push(0); 
-                          }
-                      } else { 
-                        vm.chartData3.datasets[1].data[vm.chartData3.labels.indexOf(dmy)] = vm.chartData3.datasets[1].data[vm.chartData3.labels.indexOf(dmy)]+1
-                      }
-                    } ) } )
-                }
-                if (Object.keys(doc.data().StudyGroupsJoined).length>0) {
-                  vm.chartData.datasets[0].data.push(doc.data().StudyGroupsJoined.id.length);
-                  vm.chartData.labels.push("Study Groups Joined")
-                  vm.chartData.datasets[0].backgroundColor.push('hotpink')
-                  /* for chartData2 (joined) */
-                  doc.data().StudyGroupsJoined.timestamp.forEach((t) => {
-                    var day = ("0" + t.toDate().getDate()).slice(-2)
-                    var month = ("0" + (t.toDate().getMonth() + 1)).slice(-2) 
-                    var year = t.toDate().getFullYear();
-                    var dmy = day + "/" + month + "/" + year;
-                    if (!vm.chartData2.labels.includes(dmy)) { 
-                      if (vm.chartData2.labels.length >= 1) {
-                        if (Number(month) >= Number(vm.chartData2.labels[vm.chartData2.labels.length-1].substring(3,5).replace(/^0+/, ''))) {
-                          if (Number(day) > Number(vm.chartData2.labels[vm.chartData2.labels.length-1].substring(0,2).replace(/^0+/, ''))) {
-                            vm.chartData2.labels.push(dmy);
-                            vm.chartData2.datasets[1].data.push(1); //[1] is study, [0] is prj
-                            vm.chartData2.datasets[0].data.push(0); 
-                          } else {
-                            vm.chartData2.labels.unshift(dmy);
-                            vm.chartData2.datasets[1].data.unshift(1); //[1] is study, [0] is prj
-                            vm.chartData2.datasets[0].data.unshift(0); 
-                          }
-                        } else {
-                          vm.chartData2.labels.unshift(dmy);
-                            vm.chartData2.datasets[1].data.unshift(1); //[1] is study, [0] is prj
-                            vm.chartData2.datasets[0].data.unshift(0); 
-                        }
-                      } else {
-                          vm.chartData2.labels.push(dmy);
-                          vm.chartData2.datasets[1].data.push(1); //[1] is study, [0] is prj
-                          vm.chartData2.datasets[0].data.push(0); 
-                        }
-                    } else {
-                      vm.chartData2.datasets[1].data[vm.chartData2.labels.indexOf(dmy)] = vm.chartData2.datasets[1].data[vm.chartData2.labels.indexOf(dmy)]+1
-                    }
-                  })
-                }
-                if (vm.chartData.labels.length == 0) {vm.chart1show=false;}
-                if (vm.chartData2.labels.length == 0) {vm.chart2show=false;}
-                vm.getGroups();
-              })
-            })
-            .catch(function (error) {
-              console.log("Error getting documents: ", error);
             });
-        } else {
-          vm.user = null;
-        }
+
+            var projGrpJoinedTime = [];
+            var projGrpCreatedTime = [];
+            var studyGrpJoinedTime = [];
+            var studyGrpCreatedTime = [];
+      
+            const userToCheck = vm.routeuserid;
+            database.collection('Users')
+              .where('UserName', '==', userToCheck)
+              .get().then((querySnapShot) => {
+                querySnapShot.forEach((doc) => {
+                  vm.id = doc.id
+                  vm.details.FirstName = doc.data().FirstName;
+                  vm.details.LastName = doc.data().LastName;
+                  vm.details.Major = doc.data().Major;
+                  vm.details.UserName = doc.data().UserName;
+                  vm.details.Year = doc.data().Year;
+                  vm.details.Picture = doc.data().Picture;
+
+                  if (doc.data().ProjectGroupsCreated.length>0) {
+                    vm.chartData.datasets[0].data.push(doc.data().ProjectGroupsCreated.length);
+                    vm.chartData.labels.push("Project Groups Created")
+                    vm.chartData.datasets[0].backgroundColor.push('springgreen')
+                    vm.chart3show = true;
+
+                    
+                    /* for chartData3 (created) */
+                    doc.data().ProjectGroupsCreated.forEach((grpid) => {
+                      // look into Project Groups database using this grpid
+                      database.collection('Project Group')
+                      .doc(grpid).get()
+                      .then((grpdoc) => {                
+                        const t = grpdoc.data().DatePosted;
+                        var day = ("0" + t.toDate().getDate()).slice(-2)
+                        var month = ("0" + (t.toDate().getMonth() + 1)).slice(-2) 
+                        var year = t.toDate().getFullYear();
+                        var dmy = day + "/" + month + "/" + year;
+
+                        var exist = false;
+                        projGrpCreatedTime.find(activity => {
+                          if (activity["date"] == dmy) {
+                            activity["freq"] += 1
+                            exist = true;
+                          }
+                        });
+
+                        if (!exist) {
+                              projGrpCreatedTime.push({'date': dmy,'freq' : 1})
+                            }
+                          }
+                        );
+                        
+                      })
+                      projGrpCreatedTime.sort(vm.sortDate);
+                      console.log(projGrpJoinedTime);
+                      vm.chartData3.datasets[0].labels = projGrpCreatedTime.map(function(act) {return act["date"]});
+                      vm.chartData3.datasets[0].data = projGrpCreatedTime.map(function(act) {return act["freq"]});
+
+                  }
+                  console.log('kill me')
+                  if (Object.keys(doc.data().ProjectGroupsJoined).length>0) {
+                    vm.chartData.datasets[0].data.push(doc.data().ProjectGroupsJoined.id.length);
+                    vm.chartData.labels.push("Project Groups Joined")
+                    vm.chartData.datasets[0].backgroundColor.push('cyan')
+                    /* for chartData2 (joined) */
+                    doc.data().ProjectGroupsJoined.timestamp.forEach((t) => {
+                      var day = ("0" + t.toDate().getDate()).slice(-2)
+                      var month = ("0" + (t.toDate().getMonth() + 1)).slice(-2) 
+                      var year = t.toDate().getFullYear();
+                      var dmy = day + "/" + month + "/" + year;
+
+                      var exist = false;
+                      projGrpJoinedTime.find(activity => {
+                        if (activity["date"] == dmy) {
+                            activity["freq"] += 1
+                            exist = true;
+                          }
+                      })
+                      if (!exist) {
+                        projGrpJoinedTime.push({'date': dmy,'freq' : 1})
+                      }
+                      projGrpJoinedTime.sort(vm.sortDate);
+                      })
+                      vm.chartData2.datasets[0].labels = projGrpJoinedTime.map(function(act) {return act["date"]});
+                      vm.chartData2.datasets[0].data = projGrpJoinedTime.map(function(act) {return act["freq"]});
+                    }
+                  
+                  if (doc.data().StudyGroupsCreated.length>0) {
+                    vm.chartData.datasets[0].data.push(doc.data().StudyGroupsCreated.length);
+                    vm.chartData.labels.push("Study Groups Created")
+                    vm.chartData.datasets[0].backgroundColor.push('orange')
+                    vm.chart3show = true;
+                    /* for chartData3 (created) */
+                    doc.data().StudyGroupsCreated.forEach((grpid) => {
+                      // look into Project Groups database using this grpid
+                      database.collection('Study Group')
+                      .doc(grpid).get()
+                      .then((grpdoc) => {
+                        const t = grpdoc.data().DatePosted;
+                        var day = ("0" + t.toDate().getDate()).slice(-2)
+                        var month = ("0" + (t.toDate().getMonth() + 1)).slice(-2) 
+                        var year = t.toDate().getFullYear();
+                        var dmy = day + "/" + month + "/" + year;
+                        var exist = false;
+                        studyGrpCreatedTime.find(activity => {
+                          
+                          if (activity["date"] == dmy) {
+                              activity["freq"] += 1
+                              exist = true;
+                            }})
+                        if (!exist) {
+                          studyGrpJoinedTime.push({'date': dmy,'freq' : 1})
+                        }
+                        })})
+                      
+                      studyGrpCreatedTime.sort(vm.sortDate);
+                      vm.chartData3.datasets[1].labels = studyGrpCreatedTime.map(function(act) {return act["date"]});
+                      vm.chartData3.datasets[1].data = studyGrpCreatedTime.map(function(act) {return act["freq"]});
+                  }
+                  if (Object.keys(doc.data().StudyGroupsJoined).length>0) {
+                    vm.chartData.datasets[0].data.push(doc.data().StudyGroupsJoined.id.length);
+                    vm.chartData.labels.push("Study Groups Joined")
+                    vm.chartData.datasets[0].backgroundColor.push('hotpink')
+                    /* for chartData2 (joined) */
+                    doc.data().StudyGroupsJoined.timestamp.forEach((t) => {
+                      var day = ("0" + t.toDate().getDate()).slice(-2)
+                      var month = ("0" + (t.toDate().getMonth() + 1)).slice(-2) 
+                      var year = t.toDate().getFullYear();
+                      var dmy = day + "/" + month + "/" + year;
+                      var exist = false;
+                      studyGrpJoinedTime.find(activity => {
+                      if (activity["date"] == dmy) {
+                            activity["freq"] += 1
+                            exist = true;
+                          }})
+                      
+                      if (!exist) {
+                        studyGrpJoinedTime.push({'date': dmy,'freq' : 1})
+                      }
+                      })
+                      studyGrpJoinedTime.sort(vm.sortDate);
+                      vm.chartData2.datasets[1].labels = studyGrpJoinedTime.map(function(act) {return act["date"]});
+                      vm.chartData2.datasets[1].data = studyGrpJoinedTime.map(function(act) {return act["freq"]}); 
+                      console.log(vm.chartData2.datasets[1])
+                  }        
+                  if (vm.chartData.labels.length == 0) {vm.chart1show=false;}
+                  if (vm.chartData2.labels.length == 0) {vm.chart2show=false;}
+                  vm.getGroups();
+                })
+              })
+              .catch(function (error) {
+                console.log("Error getting documents: ", error);
+              });
+          } else {
+            vm.user = null;
+          }
       });
     }
   }
