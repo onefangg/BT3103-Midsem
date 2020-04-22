@@ -176,7 +176,6 @@
   import StudyGroup from './StudyGroup.vue'
   import Pie from '../Pie.js'
   import Bar from '../Bar.js'
-
   export default {
     name: 'Profile',
     components: {
@@ -430,10 +429,14 @@
           })  
         })
       },
-      sortDate: function(a,b) {
-        if (new Date(a["date"]) - new Date(b["date"])) return 1;
-        if (new Date(b["date"]) - new Date(a["date"])) return -1;
-        return 0;
+      sortDate: function(aa,bb) {
+        var a = aa[0] + ''
+        var b = bb[0] +''
+        var datePartsa = a.split("/");
+        var dateObjecta = new Date(datePartsa[2], datePartsa[1] - 1, +datePartsa[0]); 
+        var datePartsb = b.split("/");
+        var dateObjectb = new Date(datePartsb[2], datePartsb[1] - 1, +datePartsb[0]); 
+        return (dateObjecta - dateObjectb)
       }
     },
     created: function () {
@@ -454,12 +457,10 @@
             .catch(function(error) {
                 console.log("Error getting documents: ", error);
             });
-
             var projGrpJoinedTime = [];
             var projGrpCreatedTime = [];
             var studyGrpJoinedTime = [];
             var studyGrpCreatedTime = [];
-      
             const userToCheck = vm.routeuserid;
             database.collection('Users')
               .where('UserName', '==', userToCheck)
@@ -472,16 +473,13 @@
                   vm.details.UserName = doc.data().UserName;
                   vm.details.Year = doc.data().Year;
                   vm.details.Picture = doc.data().Picture;
-
                   if (doc.data().ProjectGroupsCreated.length>0) {
                     vm.chartData.datasets[0].data.push(doc.data().ProjectGroupsCreated.length);
                     vm.chartData.labels.push("Project Groups Created")
                     vm.chartData.datasets[0].backgroundColor.push('springgreen')
                     vm.chart3show = true;
-
-                    
                     /* for chartData3 (created) */
-                    doc.data().ProjectGroupsCreated.forEach((grpid) => {
+                    for (const grpid of doc.data().ProjectGroupsCreated) {
                       // look into Project Groups database using this grpid
                       database.collection('Project Group')
                       .doc(grpid).get()
@@ -491,29 +489,27 @@
                         var month = ("0" + (t.toDate().getMonth() + 1)).slice(-2) 
                         var year = t.toDate().getFullYear();
                         var dmy = day + "/" + month + "/" + year;
-
                         var exist = false;
                         projGrpCreatedTime.find(activity => {
-                          if (activity["date"] == dmy) {
-                            activity["freq"] += 1
+                          if (activity[0] == dmy) {
+                            activity[1] += 1
                             exist = true;
                           }
                         });
-
                         if (!exist) {
-                              projGrpCreatedTime.push({'date': dmy,'freq' : 1})
-                            }
-                          }
+                          projGrpCreatedTime.push([dmy, 1])
+                          studyGrpCreatedTime.push([dmy, 0])
+                        }
+                        console.log(projGrpCreatedTime)
+                        projGrpCreatedTime.sort(vm.sortDate);
+                        studyGrpCreatedTime.sort(vm.sortDate);
+                        vm.chartData3.labels = projGrpCreatedTime.map(function(act) {return act[0]});
+                        vm.chartData3.datasets[0].data = projGrpCreatedTime.map(function(act) {return act[1]});
+                        vm.chartData3.datasets[1].data = studyGrpCreatedTime.map(function(act) {return act[1]});
+                        }
                         );
-                        
-                      })
-                      projGrpCreatedTime.sort(vm.sortDate);
-                      console.log(projGrpJoinedTime);
-                      vm.chartData3.datasets[0].labels = projGrpCreatedTime.map(function(act) {return act["date"]});
-                      vm.chartData3.datasets[0].data = projGrpCreatedTime.map(function(act) {return act["freq"]});
-
+                      }
                   }
-                  console.log('kill me')
                   if (Object.keys(doc.data().ProjectGroupsJoined).length>0) {
                     vm.chartData.datasets[0].data.push(doc.data().ProjectGroupsJoined.id.length);
                     vm.chartData.labels.push("Project Groups Joined")
@@ -524,23 +520,24 @@
                       var month = ("0" + (t.toDate().getMonth() + 1)).slice(-2) 
                       var year = t.toDate().getFullYear();
                       var dmy = day + "/" + month + "/" + year;
-
                       var exist = false;
                       projGrpJoinedTime.find(activity => {
-                        if (activity["date"] == dmy) {
-                            activity["freq"] += 1
+                        if (activity[0] == dmy) {
+                            activity[1] += 1
                             exist = true;
                           }
                       })
                       if (!exist) {
-                        projGrpJoinedTime.push({'date': dmy,'freq' : 1})
+                        projGrpJoinedTime.push([dmy, 1])
+                        studyGrpJoinedTime.push([dmy, 0])
                       }
+                      }) 
                       projGrpJoinedTime.sort(vm.sortDate);
-                      })
-                      vm.chartData2.datasets[0].labels = projGrpJoinedTime.map(function(act) {return act["date"]});
-                      vm.chartData2.datasets[0].data = projGrpJoinedTime.map(function(act) {return act["freq"]});
+                      studyGrpJoinedTime.sort(vm.sortDate)
+                      vm.chartData2.labels = projGrpJoinedTime.map(function(act) {return act[0]});
+                      vm.chartData2.datasets[0].data = projGrpJoinedTime.map(function(act) {return act[1]});
+                      vm.chartData2.datasets[1].data = studyGrpJoinedTime.map(function(act) {return act[1]});
                     }
-                  
                   if (doc.data().StudyGroupsCreated.length>0) {
                     vm.chartData.datasets[0].data.push(doc.data().StudyGroupsCreated.length);
                     vm.chartData.labels.push("Study Groups Created")
@@ -559,19 +556,21 @@
                         var dmy = day + "/" + month + "/" + year;
                         var exist = false;
                         studyGrpCreatedTime.find(activity => {
-                          
-                          if (activity["date"] == dmy) {
-                              activity["freq"] += 1
+                          if (activity[0] == dmy) {
+                              activity[1] += 1
                               exist = true;
                             }})
                         if (!exist) {
-                          studyGrpJoinedTime.push({'date': dmy,'freq' : 1})
+                          studyGrpCreatedTime.push([dmy, 1])
+                          projGrpCreatedTime.push([dmy, 0])
                         }
-                        })})
-                      
-                      studyGrpCreatedTime.sort(vm.sortDate);
-                      vm.chartData3.datasets[1].labels = studyGrpCreatedTime.map(function(act) {return act["date"]});
-                      vm.chartData3.datasets[1].data = studyGrpCreatedTime.map(function(act) {return act["freq"]});
+                        studyGrpCreatedTime.sort(vm.sortDate);
+                        projGrpCreatedTime.sort(vm.sortDate);
+                        vm.chartData3.labels = studyGrpCreatedTime.map(function(act) {return act[0]});
+                        vm.chartData3.datasets[1].data = studyGrpCreatedTime.map(function(act) {return act[1]});
+                        vm.chartData3.datasets[0].data = projGrpCreatedTime.map(function(act) {return act[1]});
+                        })
+                        })
                   }
                   if (Object.keys(doc.data().StudyGroupsJoined).length>0) {
                     vm.chartData.datasets[0].data.push(doc.data().StudyGroupsJoined.id.length);
@@ -585,19 +584,21 @@
                       var dmy = day + "/" + month + "/" + year;
                       var exist = false;
                       studyGrpJoinedTime.find(activity => {
-                      if (activity["date"] == dmy) {
-                            activity["freq"] += 1
+                      if (activity[0] == dmy) {
+                            activity[1] += 1
                             exist = true;
                           }})
                       
                       if (!exist) {
-                        studyGrpJoinedTime.push({'date': dmy,'freq' : 1})
+                        studyGrpJoinedTime.push([dmy, 1])
+                        projGrpJoinedTime.push([dmy, 0])
                       }
                       })
                       studyGrpJoinedTime.sort(vm.sortDate);
-                      vm.chartData2.datasets[1].labels = studyGrpJoinedTime.map(function(act) {return act["date"]});
-                      vm.chartData2.datasets[1].data = studyGrpJoinedTime.map(function(act) {return act["freq"]}); 
-                      console.log(vm.chartData2.datasets[1])
+                      projGrpJoinedTime.sort(vm.sortDate);
+                      vm.chartData2.labels = studyGrpJoinedTime.map(function(act) {return act[0]});
+                      vm.chartData2.datasets[1].data = studyGrpJoinedTime.map(function(act) {return act[1]}); 
+                      vm.chartData2.datasets[0].data = projGrpJoinedTime.map(function(act) {return act[1]}); 
                   }        
                   if (vm.chartData.labels.length == 0) {vm.chart1show=false;}
                   if (vm.chartData2.labels.length == 0) {vm.chart2show=false;}
@@ -620,28 +621,23 @@
     background-color: #f0f6ff;
     color: #28384d;
   }
-
   .divider {
     display:block;
     width: 100 px;
     height: 2px;
     background-color:#28384d;
   }
-
   #img1 {
     height: 250px;
   }
-
   .hi {
     padding-left: 10%;
     padding-right: 10%
   }
-
   #info {
     height: 1000px;
     width: 1230px;
   }
-
   #dashboard {
     height: 500px
   }
