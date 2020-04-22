@@ -23,30 +23,6 @@
             {{post_status}}
           </b-col>
         </b-row>
-      <template v-slot:footer>
-        <b-modal v-model="modalShow" @ok = "joinGroup()">Are you sure you want to join this group?</b-modal>
-        <b-modal v-model="teleShow">Successfully joined group! Please contact the creator of the group on telegram @{{creatorTele}}</b-modal>
-        <b-modal v-model="alreadyin">You are already in this group!</b-modal>
-        <b-row>
-          <b-col cols = "8"  id = 'post_author'>
-            <font-awesome-icon :icon="{ prefix: 'fas', iconName: 'user-circle'}" class="faicon"/>Created by: <br> 
-            <router-link :to= "{name: 'profile', params: {userId: members[0]}}">@{{userId}}</router-link>
-            <br> <div id="date">{{disp_date}}</div>
-          </b-col>
-          <b-col cols = "2">
-            <b-button v-if="showjoin()" variant = 'primary' @click="modalShow = !modalShow">Join group!</b-button>
-              <!-- delete post button and pop-up -->
-              <b-button
-                v-if="byUser(userId)" 
-                variant = "danger"
-                @click ="showdelete = !showdelete"
-                >Delete Group</b-button>
-              <b-modal v-model ="showdelete" @ok = "deletePost()">
-                Are you sure you want to delete this post?
-              </b-modal>
-          </b-col>
-        </b-row> 
-      </template>
         <!-- showing all members button -->
         <b-row class="mt-2">
           <b-button size="sm"
