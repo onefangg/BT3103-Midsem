@@ -17,7 +17,7 @@
     "core-js": "^3.6.4",
     "emailjs-com": "^2.4.1",
     "firebase": "^7.14.0",
-    "jquery": "^1.9.1",
+    "jquery": "^3.5.0",
     "moment": "^2.24.0",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.0",
